@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="it.rebirthproject.myapplication.MainActivity">
+    <item android:id="@+id/action_start_emitter"
+          android:title="@string/action_start_emitter"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
+</menu>

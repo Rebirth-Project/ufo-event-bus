@@ -1,0 +1,50 @@
+/*
+ * Copyright (C) 2021 Andrea Paternesi Rebirth project
+ * Copyright (C) 2021 Matteo Veroni Rebirth project
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.* See the License for the specific language governing permissions and* limitations under the License.
+ */
+
+plugins {
+    id 'application'   
+    id 'org.openjfx.javafxplugin' version '0.0.13'
+}
+
+group = 'it.rebirthproject'
+
+application {    
+    mainClass.set('it.rebirthproject.javafxappexample.App')
+}
+
+repositories {
+    mavenCentral()
+}
+
+javafx {
+    version = "17"
+    modules = ['javafx.controls', 'javafx.graphics']
+}
+
+compileJava {
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    options.encoding = "UTF-8"
+}
+
+dependencies {
+    implementation project(':ufo-event-bus')
+    implementation 'ch.qos.logback:logback-classic:1.4.1'
+}
+
+tasks.withType(Jar) {
+    manifest.attributes(
+            'Main-Class': application.mainClass
+    )
+}

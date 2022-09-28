@@ -1,0 +1,53 @@
+/*
+ * Copyright (C) 2021 Andrea Paternesi Rebirth project
+ * Modifications copyright (C) 2021 Matteo Veroni Rebirth project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+plugins {
+    id "me.champeau.jmh" version "0.6.8"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {    
+    testImplementation 'org.greenrobot:eventbus-java:3.3.1'
+    testImplementation 'ch.qos.logback:logback-classic:1.4.1'    
+    jmh 'org.openjdk.jmh:jmh-core:1.35'
+    jmh 'org.openjdk.jmh:jmh-generator-annprocess:1.35'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()   
+}
+
+jmhJar {
+  exclude 'org/slf4j/impl/StaticLoggerBinder.class' // to silence duplicate classpath warnings
+}
+
+jmh {
+    verbosity = 'EXTRA'        
+    benchmarkMode = ['ss']
+    warmup = '1s'
+    warmupIterations = 5
+    iterations = 25   
+    fork = 1
+    threads = 1
+    failOnError = true
+    forceGC = true
+    resultFormat = 'JSON' 
+}
+
