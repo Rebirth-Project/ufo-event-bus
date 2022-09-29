@@ -49,7 +49,7 @@ public class Registration {
     public Registration(Object listener, Method method, int priority) throws Throwable {
         this.listener = listener;
         this.method = method;
-        this.methodHandler = LambdaFactory.create(method);
+        this.methodHandler = null; //LambdaFactory.create(method);
         this.priority = priority;
     }
 

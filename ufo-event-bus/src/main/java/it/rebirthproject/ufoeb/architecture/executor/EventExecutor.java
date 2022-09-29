@@ -17,6 +17,7 @@ package it.rebirthproject.ufoeb.architecture.executor;
 
 import it.rebirthproject.ufoeb.architecture.eventbus.EventBusBuilder;
 import it.rebirthproject.ufoeb.dto.registrations.Registration;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,31 +51,31 @@ public class EventExecutor implements Runnable {
         this.eventToPost = eventToPost;
     }
     
-    @Override
-    public void run() {
-        logger.debug("Execute event message");
-        for (Registration registration : registrationList) {
-            registration.getMethodHandler().invokeMethod(registration.getListener(), eventToPost);
-        }
-        logger.debug("All messages are been delivered");
-    }
+//    @Override
+//    public void run() {
+//        logger.debug("Execute event message");
+//        for (Registration registration : registrationList) {
+//            registration.getMethodHandler().invokeMethod(registration.getListener(), eventToPost);
+//        }
+//        logger.debug("All messages are been delivered");
+//    }
     
     /**
      * This is the main method of the {@link EventExecutor}. It just iterate to send the event 
      * to every registrations. 
      */
-//    @Override
-//    public void run() {
-//        logger.debug("Execute event message");
-//        for (Registration registration : registrationList) {
-//            try {
-//                registration.getMethod().invoke(registration.getListener(), eventToPost);
-//            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-//                logger.error("Message "+eventToPost.getClass().getCanonicalName()+" cannot be delivered to Object "+registration.getListener().getClass().getCanonicalName()+".");
-//            }
-//        }
-//        logger.debug("All messages are been delivered");
-//    }
+    @Override
+    public void run() {
+        logger.debug("Execute event message");
+        for (Registration registration : registrationList) {
+            try {
+                registration.getMethod().invoke(registration.getListener(), eventToPost);
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                logger.error("Message "+eventToPost.getClass().getCanonicalName()+" cannot be delivered to Object "+registration.getListener().getClass().getCanonicalName()+".");
+            }
+        }
+        logger.debug("All messages are been delivered");
+    }
     
     
     /** 
