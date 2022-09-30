@@ -30,7 +30,9 @@ import it.rebirthproject.ufoeb.eventinheritancepolicy.policies.NoEventInheritanc
 import it.rebirthproject.ufoeb.exceptions.EventBusException;
 import it.rebirthproject.ufoeb.testutils.BaseTest;
 import it.rebirthproject.ufoeb.testutils.validators.ExpectedRegistration;
+import it.rebirthproject.ufoeb.testutils.validators.NonBlockingExpectedRegistration;
 import it.rebirthproject.ufoeb.testutils.verifiers.ListVerifier;
+import it.rebirthproject.ufoeb.testutils.verifiers.UnorderedListVerifier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.Arrays;
@@ -45,7 +47,8 @@ public class ListenerMethodFinderTest extends BaseTest {
     @BeforeEach
     public void beforeEach() {
         memoryState = new MemoryState(!SAFE_REGISTRATIONS_NEEDED, FactoryInheritancePolicy.createInheritancePolicy(InheritancePolicyType.COMPLETE_EVENT_INHERITANCE), VERBOSE_LOGGING);
-        registrationListVerifier = new ListVerifier<>();
+        unorderedRegistrationListVerifier = new UnorderedListVerifier<>();
+        registrationListVerifier= new ListVerifier<>();
     }
 
     @Test
@@ -167,10 +170,10 @@ public class ListenerMethodFinderTest extends BaseTest {
 
         assertEquals(1, memoryState.getEventEventsRegistrationsSize(), "Finder mistakes in finding the correct registrations.");
 
-        registrationListVerifier.assertAsExpected(memoryState.getRegistrations(new BusEventKey(TestEvent1.class)),
+        unorderedRegistrationListVerifier.assertAsExpected(memoryState.getRegistrations(new BusEventKey(TestEvent1.class)),
                 Arrays.asList(
-                        new ExpectedRegistration(listenerObjectToRegister, EventPriority.NONE, "methodToRegisterSon", TestEvent1.class),
-                        new ExpectedRegistration(listenerObjectToRegister, EventPriority.NONE, "methodToRegisterFather", TestEvent1.class))
+                        new NonBlockingExpectedRegistration(listenerObjectToRegister, EventPriority.NONE, "methodToRegisterSon", TestEvent1.class),
+                        new NonBlockingExpectedRegistration(listenerObjectToRegister, EventPriority.NONE, "methodToRegisterFather", TestEvent1.class))
         );
     }
 
@@ -183,13 +186,13 @@ public class ListenerMethodFinderTest extends BaseTest {
 
         assertEquals(1, memoryState.getEventEventsRegistrationsSize(), "Finder mistakes in finding the correct registrations.");
 
-        registrationListVerifier.assertAsExpected(memoryState.getRegistrations(new BusEventKey(TestEvent1.class)),
+        unorderedRegistrationListVerifier.assertAsExpected(memoryState.getRegistrations(new BusEventKey(TestEvent1.class)),
                 Arrays.asList(
-                        new ExpectedRegistration(listenerObjectToRegister, EventPriority.NONE, "methodToRegister1", TestEvent1.class),
-                        new ExpectedRegistration(listenerObjectToRegister, EventPriority.NONE, "methodToRegister2", TestEvent1.class),
-                        new ExpectedRegistration(listenerObjectToRegister, EventPriority.NONE, "methodToRegister3", TestEvent1.class),
-                        new ExpectedRegistration(listenerObjectToRegister, EventPriority.NONE, "methodToRegister4", TestEvent1.class),
-                        new ExpectedRegistration(listenerObjectToRegister, EventPriority.NONE, "methodToRegister5", TestEvent1.class))
+                        new NonBlockingExpectedRegistration(listenerObjectToRegister, EventPriority.NONE, "methodToRegister1", TestEvent1.class),
+                        new NonBlockingExpectedRegistration(listenerObjectToRegister, EventPriority.NONE, "methodToRegister2", TestEvent1.class),
+                        new NonBlockingExpectedRegistration(listenerObjectToRegister, EventPriority.NONE, "methodToRegister3", TestEvent1.class),
+                        new NonBlockingExpectedRegistration(listenerObjectToRegister, EventPriority.NONE, "methodToRegister4", TestEvent1.class),
+                        new NonBlockingExpectedRegistration(listenerObjectToRegister, EventPriority.NONE, "methodToRegister5", TestEvent1.class))
         );
     }
 
@@ -214,10 +217,10 @@ public class ListenerMethodFinderTest extends BaseTest {
 
         assertEquals(1, memoryState.getEventEventsRegistrationsSize(), "Finder mistakes in finding the correct registrations.");
 
-        registrationListVerifier.assertAsExpected(memoryState.getRegistrations(new BusEventKey(TestEvent1.class)),
+        unorderedRegistrationListVerifier.assertAsExpected(memoryState.getRegistrations(new BusEventKey(TestEvent1.class)),
                 Arrays.asList(
-                        new ExpectedRegistration(listenerObjectToRegister, EventPriority.NONE, "methodToRegisterSonDeepPackage", TestEvent1.class),
-                        new ExpectedRegistration(listenerObjectToRegister, EventPriority.NONE, "methodToRegisterFather", TestEvent1.class))
+                        new NonBlockingExpectedRegistration(listenerObjectToRegister, EventPriority.NONE, "methodToRegisterSonDeepPackage", TestEvent1.class),
+                        new NonBlockingExpectedRegistration(listenerObjectToRegister, EventPriority.NONE, "methodToRegisterFather", TestEvent1.class))
         );
     }
 

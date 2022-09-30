@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Matteo Veroni Rebirth project
+ * Copyright (C) 2022 Andrea Paternesi Rebirth project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,25 @@ import it.rebirthproject.ufoeb.testutils.validators.Validator;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ListVerifier<E, V extends Validator<E>> {
+public class UnorderedListVerifier<E, V extends Validator<E>> {
 
-    public final void assertAsExpected(List<E> list, List<V> elementValidators) throws Exception {       
+    public final void assertAsExpected(List<E> list, List<V> elementValidators) throws Exception {
         assertEquals(elementValidators.size(), list.size(), "The number of elements was different from expectations.");
 
         for (int i = 0; i < list.size(); i++) {
             E element = list.get(i);
-            V elementValidator = elementValidators.get(i);
-            elementValidator.assertValid(element);
+            int numberOfEceptions = 0;
+            for (V elementValidator : elementValidators) {
+                try {
+                    elementValidator = elementValidators.get(i);
+                    elementValidator.assertValid(element);
+                } catch (Exception ex) {
+                    numberOfEceptions++;
+                }
+            }
+            if (numberOfEceptions == elementValidators.size()) {
+                throw new Exception("I did not find this element in the list as expected." + element);
+            }
         }
     }
 }

@@ -26,7 +26,9 @@ import it.rebirthproject.ufoeb.dto.registrations.Registration;
 import it.rebirthproject.ufoeb.services.ListenerMethodFinder;
 import it.rebirthproject.ufoeb.testutils.validators.ExpectedMessage;
 import it.rebirthproject.ufoeb.testutils.validators.ExpectedRegistration;
+import it.rebirthproject.ufoeb.testutils.validators.NonBlockingExpectedRegistration;
 import it.rebirthproject.ufoeb.testutils.verifiers.ListVerifier;
+import it.rebirthproject.ufoeb.testutils.verifiers.UnorderedListVerifier;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.slf4j.Logger;
@@ -57,6 +59,7 @@ public abstract class BaseTest {
     protected static ExecutorService executorService;
     protected static ListVerifier<Message, ExpectedMessage> messageListVerifier;
     protected static ListVerifier<Registration, ExpectedRegistration> registrationListVerifier;
+    protected static UnorderedListVerifier<Registration, NonBlockingExpectedRegistration> unorderedRegistrationListVerifier;
 
     protected static RegisteredClass1ToEventInterface registeredObject1ToEventInterface = new RegisteredClass1ToEventInterface();
     protected static RegisteredClass1ToEvent1 registeredObject1ToEvent1 = new RegisteredClass1ToEvent1();
