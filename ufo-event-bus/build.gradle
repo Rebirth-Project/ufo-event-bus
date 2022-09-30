@@ -20,9 +20,13 @@ import java.text.SimpleDateFormat
 plugins {
     id "java-library"
     id 'maven-publish'
-    id 'org.javamodularity.moduleplugin' version '1.8.12'
-    //id 'net.researchgate.release' version '3.0.2'
+    id 'org.javamodularity.moduleplugin' version '1.8.12'   
 }
+
+group = 'it.rebirthproject'
+archivesBaseName = 'ufoeventbus'
+
+modularity.mixedJavaRelease 8
 
 Date buildTimeAndDate = new Date()
 ext {   
@@ -44,15 +48,6 @@ compileTestJava {
     options.encoding = "UTF-8"
 }
 
-javadoc.options.encoding = 'UTF-8'
-
-
-modularity.mixedJavaRelease 8 // sets "--release 8" for main code, and "--release 9" for "module-info.java"
-//    test.moduleOptions.runOnClasspath = true // optional (if you want your tests to still run on classpath)
-
-group = 'it.rebirthproject'
-archivesBaseName = 'ufoeventbus'
-
 dependencies {
     api 'org.slf4j:slf4j-api:2.0.2'
     testImplementation 'ch.qos.logback:logback-classic:1.4.1'
@@ -68,19 +63,6 @@ if (JavaVersion.current().isJava8Compatible()) {
     }
 }
 
-javadoc {
-    failOnError = false
-    title = "EventBus ${version} API"
-    options.bottom = ''
-    options.showFromPrivate()
-    options.setWindowTitle("UfoEventBus JavaDoc")
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    archiveClassifier.set("javadoc")
-    from 'build/docs/javadoc'
-}
-
 tasks.withType(Jar) {
     manifest.attributes(
             'Specification-Title': 'UFO Event Bus',
@@ -92,6 +74,20 @@ tasks.withType(Jar) {
             'Build-Date': project.buildDate,
             'Build-Time': project.buildTime
     )
+}
+
+javadoc {
+    failOnError = false
+    title = "EventBus ${version} API"
+    options.encoding = 'UTF-8'
+    options.bottom = ''
+    options.showFromPrivate()
+    options.setWindowTitle("UfoEventBus JavaDoc")
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    archiveClassifier.set("javadoc")
+    from 'build/docs/javadoc'
 }
 
 task sourcesJar(type: Jar) {
