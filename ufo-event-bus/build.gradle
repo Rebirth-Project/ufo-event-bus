@@ -111,22 +111,14 @@ test {
     }
 }
 
-signing {
-       
+signing {       
         //If we are in guthub then we will find those properties otherwise we are in local PC and we use directly gpg keyring (default)    
-        if(project.hasProperty('signingKey') && project.hasProperty('signingPassword')) {
-            println 'La variabile esiste?? -------------------> '+findProperty("signingKey")
-            println 'La variabile esiste?? -------------------> '+findProperty("signingPassword")    
+        if(project.hasProperty('signingKey') && project.hasProperty('signingPassword')) {            
             def signingKey = findProperty("signingKey")
             def signingPassword = findProperty("signingPassword")        
             useInMemoryPgpKeys(signingKey, signingPassword)
-            sign configurations.archives
-        }        
-        else {
-            println 'Siamo nel caso sbagliato di firma -------------------> !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! '
-            sign configurations.archives
-        }
-    
+        }                
+        sign configurations.archives            
 }
 
 //uploadArchives {
