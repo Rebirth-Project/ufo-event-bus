@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-
+    name: Build Project
     runs-on: ubuntu-latest
 
     steps:
@@ -26,3 +26,11 @@ jobs:
         run: ./gradlew -version
       - name: Build with Gradle
         run: ./gradlew clean build
+      - name: Sign with Gradle
+        env:
+            #ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.SONATYPE_PASSWORD }}
+            #ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.SONATYPE_USERNAME }}
+            ORG_GRADLE_PROJECT_signingKey: ${{ secrets.REBIRTH_GPG_SECRET_KEY }}
+            ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.REBIRTH_GPG_SECRET_KEY_PASSWORD }}
+        run: ./gradlew sign
+  
