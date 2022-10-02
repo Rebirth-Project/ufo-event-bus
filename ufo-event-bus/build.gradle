@@ -118,8 +118,11 @@ signing {
         def signingKey = findProperty("signingKey")
         def signingPassword = findProperty("signingPassword")
         useInMemoryPgpKeys(signingKey, signingPassword)
-    }    
-    sign configurations.archives
+        sign configurations.archives
+    }        
+    else {
+        sign configurations.archives
+    }
 }
 
 //uploadArchives {
