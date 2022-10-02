@@ -121,6 +121,7 @@ signing {
         sign configurations.archives
     }        
     else {
+        println 'Siamo nel caso sbagliato di firma -------------------> !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! '
         sign configurations.archives
     }
 }
