@@ -112,8 +112,9 @@ test {
 }
 
 signing {
-    //If we are in guthub then we will find those properties otherwise we are in local PC and we use directly gpg keyring (default)
+    //If we are in guthub then we will find those properties otherwise we are in local PC and we use directly gpg keyring (default)    
     if(project.hasProperty('ORG_GRADLE_PROJECT_signingKey') && project.hasProperty('ORG_GRADLE_PROJECT_signingPassword')) {
+        println 'La variabile esiste?? -------------------> '+project.ORG_GRADLE_PROJECT_signingPassword
         def signingKey = findProperty("signingKey")
         def signingPassword = findProperty("signingPassword")
         useInMemoryPgpKeys(signingKey, signingPassword)
