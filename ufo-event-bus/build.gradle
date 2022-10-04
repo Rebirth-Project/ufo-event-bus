@@ -66,10 +66,10 @@ if (JavaVersion.current().isJava8Compatible()) {
 
 tasks.withType(Jar) {
     manifest.attributes(
-            'Specification-Title': 'UFO Event Bus',
+            'Specification-Title': 'UFOEventBus',
             'Specification-Vendor': 'Rebirth Project',
-            'Specification-Version': archiveVersion.get().replace('-SNAPSHOT', ''),
-            'Implementation-Title': 'UFO Event Bus',
+            'Specification-Version': archiveVersion.get(),
+            'Implementation-Title': 'UFOEventBus',
             'Implementation-Vendor': 'Rebirth Project',
             'Implementation-Version': archiveVersion.get(),
             'Build-Date': project.buildDate,
@@ -87,19 +87,17 @@ javadoc {
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    archiveClassifier.set("javadoc")
-    from 'build/docs/javadoc'
+    archiveClassifier.set("javadoc")   
+    from javadoc
 }
 
 task sourcesJar(type: Jar) {
-    from sourceSets.main.allSource
     archiveClassifier.set("sources")
+    from sourceSets.main.allSource    
 }
 
 artifacts {
-    archives jar
-    archives javadocJar
-    archives sourcesJar
+    archives jar, javadocJar, sourcesJar
 }
 
 test {
@@ -111,6 +109,55 @@ test {
     }
 }
 
+publishing {
+    repositories {
+        maven {
+            name = "OSSRH"
+            def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            
+            credentials {
+                username = project.hasProperty('LocalSonatypeUsername') ? project.LocalSonatypeUsername : findProperty("sonatypeUsername")
+                password = project.hasProperty('LocalSonatypePassword') ? project.LocalSonatypePassword : findProperty("sonatypePassword")
+            }
+        }
+    }
+    publications {
+        mavenJava(MavenPublication) {
+            from(components.java)
+            artifact(tasks["sourcesJar"])
+            artifact(tasks["javadocJar"])
+            pom {
+                name = 'ufoeventbus'
+                description = 'UFO EventBus: Ultra Fast Object oriented event bus for Java and Android'
+                url = 'https://github.com/Rebirth-Project/ufo-event-bus'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'patton73'
+                        name = 'Andrea Paternesi'
+                    }
+                    developer {
+                        id = 'mavek87'
+                        name = 'Matteo Veroni'
+                    }
+                }
+                scm {
+                    url = 'https://github.com/Rebirth-Project/ufo-event-bus'
+                    connection = 'scm:git://github.com:Rebirth-Project/ufo-event-bus.git'
+                    developerConnection = 'scm:github.com:Rebirth-Project/ufo-event-bus.git'
+                }
+            }
+        }
+    }
+}
+
 signing {       
         //If we are in guthub then we will find those properties otherwise we are in local PC and we use directly gpg keyring (default)    
         if(project.hasProperty('signingKey') && project.hasProperty('signingPassword')) {            
@@ -118,17 +165,9 @@ signing {
             def signingPassword = findProperty("signingPassword")        
             useInMemoryPgpKeys(signingKey, signingPassword)
         }                
-        sign configurations.archives            
+        //sign configurations.archives  
+        sign publishing.publications.mavenJava
 }
 
-//uploadArchives {
-//    repositories {
-//        mavenDeployer {         
-//            pom.project {
-//                name 'EventBus'
-//                description 'EventBus is a publish/subscribe event bus.'
-//            }
-//        }
-//    }
-//}
-
+//test.mustRunAfter(build)
+//signing.mustRunAfter(test)
