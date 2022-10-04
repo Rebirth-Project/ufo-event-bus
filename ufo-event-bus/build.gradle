@@ -21,7 +21,8 @@ plugins {
     id "signing"
     id "java-library"
     id 'maven-publish'
-    id 'org.javamodularity.moduleplugin' version '1.8.12'   
+    id 'org.javamodularity.moduleplugin' version '1.8.12' 
+    id 'net.researchgate.release' version '3.0.2'
 }
 
 group = 'it.rebirthproject'
@@ -168,6 +169,15 @@ signing {
         //sign configurations.archives  
         sign publishing.publications.mavenJava
 }
+
+release {
+    failOnSnapshotDependencies = false
+    git {
+        requireBranch.set('') // consente di produrre release da branch != master
+    }
+}
+
+//afterReleaseBuild.dependsOn publish
 
 //test.mustRunAfter(build)
 //signing.mustRunAfter(test)
