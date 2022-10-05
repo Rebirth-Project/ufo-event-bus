@@ -24,18 +24,16 @@ public class UnorderedListVerifier<E, V extends Validator<E>> {
     public final void assertAsExpected(List<E> list, List<V> elementValidators) throws Exception {
         assertEquals(elementValidators.size(), list.size(), "The number of elements was different from expectations.");
 
-        for (int i = 0; i < list.size(); i++) {
-            E element = list.get(i);
-            int numberOfEceptions = 0;
+        for (E element : list) {
+            int numberOfEceptionsSearchingElement = 0;
             for (V elementValidator : elementValidators) {
                 try {
-                    elementValidator = elementValidators.get(i);
                     elementValidator.assertValid(element);
                 } catch (Exception ex) {
-                    numberOfEceptions++;
+                    numberOfEceptionsSearchingElement++;
                 }
             }
-            if (numberOfEceptions == elementValidators.size()) {
+            if (numberOfEceptionsSearchingElement == elementValidators.size()) {
                 throw new Exception("I did not find this element in the list as expected." + element);
             }
         }
