@@ -100,7 +100,7 @@ public class ListenerMethodFinder {
     /**
      * This set the usage of Lambdafactory instead of standard java reflection
      *
-     * @see EventBusBuilder#setUseLambdaFactoryInsteadStandardReflection()
+     * @see EventBusBuilder#setUseLambdaFactoryInsteadOfStandardReflection()
      */
     private final boolean useLambdaFactoryInsteadOfStandardReflection;
     /**
