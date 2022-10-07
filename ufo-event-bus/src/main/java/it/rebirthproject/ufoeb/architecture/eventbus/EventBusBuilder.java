@@ -36,12 +36,13 @@ import static it.rebirthproject.ufoeb.eventinheritancepolicy.base.InheritancePol
 public final class EventBusBuilder {
 
     /**
-     * The length of the infrastructure internal queues used by the {@link EventBusInfrastructure}.
-     * Basically the length is important for the commandQueryMessageQueue of 
-     * the {@link BusMemoryStateManager} to avoid the block of the {@link BusMemoryStateManager} 
-     * and should be calculated correctly depending on the pressure of the 
-     * application that uses the bus (posts speed, number of posting threads, and so on).
-     * The default number of workers is 100.
+     * The length of the infrastructure internal queues used by the
+     * {@link EventBusInfrastructure}. Basically the length is important for the
+     * commandQueryMessageQueue of the {@link BusMemoryStateManager} to avoid
+     * the block of the {@link BusMemoryStateManager} and should be calculated
+     * correctly depending on the pressure of the application that uses the bus
+     * (posts speed, number of posting threads, and so on). The default number
+     * of workers is 100.
      */
     private Integer queueLength = 100;
 
@@ -65,6 +66,20 @@ public final class EventBusBuilder {
      * The default value is to look for only the listener's class methods.
      */
     private boolean listenerSuperclassInheritance = false;
+    /**
+     * This parameter should be used when you want to use spped up listener's
+     * methods call. Instead the standard reflection getMethod() workers will
+     * use the method handler created by the lambdafactory getMethodHandler().
+     * Very useful when listener's methods are not time consuming. Anyway beware
+     * that MethodHandles.lookup() does not work with modules and with java 9>
+     * when a listener class is located in a different module than the
+     * eventbus's one. So basically this will work always with java 8. And with
+     * java 9> when you do not use modules, for example in an application. If
+     * you want to create a library with java 9> that uses the ufoeventbus then
+     * you must use the default method. for more informations see TODO inserire
+     * link alla documentazione ufficiale
+     */
+    private boolean useLambdaFactoryInsteadStandardReflection = false;
     /**
      * If a registering listener does not have any {@link Listen} annotated
      * method or, in case of event inheritance enabled, also its super classes
@@ -225,6 +240,19 @@ public final class EventBusBuilder {
     }
 
     /**
+     * This set the usage of Lambdafactory instead of standard java reflection
+     *
+     * @see EventBusBuilder#useLambdaFactoryInsteadStandardReflection
+     * 
+     * @return The {@link EventBusBuilder} instance configured to throw a no
+     * listener found {@link EventBusException}.
+     */
+    public EventBusBuilder setUseLambdaFactoryInsteadStandardReflection() {
+        this.useLambdaFactoryInsteadStandardReflection = true;
+        return this;
+    }
+
+    /**
      * Sets the {@link #eventInheritancePolicy} to
      * {@link ClassEventInheritancePolicy}
      *
@@ -270,7 +298,8 @@ public final class EventBusBuilder {
     }
 
     /**
-     * Sets the length of internal queues used by the the {@link EventBusInfrastructure}.
+     * Sets the length of internal queues used by the the
+     * {@link EventBusInfrastructure}.
      *
      * @param queueLength The length of the infrastructure queues
      * @return The {@link EventBusBuilder} instance configured with the updated
@@ -359,7 +388,7 @@ public final class EventBusBuilder {
     public EventBus build() throws EventBusException {
         try {
             final EventBusInfrastructure eventBusInfrastructure = new EventBusInfrastructure(
-                    new ListenerMethodFinder(listenerSuperclassInheritance, throwNotValidMethodException, throwNoListenerAnnotationException, inheritancePackageFrontierPath),
+                    new ListenerMethodFinder(listenerSuperclassInheritance, throwNotValidMethodException, throwNoListenerAnnotationException, useLambdaFactoryInsteadStandardReflection, inheritancePackageFrontierPath),
                     eventInheritancePolicy,
                     queueLength,
                     numberOfWorkers,

@@ -41,6 +41,7 @@ public abstract class BaseTest {
 
     public static final String TEST_FRONTIER_PATH = "it.rebirthproject.ufoeb";
 
+    public static final boolean USE_LAMBDAFACTORY_INSTEAD_OF_STANDARD_REFLECTION = false;
     public static final boolean LISTENER_SUPERCLASS_INHERITANCE = true;
     public static final boolean THROW_NOT_VALID_METHOD_EXCEPTION = true;
     public static final boolean THROW_NO_LISTENERS_EXCEPTION = true;
@@ -92,7 +93,7 @@ public abstract class BaseTest {
 
         messageQueue = new ArrayBlockingQueue<>(QUEUE_LENGHT);
         eventWorkerQueue = new LinkedBlockingQueue<>(QUEUE_LENGHT);
-        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, THROW_NO_LISTENERS_EXCEPTION, EMPTY_INHERITANCE_FRONTIER_PATH);
+        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, THROW_NO_LISTENERS_EXCEPTION, USE_LAMBDAFACTORY_INSTEAD_OF_STANDARD_REFLECTION, EMPTY_INHERITANCE_FRONTIER_PATH);
         executorService = Executors.newSingleThreadExecutor();
         messageListVerifier = new ListVerifier<>();
         registrationListVerifier = new ListVerifier<>();

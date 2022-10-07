@@ -24,6 +24,8 @@ import it.rebirthproject.ufoeb.dto.registrations.Registration;
 import it.rebirthproject.ufoeb.eventannotation.Listen;
 import it.rebirthproject.ufoeb.exceptions.EventBusException;
 import it.rebirthproject.ufoeb.architecture.eventbus.EventBus;
+import it.rebirthproject.ufoeb.dto.registrations.RegistrationMethodHandler;
+import it.rebirthproject.ufoeb.dto.registrations.RegistrationStandardReflection;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -96,6 +98,12 @@ public class ListenerMethodFinder {
      */
     private final boolean throwNoListenerAnnotationException;
     /**
+     * This set the usage of Lambdafactory instead of standard java reflection
+     *
+     * @see EventBusBuilder#setUseLambdaFactoryInsteadStandardReflection()
+     */
+    private final boolean useLambdaFactoryInsteadStandardReflection;
+    /**
      * Sets the package used to stop the iteration over classes while using
      * event inheritance. If a class belongs to the set package then the
      * iteration stops. This parameter must be used only when event inheritance
@@ -114,13 +122,17 @@ public class ListenerMethodFinder {
      * attribute {@link #throwNotValidMethodException}
      * @param throwNoListenerAnnotationException Parameter used to initialize
      * the attribute {@link #throwNoListenerAnnotationException}
+     * @param useLambdaFactoryInsteadStandardReflection Parameter used to
+     * initialize the attribute
+     * {@link #useLambdaFactoryInsteadStandardReflection}
      * @param inheritancePackageFrontierPath Parameter used to initialize the
      * attribute {@link #inheritancePackageFrontierPath}
      */
-    public ListenerMethodFinder(boolean listenerSuperclassInheritance, boolean throwNotValidMethodException, boolean throwNoListenerAnnotationException, String inheritancePackageFrontierPath) {
+    public ListenerMethodFinder(boolean listenerSuperclassInheritance, boolean throwNotValidMethodException, boolean throwNoListenerAnnotationException, boolean useLambdaFactoryInsteadStandardReflection, String inheritancePackageFrontierPath) {
         this.listenerSuperclassInheritance = listenerSuperclassInheritance;
         this.throwNotValidMethodException = throwNotValidMethodException;
         this.throwNoListenerAnnotationException = throwNoListenerAnnotationException;
+        this.useLambdaFactoryInsteadStandardReflection = useLambdaFactoryInsteadStandardReflection;
         this.inheritancePackageFrontierPath = (inheritancePackageFrontierPath == null) ? EMPTY_INHERITANCE_PACKAGE_FRONTIER_PATH : inheritancePackageFrontierPath;
     }
 
@@ -157,7 +169,11 @@ public class ListenerMethodFinder {
 
                             Registration registration;
                             try {
-                                registration = new Registration(listenerToRegister, method, listenerAnnotation.priority());
+                                if (useLambdaFactoryInsteadStandardReflection) {
+                                    registration = new RegistrationStandardReflection(listenerToRegister, method, listenerAnnotation.priority());
+                                } else {
+                                    registration = new RegistrationMethodHandler(listenerToRegister, method, listenerAnnotation.priority());
+                                }
                             } catch (Throwable ex) {
                                 String methodName = method.getDeclaringClass().getName() + "." + method.getName();
                                 throw new EventBusException("Could not create method handler for public method " + methodName + ".", ex);

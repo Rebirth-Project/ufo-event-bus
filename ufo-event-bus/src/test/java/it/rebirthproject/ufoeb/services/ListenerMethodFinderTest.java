@@ -48,12 +48,12 @@ public class ListenerMethodFinderTest extends BaseTest {
     public void beforeEach() {
         memoryState = new MemoryState(!SAFE_REGISTRATIONS_NEEDED, FactoryInheritancePolicy.createInheritancePolicy(InheritancePolicyType.COMPLETE_EVENT_INHERITANCE), VERBOSE_LOGGING);
         unorderedRegistrationListVerifier = new UnorderedListVerifier<>();
-        registrationListVerifier= new ListVerifier<>();
+        registrationListVerifier = new ListVerifier<>();
     }
 
     @Test
     public void finder_doesnt_throw_no_listener_annotation_exception_when_parameter_off() {
-        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, !THROW_NO_LISTENER_ANNOTATION_EXCEPTION, EMPTY_INHERITANCE_FRONTIER_PATH);
+        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, !THROW_NO_LISTENER_ANNOTATION_EXCEPTION, USE_LAMBDAFACTORY_INSTEAD_OF_STANDARD_REFLECTION, EMPTY_INHERITANCE_FRONTIER_PATH);
         assertDoesNotThrow(() -> {
             listenerMethodFinder.findListenerMethods(new Object(), memoryState);
             assertTrue(memoryState.isEventsRegistrationsEmpty());
@@ -62,7 +62,7 @@ public class ListenerMethodFinderTest extends BaseTest {
 
     @Test
     public void finder_throws_no_listener_annotation_exception_when_needed() {
-        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, THROW_NO_LISTENER_ANNOTATION_EXCEPTION, EMPTY_INHERITANCE_FRONTIER_PATH);
+        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, THROW_NO_LISTENER_ANNOTATION_EXCEPTION, USE_LAMBDAFACTORY_INSTEAD_OF_STANDARD_REFLECTION, EMPTY_INHERITANCE_FRONTIER_PATH);
         Object listenerWithoutListenerAnnotationMethod = new Object();
         EventBusException exception = assertThrows(EventBusException.class,
                 () -> listenerMethodFinder.findListenerMethods(listenerWithoutListenerAnnotationMethod, memoryState)
@@ -74,7 +74,7 @@ public class ListenerMethodFinderTest extends BaseTest {
     @Test
     public void finder_doesnt_throw_no_listener_annotation_exception_when_not_needed() {
         ClassWithValidListenerMethodAnnotation objWithValidListenerObjectMethodAnnotation = new ClassWithValidListenerMethodAnnotation();
-        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, THROW_NO_LISTENER_ANNOTATION_EXCEPTION, EMPTY_INHERITANCE_FRONTIER_PATH);
+        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, THROW_NO_LISTENER_ANNOTATION_EXCEPTION, USE_LAMBDAFACTORY_INSTEAD_OF_STANDARD_REFLECTION, EMPTY_INHERITANCE_FRONTIER_PATH);
         assertDoesNotThrow(() -> {
             listenerMethodFinder.findListenerMethods(objWithValidListenerObjectMethodAnnotation, memoryState);
             assertEquals(1, memoryState.getEventEventsRegistrationsSize());
@@ -83,7 +83,7 @@ public class ListenerMethodFinderTest extends BaseTest {
 
     @Test
     public void finder_does_not_throw_not_valid_method_exception_when_not_required() {
-        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, !THROW_NOT_VALID_METHOD_EXCEPTION, !THROW_NO_LISTENER_ANNOTATION_EXCEPTION, EMPTY_INHERITANCE_FRONTIER_PATH);
+        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, !THROW_NOT_VALID_METHOD_EXCEPTION, !THROW_NO_LISTENER_ANNOTATION_EXCEPTION, USE_LAMBDAFACTORY_INSTEAD_OF_STANDARD_REFLECTION, EMPTY_INHERITANCE_FRONTIER_PATH);
         assertDoesNotThrow(() -> {
             listenerMethodFinder.findListenerMethods(new TestClassToRegisterWithMethodWithTooManyParameters(), memoryState);
             assertTrue(memoryState.isEventsRegistrationsEmpty());
@@ -92,7 +92,7 @@ public class ListenerMethodFinderTest extends BaseTest {
 
     @Test
     public void finder_throws_not_valid_method_exception_on_method_with_too_many_parameters_when_required() {
-        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, !THROW_NO_LISTENER_ANNOTATION_EXCEPTION, EMPTY_INHERITANCE_FRONTIER_PATH);
+        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, !THROW_NO_LISTENER_ANNOTATION_EXCEPTION, USE_LAMBDAFACTORY_INSTEAD_OF_STANDARD_REFLECTION, EMPTY_INHERITANCE_FRONTIER_PATH);
         TestClassToRegisterWithMethodWithTooManyParameters listenerObjectToRegister = new TestClassToRegisterWithMethodWithTooManyParameters();
         EventBusException exception = assertThrows(EventBusException.class, ()
                 -> listenerMethodFinder.findListenerMethods(listenerObjectToRegister, memoryState)
@@ -103,7 +103,7 @@ public class ListenerMethodFinderTest extends BaseTest {
 
     @Test
     public void finder_throws_not_valid_method_exception_on_private_method_when_required() {
-        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, !THROW_NO_LISTENER_ANNOTATION_EXCEPTION, EMPTY_INHERITANCE_FRONTIER_PATH);
+        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, !THROW_NO_LISTENER_ANNOTATION_EXCEPTION, USE_LAMBDAFACTORY_INSTEAD_OF_STANDARD_REFLECTION, EMPTY_INHERITANCE_FRONTIER_PATH);
         TestClassToRegisterWithPrivateMethod listenerObjectToRegister = new TestClassToRegisterWithPrivateMethod();
         EventBusException exception = assertThrows(EventBusException.class, ()
                 -> listenerMethodFinder.findListenerMethods(listenerObjectToRegister, memoryState)
@@ -114,7 +114,7 @@ public class ListenerMethodFinderTest extends BaseTest {
 
     @Test
     public void finder_throws_not_valid_method_exception_on_static_method_when_required() {
-        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, !THROW_NO_LISTENER_ANNOTATION_EXCEPTION, EMPTY_INHERITANCE_FRONTIER_PATH);
+        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, !THROW_NO_LISTENER_ANNOTATION_EXCEPTION, USE_LAMBDAFACTORY_INSTEAD_OF_STANDARD_REFLECTION, EMPTY_INHERITANCE_FRONTIER_PATH);
         TestClassToRegisterWithStaticMethod listenerObjectToRegister = new TestClassToRegisterWithStaticMethod();
         EventBusException exception = assertThrows(EventBusException.class, ()
                 -> listenerMethodFinder.findListenerMethods(listenerObjectToRegister, memoryState)
@@ -125,7 +125,7 @@ public class ListenerMethodFinderTest extends BaseTest {
 
     @Test
     public void finder_throws_not_valid_method_exception_on_protected_method_when_required() {
-        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, !THROW_NO_LISTENER_ANNOTATION_EXCEPTION, EMPTY_INHERITANCE_FRONTIER_PATH);
+        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, !THROW_NO_LISTENER_ANNOTATION_EXCEPTION, USE_LAMBDAFACTORY_INSTEAD_OF_STANDARD_REFLECTION, EMPTY_INHERITANCE_FRONTIER_PATH);
         TestClassToRegisterWithProtectedMethod listenerObjectToRegister = new TestClassToRegisterWithProtectedMethod();
         EventBusException exception = assertThrows(EventBusException.class, ()
                 -> listenerMethodFinder.findListenerMethods(listenerObjectToRegister, memoryState)
@@ -137,7 +137,7 @@ public class ListenerMethodFinderTest extends BaseTest {
     @Test
     public void finder_does_not_search_for_events_inheritance_when_not_required() throws Exception {
         memoryState = new MemoryState(!SAFE_REGISTRATIONS_NEEDED, new NoEventInheritancePolicy(), true);
-        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, THROW_NO_LISTENER_ANNOTATION_EXCEPTION, EMPTY_INHERITANCE_FRONTIER_PATH);
+        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, THROW_NO_LISTENER_ANNOTATION_EXCEPTION, USE_LAMBDAFACTORY_INSTEAD_OF_STANDARD_REFLECTION, EMPTY_INHERITANCE_FRONTIER_PATH);
         TestClassToRegisterWithCorrectMethod listenerObjectToRegister = new TestClassToRegisterWithCorrectMethod();
         listenerMethodFinder.findListenerMethods(listenerObjectToRegister, memoryState);
 
@@ -150,7 +150,7 @@ public class ListenerMethodFinderTest extends BaseTest {
 
     @Test
     public void finder_searches_for_events_with_inheritance_when_required() throws Exception {
-        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, THROW_NO_LISTENER_ANNOTATION_EXCEPTION, EMPTY_INHERITANCE_FRONTIER_PATH);
+        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, THROW_NO_LISTENER_ANNOTATION_EXCEPTION, USE_LAMBDAFACTORY_INSTEAD_OF_STANDARD_REFLECTION, EMPTY_INHERITANCE_FRONTIER_PATH);
         TestClassToRegisterWithEventInheritance listenerObjectToRegister = new TestClassToRegisterWithEventInheritance();
         listenerMethodFinder.findListenerMethods(listenerObjectToRegister, memoryState);
 
@@ -163,7 +163,7 @@ public class ListenerMethodFinderTest extends BaseTest {
 
     @Test
     public void finder_searches_for_events_in_all_classes_hierarchy() throws Exception {
-        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, THROW_NO_LISTENER_ANNOTATION_EXCEPTION, EMPTY_INHERITANCE_FRONTIER_PATH);
+        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, THROW_NO_LISTENER_ANNOTATION_EXCEPTION, USE_LAMBDAFACTORY_INSTEAD_OF_STANDARD_REFLECTION, EMPTY_INHERITANCE_FRONTIER_PATH);
         TestClassSonToRegister listenerObjectToRegister = new TestClassSonToRegister();
 
         listenerMethodFinder.findListenerMethods(listenerObjectToRegister, memoryState);
@@ -179,7 +179,7 @@ public class ListenerMethodFinderTest extends BaseTest {
 
     @Test
     public void finder_finds_all_methods_listening_to_the_same_event() throws Exception {
-        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, THROW_NO_LISTENER_ANNOTATION_EXCEPTION, EMPTY_INHERITANCE_FRONTIER_PATH);
+        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, THROW_NO_LISTENER_ANNOTATION_EXCEPTION, USE_LAMBDAFACTORY_INSTEAD_OF_STANDARD_REFLECTION, EMPTY_INHERITANCE_FRONTIER_PATH);
         TestClassManyMethodsSameEventToRegister listenerObjectToRegister = new TestClassManyMethodsSameEventToRegister();
 
         listenerMethodFinder.findListenerMethods(listenerObjectToRegister, memoryState);
@@ -198,7 +198,7 @@ public class ListenerMethodFinderTest extends BaseTest {
 
     @Test
     public void finder_stop_reflection_when_package_is_different_from_inheritance_frontier_path() throws Exception {
-        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, !THROW_NOT_VALID_METHOD_EXCEPTION, !THROW_NO_LISTENER_ANNOTATION_EXCEPTION, "it.rebirthproject.ufoeb.dto.objectstoregister.sonpackage");
+        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, !THROW_NOT_VALID_METHOD_EXCEPTION, !THROW_NO_LISTENER_ANNOTATION_EXCEPTION, USE_LAMBDAFACTORY_INSTEAD_OF_STANDARD_REFLECTION, "it.rebirthproject.ufoeb.dto.objectstoregister.sonpackage");
         TestClassSonOnDeepPackageToRegister listenerObjectToRegister = new TestClassSonOnDeepPackageToRegister();
         listenerMethodFinder.findListenerMethods(listenerObjectToRegister, memoryState);
 
@@ -211,7 +211,7 @@ public class ListenerMethodFinderTest extends BaseTest {
 
     @Test
     public void finder_doesnt_stop_reflection_if_inheritance_frontier_path_not_set() throws Exception {
-        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, !THROW_NOT_VALID_METHOD_EXCEPTION, !THROW_NO_LISTENER_ANNOTATION_EXCEPTION, EMPTY_INHERITANCE_FRONTIER_PATH);
+        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, !THROW_NOT_VALID_METHOD_EXCEPTION, !THROW_NO_LISTENER_ANNOTATION_EXCEPTION, USE_LAMBDAFACTORY_INSTEAD_OF_STANDARD_REFLECTION, EMPTY_INHERITANCE_FRONTIER_PATH);
         TestClassSonOnDeepPackageToRegister listenerObjectToRegister = new TestClassSonOnDeepPackageToRegister();
         listenerMethodFinder.findListenerMethods(listenerObjectToRegister, memoryState);
 

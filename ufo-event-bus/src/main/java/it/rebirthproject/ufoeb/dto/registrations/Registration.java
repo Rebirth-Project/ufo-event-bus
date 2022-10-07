@@ -15,43 +15,35 @@
  */
 package it.rebirthproject.ufoeb.dto.registrations;
 
-import it.rebirthproject.ufoeb.services.lambdafactory.Handler;
-import it.rebirthproject.ufoeb.services.lambdafactory.LambdaFactory;
 import java.lang.reflect.Method;
 
 /**
- * DTO Representing all the data of a listener to register in the system.
+ * Interface representing a registration.
  */
-public class Registration {
+public abstract class Registration {
 
     /**
      * The listener of the {@link Registration}
      */
-    private final Object listener;
+    protected Object listener;
     /**
      * The priority of the {@link Registration}
      */
-    private final int priority;
+    protected int priority;
+
     /**
-     * The callback method to invoke when a new notification for the listener needs to be delivered
+     * The callback method to invoke when a new notification for the listener
+     * needs to be delivered
      */
-    private final Method method;
+    protected Method method;
+
     /**
-     * The handler method to invoke when a new notification for the listener needs to be delivered. This should be faster.
+     * Method to process a registration
+     *
+     * @param event the event to process
+     * @throws java.lang.Exception
      */
-    private final Handler methodHandler;
-    
-    /**
-     * @param listener The listener of the {@link Registration}
-     * @param method   The callback method to invoke when a new notification for the listener needs to be delivered
-     * @param priority The priority of the {@link Registration}
-     */
-    public Registration(Object listener, Method method, int priority) throws Throwable {
-        this.listener = listener;
-        this.method = method;
-        this.methodHandler = null; //LambdaFactory.create(method);
-        this.priority = priority;
-    }
+    public abstract void process(Object event) throws Exception;
 
     /**
      * Getter for the listener of the {@link Registration}
@@ -72,20 +64,13 @@ public class Registration {
     }
 
     /**
-     * Getter for method to invoke when a new notification for the listener needs to be delivered
+     * Getter for method to invoke when a new notification for the listener
+     * needs to be delivered
      *
-     * @return The method to invoke when a new notification for the listener needs to be delivered
+     * @return The method to invoke when a new notification for the listener
+     * needs to be delivered
      */
     public Method getMethod() {
         return method;
-    }
-    
-    /**
-     * Getter for methodHandler to invoke when a new notification for the listener needs to be delivered
-     *
-     * @return The methodHandler to invoke when a new notification for the listener needs to be delivered
-     */
-    public Handler getMethodHandler() {
-        return methodHandler;
     }
 }
