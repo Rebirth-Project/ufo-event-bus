@@ -102,7 +102,7 @@ public class ListenerMethodFinder {
      *
      * @see EventBusBuilder#setUseLambdaFactoryInsteadStandardReflection()
      */
-    private final boolean useLambdaFactoryInsteadStandardReflection;
+    private final boolean useLambdaFactoryInsteadOfStandardReflection;
     /**
      * Sets the package used to stop the iteration over classes while using
      * event inheritance. If a class belongs to the set package then the
@@ -122,17 +122,17 @@ public class ListenerMethodFinder {
      * attribute {@link #throwNotValidMethodException}
      * @param throwNoListenerAnnotationException Parameter used to initialize
      * the attribute {@link #throwNoListenerAnnotationException}
-     * @param useLambdaFactoryInsteadStandardReflection Parameter used to
+     * @param useLambdaFactoryInsteadOfStandardReflection Parameter used to
      * initialize the attribute
-     * {@link #useLambdaFactoryInsteadStandardReflection}
+     * {@link #useLambdaFactoryInsteadOfStandardReflection}
      * @param inheritancePackageFrontierPath Parameter used to initialize the
      * attribute {@link #inheritancePackageFrontierPath}
      */
-    public ListenerMethodFinder(boolean listenerSuperclassInheritance, boolean throwNotValidMethodException, boolean throwNoListenerAnnotationException, boolean useLambdaFactoryInsteadStandardReflection, String inheritancePackageFrontierPath) {
+    public ListenerMethodFinder(boolean listenerSuperclassInheritance, boolean throwNotValidMethodException, boolean throwNoListenerAnnotationException, boolean useLambdaFactoryInsteadOfStandardReflection, String inheritancePackageFrontierPath) {
         this.listenerSuperclassInheritance = listenerSuperclassInheritance;
         this.throwNotValidMethodException = throwNotValidMethodException;
         this.throwNoListenerAnnotationException = throwNoListenerAnnotationException;
-        this.useLambdaFactoryInsteadStandardReflection = useLambdaFactoryInsteadStandardReflection;
+        this.useLambdaFactoryInsteadOfStandardReflection = useLambdaFactoryInsteadOfStandardReflection;
         this.inheritancePackageFrontierPath = (inheritancePackageFrontierPath == null) ? EMPTY_INHERITANCE_PACKAGE_FRONTIER_PATH : inheritancePackageFrontierPath;
     }
 
@@ -169,10 +169,10 @@ public class ListenerMethodFinder {
 
                             Registration registration;
                             try {
-                                if (useLambdaFactoryInsteadStandardReflection) {
-                                    registration = new RegistrationStandardReflection(listenerToRegister, method, listenerAnnotation.priority());
-                                } else {
+                                if (useLambdaFactoryInsteadOfStandardReflection) {
                                     registration = new RegistrationMethodHandler(listenerToRegister, method, listenerAnnotation.priority());
+                                } else {
+                                    registration = new RegistrationStandardReflection(listenerToRegister, method, listenerAnnotation.priority());
                                 }
                             } catch (Throwable ex) {
                                 String methodName = method.getDeclaringClass().getName() + "." + method.getName();

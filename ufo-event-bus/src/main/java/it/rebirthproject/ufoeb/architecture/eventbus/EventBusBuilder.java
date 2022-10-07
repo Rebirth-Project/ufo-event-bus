@@ -79,7 +79,7 @@ public final class EventBusBuilder {
      * you must use the default method. for more informations see TODO inserire
      * link alla documentazione ufficiale
      */
-    private boolean useLambdaFactoryInsteadStandardReflection = false;
+    private boolean useLambdaFactoryInsteadOfStandardReflection = false;
     /**
      * If a registering listener does not have any {@link Listen} annotated
      * method or, in case of event inheritance enabled, also its super classes
@@ -242,13 +242,13 @@ public final class EventBusBuilder {
     /**
      * This set the usage of Lambdafactory instead of standard java reflection
      *
-     * @see EventBusBuilder#useLambdaFactoryInsteadStandardReflection
+     * @see EventBusBuilder#useLambdaFactoryInsteadOfStandardReflection
      * 
      * @return The {@link EventBusBuilder} instance configured to throw a no
      * listener found {@link EventBusException}.
      */
-    public EventBusBuilder setUseLambdaFactoryInsteadStandardReflection() {
-        this.useLambdaFactoryInsteadStandardReflection = true;
+    public EventBusBuilder setUseLambdaFactoryInsteadOfStandardReflection() {
+        this.useLambdaFactoryInsteadOfStandardReflection = true;
         return this;
     }
 
@@ -388,7 +388,7 @@ public final class EventBusBuilder {
     public EventBus build() throws EventBusException {
         try {
             final EventBusInfrastructure eventBusInfrastructure = new EventBusInfrastructure(
-                    new ListenerMethodFinder(listenerSuperclassInheritance, throwNotValidMethodException, throwNoListenerAnnotationException, useLambdaFactoryInsteadStandardReflection, inheritancePackageFrontierPath),
+                    new ListenerMethodFinder(listenerSuperclassInheritance, throwNotValidMethodException, throwNoListenerAnnotationException, useLambdaFactoryInsteadOfStandardReflection, inheritancePackageFrontierPath),
                     eventInheritancePolicy,
                     queueLength,
                     numberOfWorkers,
