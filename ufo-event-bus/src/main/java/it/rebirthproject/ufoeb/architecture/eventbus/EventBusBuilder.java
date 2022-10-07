@@ -76,8 +76,8 @@ public final class EventBusBuilder {
      * eventbus's one. So basically this will work always with java 8. And with
      * java 9> when you do not use modules, for example in an application. If
      * you want to create a library with java 9> that uses the ufoeventbus then
-     * you must use the default method. for more informations see TODO inserire
-     * link alla documentazione ufficiale
+     * you must use the default method. For more informations see 
+     * https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/invoke/MethodHandles.Lookup.html
      */
     private boolean useLambdaFactoryInsteadOfStandardReflection = false;
     /**
