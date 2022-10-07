@@ -2,8 +2,10 @@ name: Java Gradle compilation and Testing
 
 on:
   push:
-      branches:        
-        - '**'
+      branches:
+      - main
+      tags-ignore:
+      - '*'
   pull_request:
 
 jobs:
