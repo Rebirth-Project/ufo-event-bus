@@ -2,6 +2,8 @@ name: Java Gradle compilation and Testing
 
 on:
   push:
+      tags-ignore:        
+        - '**'
   pull_request:
 
 jobs:
