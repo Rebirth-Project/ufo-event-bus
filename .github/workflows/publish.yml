@@ -2,6 +2,7 @@ name: Java Gradle publishing
 
 on:
   tags:
+    - '*'    
 
 jobs:
   build:
