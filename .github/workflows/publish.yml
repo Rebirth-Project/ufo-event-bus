@@ -1,8 +1,9 @@
 name: Java Gradle publishing
 
 on:
-  tags:
-    - '*'    
+  push:  
+    tags:
+      - '*'    
 
 jobs:
   build:
