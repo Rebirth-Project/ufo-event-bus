@@ -14,10 +14,11 @@ system written in Java.
 * is entirely documented
 * the code is clean, testable, compact and very easy to understand and mantain
 * is covered with unit test in basically every part of logical code
-![Build Status](https://github.com/Rebirth-Project/ufo-event-bus/actions/workflows/build.yml/badge.svg)
 <br/>
-## Add Ufo Eventbus in your project
+![Build Status](https://github.com/Rebirth-Project/ufo-event-bus/actions/workflows/build.yml/badge.svg?raw=true)
+<br/>
 
+## Add Ufo Eventbus in your project
 
 ##### ```Gradle```
 
@@ -44,7 +45,7 @@ dependencies {
 
 ## Architecture Overview
 
-![Ufo Eventbus Architectureschema](documentation/UfoEventBusArchitectureFinalWhiteBackground.png?raw=true"Title")
+![Ufo Eventbus Architectureschema](documentation/UfoEventBusArchitectureFinalWhiteBackground.png?raw=true)
 
 
 ## Basic usage
