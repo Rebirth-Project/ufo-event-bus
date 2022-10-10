@@ -1,9 +1,45 @@
-# UFO EventBus
-UFO EventBus (Ultra Fast Object-Oriented Event Bus) is a powerful, lightweight and scalable publish/subscribe event 
-system written in Java.
+# UFO Event bus ![Ufo Eventbus Icon](documentation/UfoEventBus.png)
+UFO Event bus (Ultra Fast Object-oriented Event bus) is a powerful, lightweight and scalable publish/subscribe event 
+system written in Java. 
+
+[![Build Status](https://github.com/Rebirth-Project/ufo-event-bus/actions/workflows/build.yml/badge.svg)(https://github.com/Rebirth-Project/ufo-event-bus/actions)
+
+* is scalable
+* is very tiny (~50k jar)
+* performs well with Android and all versions of java >=8
+* used with java > 9 is compiled as module increasing encapsulation
+* it has no dependencies but SLF4J library for enabling logging 
+* can simplify the communication between components since decouples event posters and listeners
+* is completely asynchronous
+* is fast in almost every situations and loads and can be configured
+* has advanced features like listener priorities, events inheritance, listeners inheritance, inbound event order
+* is entirely documented
+* the code is clean, testable, compact and very easy to understand and mantain
+* is covered with unit test in basically every part of logical code
+<br/>
+<br/>
+
+## Add Ufo Eventbus in your project
 
 
-## Core Objects
+##### ```Gradle```
+
+```
+dependencies {
+    implementation "it.rebirthproject:ufoeventbus:1.0.0"
+}
+```
+##### ```Maven```
+
+```
+<dependency>
+    <groupId>it.rebirthproject</groupId>
+    <artifactId>ufoeventbus</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+<br/>
+##Core Objects
 
 - EventBus: The API of the event bus system
 - EventBusBuilder: The builder class to create new event bus instances
@@ -13,35 +49,6 @@ system written in Java.
 
 ![Ufo Eventbus Architectureschema](documentation/UfoEventBusArchitectureFinalWhiteBackground.png?raw=true"Title")
 
-## How to use it in your project
-
-#### ```Gradle```
-
-```
-repositories {
-    maven { url '...' }
-}
-
-dependencies {
-    implementation ''
-}
-```
-#### ```Maven```
-
-```
-<repositories>
-    <repository>
-    	<id></id>
-	<url></url>
-    </repository>
-</repositories>
-
-<dependency>
-    <groupId></groupId>
-    <artifactId></artifactId>
-    <version></version>
-</dependency>
-```
 
 ## Basic usage
 
@@ -90,11 +97,11 @@ public class Main extends Application {
 
 .......
 
-## Credits
+## Credits and License
+Copyright (C) 2021-2022 [Andrea Paternesi](https://github.com/patton73) 
+ 
+Copyright (C) 2021-2022 [Matteo Veroni](https://github.com/mavek87)  
 
-#### Authors:
-- Andrea Paternesi (https://github.com/patton73)
-- Matteo Veroni (https://github.com/mavek87)
+[Rebirth Project](https://www.rebirth-project.it)
 
-## License
-[MIT](https://github.com/xxx/xxx/blob/master/LICENSE)
+Ufo Eventbus binaries and source code can be used according to the [Apache License, Version 2.0](LICENSE.MD).
