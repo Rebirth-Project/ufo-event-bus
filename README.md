@@ -98,9 +98,9 @@ public class Main extends Application {
 .......
 
 ## Credits and License
-Copyright (C) 2021-2022 [Andrea Paternesi](https://github.com/patton73) 
+Copyright (C) 2021/2022 [Andrea Paternesi](https://github.com/patton73) 
  
-Copyright (C) 2021-2022 [Matteo Veroni](https://github.com/mavek87)  
+Copyright (C) 2021/2022 [Matteo Veroni](https://github.com/mavek87)  
 
 [Rebirth Project](https://www.rebirth-project.it)
 
