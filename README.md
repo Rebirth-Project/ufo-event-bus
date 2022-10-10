@@ -14,7 +14,6 @@ system written in Java.
 * is entirely documented
 * the code is clean, testable, compact and very easy to understand and mantain
 * is covered with unit test in basically every part of logical code
-<br/>
 ![Build Status](https://github.com/Rebirth-Project/ufo-event-bus/actions/workflows/build.yml/badge.svg)
 <br/>
 ## Add Ufo Eventbus in your project
