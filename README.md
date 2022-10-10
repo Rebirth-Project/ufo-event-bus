@@ -47,7 +47,7 @@ dependencies {
 
 ## Architecture Overview
 
-![Ufo Eventbus Architectureschema](documentation/UfoEventBusArchitectureFinalWhiteBackground.png)
+![Ufo Eventbus Architectureschema](documentation/UfoEventBusArchitectureFinalWhiteBackground.png?raw=true"Title")
 
 
 ## Basic usage
@@ -104,4 +104,4 @@ Copyright (C) 2021-2022 [Matteo Veroni](https://github.com/mavek87)
 
 [Rebirth Project](https://www.rebirth-project.it)
 
-Ufo Eventbus binaries and source code can be used according to the [Apache License, Version 2.0](LICENSE.MD).
+Ufo Eventbus binaries and source code can be used according to the [Apache License, Version 2.0](LICENSE.md).
