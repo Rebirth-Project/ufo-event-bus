@@ -2,7 +2,7 @@
 UFO Event bus (Ultra Fast Object-oriented Event bus) is a powerful, lightweight and scalable publish/subscribe event 
 system written in Java. 
 
-[![Build Status](https://github.com/Rebirth-Project/ufo-event-bus/actions/workflows/build.yml/badge.svg)(https://github.com/Rebirth-Project/ufo-event-bus/actions)
+![Build Status](https://github.com/Rebirth-Project/ufo-event-bus/actions/workflows/build.yml/badge.svg)
 
 * is scalable
 * is very tiny (~50k jar)
@@ -47,7 +47,7 @@ dependencies {
 
 ## Architecture Overview
 
-![Ufo Eventbus Architectureschema](documentation/UfoEventBusArchitectureFinalWhiteBackground.png?raw=true"Title")
+![Ufo Eventbus Architectureschema](documentation/UfoEventBusArchitectureFinalWhiteBackground.png)
 
 
 ## Basic usage
