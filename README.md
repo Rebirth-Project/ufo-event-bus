@@ -2,10 +2,10 @@
 UFO Event bus (Ultra Fast Object-oriented Event bus) is a powerful, lightweight and scalable publish/subscribe event 
 system written in Java. 
 
-* is scalable
+* is paraller and scalable
 * is completely asynchronous
 * is very tiny (~50k jar)
-* performs well with Android and all versions of java >=8
+* performs well with Android >= 8.0 and all versions of java >= 8
 * used with java > 9 is compiled as module increasing encapsulation
 * it has no dependencies but SLF4J library for enabling logging 
 * can simplify the communication between components since decouples event posters and listeners
