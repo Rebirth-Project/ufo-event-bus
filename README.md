@@ -46,7 +46,6 @@ dependencies {
     <version>1.0.0</version>
 </dependency>
 ```
-<br/>
 
 ##Quick Start
 
@@ -74,8 +73,7 @@ ufoEventBus.register(ListenerForEventInstance);
 //post messages on the bus
 ufoEventBus.post(new Event());
 ```
-<br/>
-
+  
 ## Internal Architecture Overview and detailed documentation
 You can read detailed documentation here [UfO Eventbus documentation](documentation/Documentation.md).
 <br/>
