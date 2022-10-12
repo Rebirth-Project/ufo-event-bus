@@ -47,7 +47,7 @@ dependencies {
 </dependency>
 ```
 
-##Quick Start
+## Quick Start
 
 ```java
 //Create an event as a simple java class with necessary fields
@@ -72,11 +72,9 @@ ufoEventBus.register(ListenerForEventInstance);
 
 //post messages on the bus
 ufoEventBus.post(new Event());
-```
-  
+```  
 ## Internal Architecture Overview and detailed documentation
 You can read detailed documentation here [UfO Eventbus documentation](documentation/Documentation.md).
-<br/>
 
 ## Credits and License
 Copyright (C) 2021/2022 [Andrea Paternesi](https://github.com/patton73) 
