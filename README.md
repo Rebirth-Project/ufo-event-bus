@@ -51,26 +51,26 @@ dependencies {
 
 ```java
 //Create an event as a simple java class with necessary fields
-public class Event { /* Add fields if needed */ }
+public class Event { // Add fields if needed }
 
 //Create a listener for the event using the provided annotation
 import it.rebirthproject.ufoeb.eventannotation.Listen;
 
 public class ListenerForEvent {
     @Listen
-    public void onEvent(EventToListen1 event) {
+    public void someMethod(Event eventToListen) {
       	//Do something useful here
     }
 }
 
-//create the Eventbus using the builder (the default values apply for almost every situation)
+//Create the Eventbus using the builder (the default values apply for almost every situation)
 //but read how to configure advanced bus features when needed
 EventBus ufoEventBus = new EventBusBuilder().build();
 
-//register the listener on the bus
+//Register the listener on the bus
 ufoEventBus.register(ListenerForEventInstance);
 
-//post messages on the bus
+//Post messages on the bus
 ufoEventBus.post(new Event());
 ```  
 
@@ -78,7 +78,7 @@ ufoEventBus.post(new Event());
 You can read detailed documentation here [UfO Eventbus documentation](documentation/Documentation.md).
 
 ## Credits and License
-Copyright (C) 2021/2022 [Andrea Paternesi](https://github.com/patton73) 
+Copyright (C) 2021/2022 [Andrea Paternesi](https://github.com/patton73)
  
 Copyright (C) 2021/2022 [Matteo Veroni](https://github.com/mavek87)  
 
