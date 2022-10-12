@@ -68,10 +68,10 @@ public class ListenerForEvent {
 EventBus ufoEventBus = new EventBusBuilder().build();
 
 //Register the listener on the bus
-ufoEventBus.register(ListenerForEventInstance); //this will trhow eventually an exception
+ufoEventBus.register(ListenerForEventInstance); //this will throw eventually an exception
 
 //Post messages on the bus
-ufoEventBus.post(new Event()); //this will trhow eventually an exception
+ufoEventBus.post(new Event()); //this will throw eventually an exception
 ```  
 
 ## Internal Architecture Overview and detailed documentation
