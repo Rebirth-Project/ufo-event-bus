@@ -5,7 +5,7 @@ system written in Java.
 * is parallel and scalable
 * is completely asynchronous
 * is very tiny (~50k jar)
-* performs well with Android >= 8.0 and all versions of java >= 8
+* performs well with Android and Java
 * used with java > 9 is compiled as module increasing encapsulation
 * it has no dependencies but SLF4J library for enabling logging 
 * can simplify the communication between components since it decouples event posters and listeners
@@ -16,7 +16,17 @@ system written in Java.
 * is covered with unit test in basically every part of logical code
 
 ![Build Status](https://github.com/Rebirth-Project/ufo-event-bus/actions/workflows/build.yml/badge.svg?raw=true)
-<br/>
+
+## Goals
+  * Provide a simple to use library to allow messaging within the app's objects
+  * Make a completely asyncrhonous message passing system
+  * Make a fast and reliable message passing system 
+  * Make a library with no architectural dependencies (code must depend only on standard java libraries)
+  * Make the code as cleaner and testable as possible
+
+## Requirements
+- Minumum Java version: 8
+- Minimum Android version: 8 minSdkVersion 26
 
 ## Add Ufo Eventbus in your project
 
@@ -37,63 +47,38 @@ dependencies {
 </dependency>
 ```
 <br/>
-##Core Objects
 
-- EventBus: The API of the event bus system
-- EventBusBuilder: The builder class to create new event bus instances
-- GlobalEventBus: A global singleton event bus instance
-
-## Architecture Overview
-
-![Ufo Eventbus Architectureschema](documentation/UfoEventBusArchitectureFinalWhiteBackground.png?raw=true)
-
-
-## Basic usage
-
-### 1) a
-
-xxxxxxxxxxxx
+##Quick Start
 
 ```java
-X x = new X(y);
-```
+//Create an event as a simple java class with necessary fields
+public class Event { /* Add fields if needed */ }
 
-### 2) b
+//Create a listener for the event Event using the provided annotation
+import it.rebirthproject.ufoeb.eventannotation.Listen;
 
-xxxxxxxxxxxx
-
-```java
-X.a(y);
-```
-
-### 3) c
-
-xxxxxxxxxxxx
-
-```java
-```
-
-## Examples
-
-#### abc
-
-```java
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-
-public class Main extends Application {
-    
-    public static void main(String[] args) {
+public class ListenerForEvent {
+    @Listen
+    public void onEvent(EventToListen1 event) {
+      	//Do something useful here
     }
 }
+
+//create the Eventbus using the builder (the default values apply for almost every situation)
+//but read how to configure advanced bus features when needed
+EventBus ufoEventBus = new EventBusBuilder().build();
+
+//register the listener on the bus
+ufoEventBus.register(ListenerForEventInstance);
+
+//post messages on the bus
+ufoEventBus.post(new Event());
 ```
+<br/>
 
-## Advanced usages
-
-.......
+## Internal Architecture Overview and detailed documentation
+You can read detailed documentation here [UfO Eventbus documentation](documentation/Documentation.md).
+<br/>
 
 ## Credits and License
 Copyright (C) 2021/2022 [Andrea Paternesi](https://github.com/patton73) 
