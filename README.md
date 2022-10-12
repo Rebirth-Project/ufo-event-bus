@@ -1,4 +1,4 @@
-# UFO Event bus ![Ufo Eventbus Icon](documentation/UfoEventBus.png)
+# UFO Eventbus ![Ufo Eventbus Icon](documentation/UfoEventBus.png)
 UFO Event bus (Ultra Fast Object-oriented Event bus) is a powerful, lightweight and scalable publish/subscribe event 
 system written in Java. 
 
@@ -19,7 +19,7 @@ system written in Java.
 
 ## Goals
   * Provide a simple to use library to allow messaging within the app's objects
-  * Make a completely asyncrhonous message passing system
+  * Make a completely asynchronous message passing system
   * Make a fast and reliable message passing system 
   * Make a library with no architectural dependencies (code must depend only on standard java libraries)
   * Make the code as cleaner and testable as possible
@@ -68,14 +68,14 @@ public class ListenerForEvent {
 EventBus ufoEventBus = new EventBusBuilder().build();
 
 //Register the listener on the bus
-ufoEventBus.register(ListenerForEventInstance);
+ufoEventBus.register(ListenerForEventInstance); //this will trhow eventually an exception
 
 //Post messages on the bus
-ufoEventBus.post(new Event());
+ufoEventBus.post(new Event()); //this will trhow eventually an exception
 ```  
 
 ## Internal Architecture Overview and detailed documentation
-You can read detailed documentation here [UfO Eventbus documentation](documentation/Documentation.md).
+You can read detailed documentation here [UFO Eventbus documentation](documentation/Documentation.md).
 
 ## Credits and License
 Copyright (C) 2021/2022 [Andrea Paternesi](https://github.com/patton73)
