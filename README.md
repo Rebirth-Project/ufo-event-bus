@@ -53,7 +53,7 @@ dependencies {
 //Create an event as a simple java class with necessary fields
 public class Event { /* Add fields if needed */ }
 
-//Create a listener for the event Event using the provided annotation
+//Create a listener for the event using the provided annotation
 import it.rebirthproject.ufoeb.eventannotation.Listen;
 
 public class ListenerForEvent {

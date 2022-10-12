@@ -1,4 +1,4 @@
 ## Internal Architecture Overview
 
-![Ufo Eventbus Architectureschema](documentation/UfoEventBusArchitectureFinalWhiteBackground.png?raw=true)
+![Ufo Eventbus Architectureschema](UfoEventBusArchitectureFinalWhiteBackground.png?raw=true)
 
