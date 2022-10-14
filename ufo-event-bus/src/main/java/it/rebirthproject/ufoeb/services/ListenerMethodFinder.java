@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2016 Markus Junginger, greenrobot (http://greenrobot.org)
+ * Copyright (C) 2012-2016 Markus Junginger, greenrobot (http://greenrobot.org) for some pieces of code and inspiration  
  * Modifications copyright (C) 2021/2022 Andrea Paternesi Rebirth project
  * Modifications copyright (C) 2021/2022 Matteo Veroni Rebirth project
  *

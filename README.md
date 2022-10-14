@@ -1,6 +1,8 @@
 # UFO Eventbus ![Ufo Eventbus Icon](documentation/UfoEventBus.png)
 UFO Event bus (Ultra Fast Object-oriented Event bus) is a powerful asynchronous, lightweight and scalable publish/subscribe event 
-system written in Java. 
+system written in Java.
+
+It was inspired by [Greenrobot eventbus](https://github.com/greenrobot/EventBus), but basically coded from scratch.
 
 * is parallel and scalable
 * is completely asynchronous
@@ -49,13 +51,13 @@ dependencies {
 
 ## Quick Start
 
-1. First step:
+##### First step:
 ```java
 // Create an event as a simple java class with necessary fields
 public class Event { // Add fields if needed }
 ```
 
-2. Second step:
+##### Second step:
 ```java
 import it.rebirthproject.ufoeb.eventannotation.Listen;
 
@@ -69,7 +71,7 @@ public class ListenerForEvent {
 }
 ```
 
-3. Third step:
+##### Third step:
 ```java
 // Instantiate the listener
 ListenerForEvent listener = new ListenerForEvent();
@@ -90,9 +92,9 @@ ufoEventBus.post(new Event()); // The 'post' method throws an EventBusException
 You can read detailed documentation here [UFO Eventbus documentation](documentation/Documentation.md).
 
 ## Credits and License
-Copyright (C) 2021/2022/2022 [Andrea Paternesi](https://github.com/patton73)
+Copyright (C) 2021/2022 [Andrea Paternesi](https://github.com/patton73)
  
-Copyright (C) 2021/2022/2022 [Matteo Veroni](https://github.com/mavek87)  
+Copyright (C) 2021/2022 [Matteo Veroni](https://github.com/mavek87)  
 
 [Rebirth Project](https://www.rebirth-project.it)
 
