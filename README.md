@@ -49,29 +49,39 @@ dependencies {
 
 ## Quick Start
 
+1. First step:
 ```java
-//Create an event as a simple java class with necessary fields
+// Create an event as a simple java class with necessary fields
 public class Event { // Add fields if needed }
+```
 
-//Create a listener for the event using the provided annotation
+2. Second step:
+```java
 import it.rebirthproject.ufoeb.eventannotation.Listen;
 
+// Create a listener for the event using the '@Listen' annotation
 public class ListenerForEvent {
+    
     @Listen
-    public void someMethod(Event eventToListen) {
-      	//Do something useful here
+    public void someMethod(Event event) {
+      	// Do something useful here.. Maybe using some data taken from the event...
     }
 }
+```
 
-//Create the Eventbus using the builder (the default values apply for almost every situation)
-//but read how to configure advanced bus features when needed
+3. Third step:
+```java
+ListenerForEvent listener = new ListenerForEvent();
+
+// Create the Eventbus using the builder (the default values apply for almost every situation)
+// but read how to configure advanced bus features when needed
 EventBus ufoEventBus = new EventBusBuilder().build();
 
-//Register the listener on the bus
-ufoEventBus.register(ListenerForEventInstance); //this will throw eventually an exception
+// Register the listener on the bus
+ufoEventBus.register(listener); // The 'register' method throws an EventBusException
 
-//Post messages on the bus
-ufoEventBus.post(new Event()); //this will throw eventually an exception
+// Post messages on the bus. This will call the listener method!
+ufoEventBus.post(new Event()); // The 'post' method throws an EventBusException
 ```  
 
 ## Internal Architecture Overview and detailed documentation
