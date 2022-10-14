@@ -71,10 +71,12 @@ public class ListenerForEvent {
 
 3. Third step:
 ```java
+// Instantiate the listener
 ListenerForEvent listener = new ListenerForEvent();
 
-// Create the Eventbus using the builder (the default values apply for almost every situation)
-// but read how to configure advanced bus features when needed
+// Create the Eventbus using the builder
+// The default values apply for almost every situation, but
+// read how to configure advanced bus features when needed
 EventBus ufoEventBus = new EventBusBuilder().build();
 
 // Register the listener on the bus
@@ -88,9 +90,9 @@ ufoEventBus.post(new Event()); // The 'post' method throws an EventBusException
 You can read detailed documentation here [UFO Eventbus documentation](documentation/Documentation.md).
 
 ## Credits and License
-Copyright (C) 2021/2022 [Andrea Paternesi](https://github.com/patton73)
+Copyright (C) 2021/2022/2022 [Andrea Paternesi](https://github.com/patton73)
  
-Copyright (C) 2021/2022 [Matteo Veroni](https://github.com/mavek87)  
+Copyright (C) 2021/2022/2022 [Matteo Veroni](https://github.com/mavek87)  
 
 [Rebirth Project](https://www.rebirth-project.it)
 
