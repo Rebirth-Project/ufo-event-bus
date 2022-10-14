@@ -40,7 +40,7 @@ public class App extends Application {
     private final ListView<String> listViewOutput = new ListView<>();
     private final Button btnStopEmitter = new Button("Stop emitter");
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Application.launch(args);
     }
 
