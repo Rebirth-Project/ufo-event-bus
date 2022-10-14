@@ -27,7 +27,7 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -37,7 +37,8 @@ public class App extends Application {
     private EventBus eventBus;
     private EventEmitterRunnable eventEmitterRunnable;
     private Thread eventEmitterThread;
-    private final TextField txtOutput = new TextField("Any message notified yet!!!");
+    private final ListView<String> listViewOutput = new ListView<>();
+    private final Button btnStopEmitter = new Button("Stop emitter");
 
     public static void main(String[] args) throws Exception {
         Application.launch(args);
@@ -55,21 +56,24 @@ public class App extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
-        txtOutput.setMaxWidth(500);
+    public void start(Stage stage) {
+        listViewOutput.setMaxWidth(500);
 
         stage.setTitle("Javafx App Test");
-        stage.setWidth(640);
-        stage.setHeight(200);
+        stage.setWidth(800);
+        stage.setHeight(600);
 
-        Button btnStopEmitter = new Button("Stop emitter");
-        btnStopEmitter.setOnAction(action -> eventEmitterRunnable.stop());
+        btnStopEmitter.setOnAction(action -> {
+            btnStopEmitter.setVisible(false);
+            eventEmitterRunnable.stop();
+        });
 
         VBox vBox = new VBox();
         vBox.setAlignment(Pos.CENTER);
         vBox.setSpacing(30);
-        vBox.getChildren().add(txtOutput);
+        vBox.getChildren().add(listViewOutput);
         vBox.getChildren().add(btnStopEmitter);
+        vBox.setSpacing(30);
 
         BorderPane rootPane = new BorderPane();
         rootPane.setCenter(vBox);
@@ -80,7 +84,7 @@ public class App extends Application {
 
     @Listen
     public void onEvent(EventMessage event) {
-        Platform.runLater(() -> txtOutput.setText(event.getMessage()));
+        Platform.runLater(() -> listViewOutput.getItems().add(event.getMessage()));
     }
 
     @Override
