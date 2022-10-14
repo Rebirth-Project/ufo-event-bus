@@ -1,5 +1,5 @@
 # UFO Eventbus ![Ufo Eventbus Icon](documentation/UfoEventBus.png)
-UFO Event bus (Ultra Fast Object-oriented Event bus) is a powerful, lightweight and scalable publish/subscribe event 
+UFO Event bus (Ultra Fast Object-oriented Event bus) is a powerful asynchronous, lightweight and scalable publish/subscribe event 
 system written in Java. 
 
 * is parallel and scalable
