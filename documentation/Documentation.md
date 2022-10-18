@@ -44,7 +44,76 @@ If your configuration for registered/unregistered listeners does not change at r
 
 Another important feature of the bus is that it uses reflection to execute listeners' registered methods. Hence an annotation is used to register a listener's method and, by default, reflection's ```method.invoke()``` is used. Is also provided a faster way to execute events by setting the correct parameter (**useLambdaFactoryInsteadOfStandardReflection**). This will use a LambdaFactory to create methods handlers (a lot faster than standard reflection). This method can be used always but in combination with modules as explained [here](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/invoke/MethodHandles.Lookup.html), so this is not the default behaviour of the bus. 
 
-### Internal Architecture Overview
+### Eventbus' builder and configuration's options
+
+To build the eventbus you must use the provided builder. It is a standard builder with fluent syntax. It returns a completely configured bus.
+There are various parameters you can use to configure the bus:
+
+* Performance parameters
+* Java Class inheritance parameters
+* Safeness' parametrs
+* Logging, debugging and Exceptions' parameters
+
+#### Performance parameters:
+
+* **queueLength** This varies the inbound message queue length, default value is set to 100. This should be changed only when you need more workers to scale in performaces and when operating in heavy load environments. From tests this lenght should not be bigger than 1000, because if there are not free workers the bus will block anyway. Is does not make sense in filling a huge queue using a lot of memory, while you do not have free workers.
+* **numberOfWorkers** This varies the number of workers available in the pool. Default value is set to 1. Modify this value only when you operate in a heavy duty environment. The scalability curve tells that you should add workers only when event's execution is time consuming (just see the performance tests). In multi-threaded processor's you can use up to 20 workers, but workload should be high and blocking. Usually not more that 2-3 workers are needed. A worker thread brings overead into bus performance so the workload must be higher. Use this parameter in combination with <ins>queueLength</ins>.
+* **useLambdaFactoryInsteadOfStandardReflection** This parameter is used to force the bus using an internal LambaFactory to speed up the execution of events. This will use Method handlers instead of standard method reflection invocation. It is a lot faster but have some drawbacks as stated in Java documentation. Be sure of what you are doing or leave the default value.
+
+#### Inheritance parameters:
+
+* **listenerSuperclassInheritance** Use this parameter if you want the bus keep track of listeners classes inheritance. This value by default is switched off. So the bus will not iterate through parent classes to search for listening methods, but will find only the listener main class' methods. If you want to iterate through the parent classes just use this parameter. Please <ins>note</ins> that using this feature is dangerous because by default reflection will stop only in certain cases (when package does not contain java or android classes). Somethimes this does not work. So to be sure to avoid problems using also the next parameter.
+
+* **inheritancePackageFrontierPath** Use this parameter to tell the bus where to stop when iterating between paret classes. This should be always used to speedup methods search and to avoid strange exceptions at runtime.
+Usually what you want is to look for classes in your project's package. So we reccomend to always use this parameter in the following way:
+```java 
+  builder.setInheritancePackageFrontierPath("com.mycompany.mypackage"); 
+```
+* **eventInheritancePolicy** Use this parameter to achieve a powerful bus feature. This will  tell the bus to keep track also of events class inheritance. There are four main policies. The default one is to not use events' inheritance. Otherwise you can iterate over classes, over interfaces or over both. 
+```java 
+1) Default : no event inheritance 
+2) builder.setEventSuperclassInheritance(); // iterate only over classes
+3) builder.setEventInterfaceInheritance();  // iterate only over interfaces
+4) builder.setCompleteEventInheritance(); // iterate over classes and interfaces
+
+//As a simple example 
+//You have Event E1 that extends class C1 
+//You have Event E2 that extends class C2 that implements interface I
+//and then define a listener L that listens for class E1, class C2 and interface I in three different methods 
+//The policy will tell the bus which methods to call when an event arrives.
+
+//lets say that you post event E2, according to policy we can have different behaviours on listener L
+//1) no method will be called
+//2) the method that listens to C2 will be called
+//3) the method that listens to I will be called
+//4) the methods that listen to I and C2 will be called 
+
+//lets say that you post event E1, according to policy we can have different behaviours on listener L
+//1) method that listens to E1 will be called
+//2) method that listens to E1 will be called
+//3) no method will be called
+//4) method that listens to E1 will be called
+```
+#### Safeness parameters:
+
+* **safeRegistrationsListNeeded** this forces the bus to make a copy of registrations' lists instead of passing to the workers the references. Useful when you want to play with registration/deregistration of listeners at runtime.
+
+#### Logging, debugging and Exceptions' parameters
+
+* **throwNoListenerAnnotationException** If a registering listener does not have any annotated method or, in case of event inheritance enabled, also its super classes or interfaces does not have any annotated method, then a non blocking Exception is thrown.
+By default bus handles this case slently. Use this to debug application.
+
+* **throwNoRegistrationsWarning** A non blocking Exception is thrown when event E is posted to the bus but no listener is registered to listen to it. By default bus handles this case slently. Use this to debug application.
+
+* **throwNotValidMethodException** if set then a non blocking Exception is thrown when an invalid  annotated method is found in a Listener. The method must be public and not static and must have only one parameter that represents the listened event. By default bus handles this case slently. Use this to debug application.
+
+* **verboseLogging** This opstion is used to debug eventbus memory state. It will print out actual state.
+
+
+
+
+
+ 
 
 
 

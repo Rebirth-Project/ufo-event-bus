@@ -32,14 +32,14 @@ It was inspired by [Greenrobot eventbus](https://github.com/greenrobot/EventBus)
 
 ## Add Ufo Eventbus in your project
 
-##### ```Gradle```
+##### Gradle:
 
 ```
 dependencies {
     implementation "it.rebirthproject:ufoeventbus:1.0.0"
 }
 ```
-##### ```Maven```
+##### Maven:
 
 ```
 <dependency>
