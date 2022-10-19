@@ -15,22 +15,16 @@
 
 plugins {
     id 'application'   
-    id 'org.openjfx.javafxplugin' version '0.0.13'
 }
 
 group = 'it.rebirthproject'
 
 application {    
-    mainClass.set('it.rebirthproject.javafxappexample.App')
+    mainClass.set('it.rebirthproject.plainjavaexample.App')
 }
 
 repositories {
     mavenCentral()
-}
-
-javafx {
-    version = "17"
-    modules = ['javafx.controls', 'javafx.graphics']
 }
 
 compileJava {

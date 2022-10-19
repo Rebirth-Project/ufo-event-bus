@@ -14,4 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-include 'ufo-event-bus', 'benchmark', 'benchmark-greb', 'plain-java-example', 'javafx-app-example', 'android-app-example'
+
+package it.rebirthproject.plainjavaexample.events;
+
+public class EventMessage {
+
+    private final int messageNumber;
+    private final String message;
+
+    public EventMessage(int messageNumber, String message) {
+        this.messageNumber = messageNumber;
+        this.message = message;
+    }
+
+    public int getMessageNumber() {
+        return messageNumber;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    @Override
+    public String toString() {
+        return "EventMessage{" +
+                "messageNumber=" + messageNumber +
+                ", message='" + message + '\'' +
+                '}';
+    }
+}

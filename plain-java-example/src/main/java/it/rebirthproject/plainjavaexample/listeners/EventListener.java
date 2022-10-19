@@ -14,4 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-include 'ufo-event-bus', 'benchmark', 'benchmark-greb', 'plain-java-example', 'javafx-app-example', 'android-app-example'
+
+package it.rebirthproject.plainjavaexample.listeners;
+
+import it.rebirthproject.plainjavaexample.events.EventMessage;
+import it.rebirthproject.ufoeb.eventannotation.Listen;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class EventListener {
+
+    private final Logger log = LoggerFactory.getLogger(EventListener.class);
+
+    @Listen
+    public void onEvent(EventMessage event) {
+        log.info("A new event received => {}", event);
+    }
+}
