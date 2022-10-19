@@ -23,12 +23,12 @@ It was inspired by [Greenrobot eventbus](https://github.com/greenrobot/EventBus)
   * Provide a simple to use library to allow messaging within the app's objects
   * Make a completely asynchronous message passing system
   * Make a fast and reliable message passing system 
-  * Make a library with no architectural dependencies (code must depend only on standard java libraries)
+  * Make a library with no architectural dependencies (code must depend only on standard Java libraries)
   * Make the code as cleaner and testable as possible
 
 ## Requirements
 - Minumum Java version: 8
-- Minimum Android version: 8 minSdkVersion 26
+- Minimum Android version: 8.0 minSdkVersion 26
 
 ## Add Ufo Eventbus in your project
 
@@ -51,14 +51,14 @@ dependencies {
 
 ## Quick Start
 
-##### First step:
-```java
+##### First step - Create an event:
+``` java
 // Create an event as a simple java class with necessary fields
 public class Event { // Add fields if needed }
 ```
 
-##### Second step:
-```java
+##### Second step - Create an event listener:
+``` java
 import it.rebirthproject.ufoeb.eventannotation.Listen;
 
 // Create a listener for the event using the '@Listen' annotation
@@ -71,8 +71,9 @@ public class ListenerForEvent {
 }
 ```
 
-##### Third step:
-```java
+##### Third step - Create the bus, register the listeners and send the events:
+
+``` java
 // Instantiate the listener
 ListenerForEvent listener = new ListenerForEvent();
 
