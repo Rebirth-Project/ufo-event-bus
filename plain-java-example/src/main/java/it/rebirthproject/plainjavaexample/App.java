@@ -54,9 +54,9 @@ public class App {
             // Waiting until the emitter thread stops
             eventEmitterThread.join();
         } catch (EventBusException ex1) {
-            log.error("EventBus error", ex1);
+            log.error("EventBus error occurred", ex1);
         } catch (InterruptedException ex2) {
-            log.error("Error", ex2);
+            log.error("Error occurred", ex2);
         } finally {
             // Eventbus shutdown
             if (eventBus != null) {
