@@ -21,7 +21,7 @@ system written in Java.
   * Provide a simple to use library to allow messaging within the app's objects
   * Make a completely asynchronous message passing system
   * Make a fast and reliable message passing system 
-  * Make a library with no architectural dependencies (code must depend only on standard java libraries)
+  * Make a library with no architectural dependencies (code must depend only on standard Java libraries)
   * Make the code as cleaner and testable as possible
 
 ## Requirements
@@ -49,13 +49,13 @@ dependencies {
 
 ## Quick Start
 
-1. First step:
+1. First step - Create an event:
 ```java
 // Create an event as a simple java class with necessary fields
 public class Event { // Add fields if needed }
 ```
 
-2. Second step:
+2. Second step - Create an event listener:
 ```java
 import it.rebirthproject.ufoeb.eventannotation.Listen;
 
@@ -69,7 +69,7 @@ public class ListenerForEvent {
 }
 ```
 
-3. Third step:
+3. Third step - Create the eventbus, register the listener and send events:
 ```java
 ListenerForEvent listener = new ListenerForEvent();
 

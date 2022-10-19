@@ -62,3 +62,6 @@ bin/
 tmp/
 
 !gradle-wrapper.jar
+
+# Android
+local.properties
