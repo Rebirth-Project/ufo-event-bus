@@ -7,11 +7,11 @@ system written in Java.
 
 It has a lot of interesting features:
 
-* Asynchronous parallel non-blocking (it depends on  worker's number) event delivery
+* [Asynchronous parallel non-blocking (it depends on  worker's number) event delivery](#internal-architecture-overview)
 * [Listener's event priority](#listeners-event-priority)
-* [Global sticky events](#performance-parameters)
-* Events' delivery based on event's classes  inheritance if configured
-* Events' delivery based on listener's classes inheritance if configured
+* [Global sticky events](#global-sticky-events)
+* [Events' delivery based on event's classes inheritance if configured](#inheritance-parameters)
+* [Events' delivery based on listener's classes inheritance if configured](#inheritance-parameters)
 * Asynchronous queries based on Java's completable futures
 
 ### Internal Architecture Overview
@@ -148,7 +148,7 @@ Separating methods to create the instance and to obtain it is a safe way to avoi
 ### Listener's event priority
 
 Event priority is another powerful feature of the bus. The priority is declared as an attribute of the ```Listen``` annotation.
-The priority is basically managed inside the bus as a global declaration for the listeners and the related event. So you can order methods' execution inside a listener (methods listening the same event) , or more you can order the event execution between different listeners. You cannot order methods listening for different events, since it depends on the application's runtime flow (call a post before another for example).
+The priority is basically managed inside the bus as a global declaration for the listeners and the related event. So you can order methods' execution inside a listener (methods listening the same event) , or more you can order the event execution between different listeners. You cannot order methods listening for different events, since it depends on the application's runtime flow (call an event post before another for example).
 
 ```java
 //Let's have a listener that listens the same event in two different methods, and you want to guarantee
@@ -165,7 +165,7 @@ public class ExampleListener {
 }
 
 //This applies also to different listeners
-//In this case Method1 of Listener1 will be called before Method2 of listener 2
+//In this case method1 of Listener1 will be called before method2 of listener 2
 public class Listener1 {
     @Listen(priority = 1)
     public void method1(Event event) throws InterruptedException {       
@@ -178,10 +178,27 @@ public class Listener2 {
     }    
 }
 ```
+### Global sticky events
 
+Ufo eventbus also can handle global sticky events. A sticky event is an event that posted to the bus persists until it is removed.
+When posted, the event is processed and every listener is called acordingly, more the event is saved in bus memory state for later use. If a new listener (that listens for this particulare event) is registered after the posting of the sticky event, then the bus executes immediately the event for that listener. This is a runtime feature and can be used when a listener cannot be instantiated and registered to the bus when the application start, and has all the drawbacks related to the sticky events theory and application state, since a sticky event basically can be a sort of application memory extension if used in a wrong way. Use sticky events wisely and only when really needed. 
  
+```java
+//lest's define a listener that listen to even Event
+public class Listener {
+    @Listen
+    public void method(Event event) throws InterruptedException {       
+    }
+}
 
+//let's a poster post an event as sticky
+eventbus.postSticky(new Event());
 
+//after that if the listener is registered to the bus it can receive the sticky event
+eventbus.register(new Listener());
 
-
+//a sticky event can be removed
+eventbus.removeSticky(Event.class);
+//after that if a listener registers for Event on the bus nothing will happen
+```
 
