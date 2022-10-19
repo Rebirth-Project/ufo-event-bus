@@ -51,7 +51,7 @@ public class App {
             Thread eventEmitterThread = new Thread(new EventEmitterRunnable(eventBus));
             eventEmitterThread.start();
 
-            // Waiting util the emitter thread stops
+            // Waiting until the emitter thread stops
             eventEmitterThread.join();
         } catch (EventBusException ex1) {
             log.error("EventBus error", ex1);
