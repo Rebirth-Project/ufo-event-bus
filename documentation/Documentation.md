@@ -8,13 +8,13 @@ system written in Java.
 It has a lot of interesting features:
 
 * Asynchronous parallel non-blocking (it depends on  worker's number) event delivery
-* Listener's internal event priority
+* [Listener's event priority](#listeners-event-priority)
 * Global sticky events
 * Events' delivery based on event's classes  inheritance if configured
 * Events' delivery based on listener's classes inheritance if configured
 * Asynchronous queries based on Java's completable futures
 
-### Internal Architecture Overview
+###Internal Architecture Overview
 
 ![Ufo Eventbus Architectureschema](UfoEventBusArchitectureFinalWhiteBackground.png?raw=true)
 
@@ -54,13 +54,13 @@ There are various parameters you can use to configure the bus:
 * Safeness' parametrs
 * Logging, debugging and Exceptions' parameters
 
-#### Performance parameters:
+####Performance parameters:
 
 * **queueLength** This varies the inbound message queue length, default value is set to 100. This should be changed only when you need more workers to scale in performaces and when operating in heavy load environments. From tests this lenght should not be bigger than 1000, because if there are not free workers the bus will block anyway. Is does not make sense in filling a huge queue using a lot of memory, while you do not have free workers.
 * **numberOfWorkers** This varies the number of workers available in the pool. Default value is set to 1. Modify this value only when you operate in a heavy duty environment. The scalability curve tells that you should add workers only when event's execution is time consuming (just see the performance tests). In multi-threaded processor's you can use up to 20 workers, but workload should be high and blocking. Usually not more that 2-3 workers are needed. A worker thread brings overead into bus performance so the workload must be higher. Use this parameter in combination with <ins>queueLength</ins>.
 * **useLambdaFactoryInsteadOfStandardReflection** This parameter is used to force the bus using an internal LambaFactory to speed up the execution of events. This will use Method handlers instead of standard method reflection invocation. It is a lot faster but have some drawbacks as stated in Java documentation. Be sure of what you are doing or leave the default value.
 
-#### Inheritance parameters:
+####Inheritance parameters:
 
 * **listenerSuperclassInheritance** Use this parameter if you want the bus keep track of listeners classes inheritance. This value by default is switched off. So the bus will not iterate through parent classes to search for listening methods, but will find only the listener main class' methods. If you want to iterate through the parent classes just use this parameter. Please <ins>note</ins> that using this feature is dangerous because by default reflection will stop only in certain cases (when package does not contain java or android classes). Somethimes this does not work. So to be sure to avoid problems using also the next parameter.
 
@@ -94,11 +94,11 @@ Usually what you want is to look for classes in your project's package. So we re
 //3) no method will be called
 //4) method that listens to E1 will be called
 ```
-#### Safeness parameters:
+####Safeness parameters:
 
 * **safeRegistrationsListNeeded** this forces the bus to make a copy of registrations' lists instead of passing to the workers the references. Useful when you want to play with registration/deregistration of listeners at runtime.
 
-#### Logging, debugging and Exceptions' parameters
+####Logging, debugging and Exceptions' parameters
 
 * **throwNoListenerAnnotationException** If a registering listener does not have any annotated method or, in case of event inheritance enabled, also its super classes or interfaces does not have any annotated method, then a non blocking Exception is thrown.
 By default bus handles this case slently. Use this to debug application.
@@ -109,9 +109,75 @@ By default bus handles this case slently. Use this to debug application.
 
 * **verboseLogging** This opstion is used to debug eventbus memory state. It will print out actual state.
 
+####Builder usage example
+```java
+EventBus ufoEventBus = new EventBusBuilder()
+	.setListenerSuperclassInheritance()
+	.setEventSuperclassInheritance()
+	.setThrowNoRegistrationsWarning()
+	.setThrowNoListenerAnnotationException()
+	.setThrowNotValidMethodException()
+	.setInheritancePackageFrontierPath("it.rebirthproject.myexampleproject")
+	.build();
+```
 
+###Eventbus reference, dependency injection and singleton
 
+We reccommend to instantiate the eventbus using the builder and any dependency injection system. You can even simply create the instance and pass it by constructor to the desired objects. This is up to you and your decision only. The advice is always to Keep It Simple Stupid (KISS principle). If you can avoid over structures you do not go wrong. For those who want instead having a singleton at any cost we provided a completely separated special class that implements it in a safe way. 
 
+```java
+//1) Standard way to create it
+//build the eventbus builder and set all needed paramenters
+EventBusBuilder eventbusBuilder = new EventBusBuilder();
+//call the GlobalEventBus setup method
+GlobalEventBus.setup(eventbusBuilder);
+//get the bus singleton instance after created it
+EventBus singletonInstanceBus = GlobalEventBus.getInstance();
+
+//2) quicker way to create it
+//use the convenience method to create quickly and safely the singleton instance
+EventBus singletonInstanceBus = GlobalEventBus.setupAndGetInstance(eventbusBuilder);
+//get the bus singleton instance after created it
+EventBus singletonInstanceBus = GlobalEventBus.getInstance();
+
+```
+
+Separating methods to create the instance and to obtain it is a safe way to avoid singleton anti-pattern problems. However be careful in using it, there could be many situations where singleton usage will lead to problems.
+<ins>Dependency Injection usage is always to be preferred</ins>.
+ 
+###Listener's event priority
+
+Event priority is another powerful feature of the bus. The priority is declared as an attribute of the ```Listen``` annotation.
+The priority is basically managed inside the bus as a global declaration for the listeners and the related event. So you can order methods' execution inside a listener (methods listening the same event) , or more you can order the event execution between different listeners. You cannot order methods listening for different events, since it depends on the application's runtime flow (call a post before another for example).
+
+```java
+//Let's have a listener that listens the same event in two different methods, and you want to guarantee
+//that the first method is called before the second one, you then need to set the priority annotation. 
+//Higher priority means calling the related method first. Note that priority applies only on the same event.
+public class ExampleListener {
+    @Listen(priority = 1)
+    public void method1(Event event) throws InterruptedException {       
+    }
+    
+     @Listen(priority = 0)
+    public void method2(Event event) throws InterruptedException {       
+    }    
+}
+
+//This applies also to different listeners
+//In this case Method1 of Listener1 will be called before Method2 of listener 2
+public class Listener1 {
+    @Listen(priority = 1)
+    public void method1(Event event) throws InterruptedException {       
+    }
+}
+
+public class Listener2 {    
+    @Listen(priority = 0)
+    public void method2(Event event) throws InterruptedException {       
+    }    
+}
+```
 
  
 
