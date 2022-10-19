@@ -34,9 +34,10 @@ public class App {
     }
 
     private void start() {
+        EventBus eventBus = null;
         try {
             // Building the event bus
-            EventBus eventBus = new EventBusBuilder()
+            eventBus = new EventBusBuilder()
                     .setNumberOfWorkers(1)
                     .build();
 
@@ -52,13 +53,15 @@ public class App {
 
             // Waiting util the emitter thread stops
             eventEmitterThread.join();
-
-            // Eventbus shutdown
-            eventBus.shutdownBus();
         } catch (EventBusException ex1) {
             log.error("EventBus error", ex1);
         } catch (InterruptedException ex2) {
             log.error("Error", ex2);
+        } finally {
+            // Eventbus shutdown
+            if (eventBus != null) {
+                eventBus.shutdownBus();
+            }
         }
     }
 }
