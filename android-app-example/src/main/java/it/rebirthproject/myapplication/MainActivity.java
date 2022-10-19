@@ -24,6 +24,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import it.rebirthproject.myapplication.databinding.ActivityMainBinding;
@@ -59,7 +60,9 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
+        NavController navController = navHostFragment.getNavController();
+
         appBarConfiguration = new AppBarConfiguration.Builder().build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
@@ -71,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         try {
             EventBus eventBus = GlobalEventBus.getInstance();
-            if(!eventBus.isRegistered(this).get()) {
+            if (!eventBus.isRegistered(this).get()) {
                 eventBus.register(this);
             }
             Log.i("INFO", getClass().getSimpleName() + " - Thread (" + Thread.currentThread().getName() + ") - " + "registered to eventbus");
