@@ -1,6 +1,8 @@
 # UFO Eventbus ![Ufo Eventbus Icon](documentation/UfoEventBus.png)
 UFO Event bus (Ultra Fast Object-oriented Event bus) is a powerful asynchronous, lightweight and scalable publish/subscribe event 
-system written in Java. 
+system written in Java.
+
+It was inspired by [Greenrobot eventbus](https://github.com/greenrobot/EventBus), but basically coded from scratch.
 
 * is parallel and scalable
 * is completely asynchronous
@@ -21,7 +23,7 @@ system written in Java.
   * Provide a simple to use library to allow messaging within the app's objects
   * Make a completely asynchronous message passing system
   * Make a fast and reliable message passing system 
-  * Make a library with no architectural dependencies (code must depend only on standard Java libraries)
+  * Make a library with no architectural dependencies (code must depend only on standard java libraries)
   * Make the code as cleaner and testable as possible
 
 ## Requirements
@@ -30,14 +32,14 @@ system written in Java.
 
 ## Add Ufo Eventbus in your project
 
-##### ```Gradle```
+##### Gradle:
 
 ```
 dependencies {
     implementation "it.rebirthproject:ufoeventbus:1.0.0"
 }
 ```
-##### ```Maven```
+##### Maven:
 
 ```
 <dependency>
@@ -49,13 +51,13 @@ dependencies {
 
 ## Quick Start
 
-1. First step - Create an event:
+##### First step:
 ```java
 // Create an event as a simple java class with necessary fields
 public class Event { // Add fields if needed }
 ```
 
-2. Second step - Create an event listener:
+##### Second step:
 ```java
 import it.rebirthproject.ufoeb.eventannotation.Listen;
 
@@ -69,12 +71,14 @@ public class ListenerForEvent {
 }
 ```
 
-3. Third step - Create the eventbus, register the listener and send events:
+##### Third step:
 ```java
+// Instantiate the listener
 ListenerForEvent listener = new ListenerForEvent();
 
-// Create the Eventbus using the builder (the default values apply for almost every situation)
-// but read how to configure advanced bus features when needed
+// Create the Eventbus using the builder
+// The default values apply for almost every situation, but
+// read how to configure advanced bus features when needed
 EventBus ufoEventBus = new EventBusBuilder().build();
 
 // Register the listener on the bus
