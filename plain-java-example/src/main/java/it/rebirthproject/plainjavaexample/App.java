@@ -47,11 +47,10 @@ public class App {
             eventBus.register(listener);
 
             // Creating an event emitter
-            EventEmitterRunnable eventEmitterRunnable = new EventEmitterRunnable(eventBus);
-            Thread eventEmitterThread = new Thread(eventEmitterRunnable);
+            Thread eventEmitterThread = new Thread(new EventEmitterRunnable(eventBus));
             eventEmitterThread.start();
 
-            // Waiting util the emitter stops
+            // Waiting util the emitter thread stops
             eventEmitterThread.join();
 
             // Eventbus shutdown
