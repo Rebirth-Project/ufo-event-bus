@@ -181,7 +181,7 @@ public class Listener2 {
 ### Global sticky events
 
 Ufo eventbus also can handle global sticky events. A sticky event is an event that posted to the bus persists until it is removed.
-When posted, the event is processed and every listener is called acordingly, more the event is saved in bus memory state for later use. If a new listener (that listens for this particulare event) is registered after the posting of the sticky event, then the bus executes immediately the event for that listener. This is a runtime feature and can be used when a listener cannot be instantiated and registered to the bus when the application start, and has all the drawbacks related to the sticky events theory and application state, since a sticky event basically can be a sort of application memory extension if used in a wrong way. Use sticky events wisely and only when really needed. 
+When posted, the event is processed and every listener is called acordingly, more the event is saved in bus memory state for later use. If a new listener (that listens for this particular event) is registered after the post of the sticky event, then the bus executes immediately the event for that listener. This is a runtime feature and can be used when a listener cannot be instantiated and registered to the bus when the application start, and has all the drawbacks related to the sticky events theory and application state, since a sticky event basically can be a sort of application memory extension if used in a wrong way. Use sticky events wisely and only when really needed. The ```postSticky()``` and ```removeSticky()``` methods are idempotent in their bus implementations since an internal HashMap is used. 
  
 ```java
 //lest's define a listener that listen to even Event
@@ -191,7 +191,7 @@ public class Listener {
     }
 }
 
-//let's a poster post an event as sticky
+//let a poster post an event as sticky
 eventbus.postSticky(new Event());
 
 //after that if the listener is registered to the bus it can receive the sticky event
