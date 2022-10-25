@@ -92,7 +92,7 @@ ufoEventBus.post(new Event()); // The 'post' method throws an EventBusException
 ## Internal Architecture Overview and detailed documentation
 You can read detailed documentation [here](documentation/Documentation.md).
 
-You can acces the javadoc documentation [here](https://www.rebirth-project.it/ufoeventbus/documentation/index.html).
+You can acces the javadoc documentation [here](https://www.rebirth-project.it/ufoeventbus/javadoc/index.html).
 
 #### Examples of usages
 How to use the bus in android [here](https://github.com/Rebirth-Project/ufo-event-bus/tree/main/android-app-example).
