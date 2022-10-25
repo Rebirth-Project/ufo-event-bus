@@ -12,7 +12,7 @@ It has a lot of interesting features:
 * [Global sticky events](#global-sticky-events)
 * [Events' delivery based on event's classes inheritance if configured](#inheritance-parameters)
 * [Events' delivery based on listener's classes inheritance if configured](#inheritance-parameters)
-* Asynchronous queries based on Java's completable futures
+* [Asynchronous queries based on Java's completable futures](#asynchronous-queries)
 
 ### Internal Architecture Overview
 
@@ -62,9 +62,9 @@ There are various parameters you can use to configure the bus:
 
 #### Inheritance parameters:
 
-* **listenerSuperclassInheritance** Use this parameter if you want the bus keep track of listeners classes inheritance. This value by default is switched off. So the bus will not iterate through parent classes to search for listening methods, but will find only the listener main class' methods. If you want to iterate through the parent classes just use this parameter. Please <ins>note</ins> that using this feature is dangerous because by default reflection will stop only in certain cases (when package does not contain java or android classes). Somethimes this does not work. So to be sure to avoid problems using also the next parameter.
+* **listenerSuperclassInheritance** Use this parameter if you want the bus keep track of listeners classes inheritance. This value by default is switched off. So the bus will not iterate through parent classes to search for listening methods, but will find only the listener main class' methods. If you want to iterate through the parent classes just use this parameter. Please <ins>note</ins> that using this feature is dangerous because by default reflection will stop only in certain cases (when package does not contain java or android classes). Sometimes this does not work. So to be sure to avoid problems using always also the next parameter.
 
-* **inheritancePackageFrontierPath** Use this parameter to tell the bus where to stop when iterating between paret classes. This should be always used to speedup methods search and to avoid strange exceptions at runtime.
+* **inheritancePackageFrontierPath** Use this parameter to tell the bus where to stop when iterating between parent classes. This should be always used to speedup methods search and to avoid strange exceptions at runtime. The back iteration will stop when the package is different from the provided one.
 Usually what you want is to look for classes in your project's package. So we reccomend to always use this parameter in the following way:
 ```java 
   builder.setInheritancePackageFrontierPath("com.mycompany.mypackage"); 
@@ -148,7 +148,7 @@ Separating methods to create the instance and to obtain it is a safe way to avoi
 ### Listener's event priority
 
 Event priority is another powerful feature of the bus. The priority is declared as an attribute of the ```Listen``` annotation.
-The priority is basically managed inside the bus as a global declaration for the listeners and the related event. So you can order methods' execution inside a listener (methods listening the same event) , or more you can order the event execution between different listeners. You cannot order methods listening for different events, since it depends on the application's runtime flow (call an event post before another for example).
+The priority is basically managed inside the bus as a global declaration for the listeners and the related event. So you can order methods' execution inside a listener (methods listening the same event) , or more you can order the event execution between different listeners. You cannot order methods listening for different events, since it depends on the application's runtime flow (for example calling an event post before another).
 
 ```java
 //Let's have a listener that listens the same event in two different methods, and you want to guarantee
@@ -181,7 +181,7 @@ public class Listener2 {
 ### Global sticky events
 
 Ufo eventbus also can handle global sticky events. A sticky event is an event that posted to the bus persists until it is removed.
-When posted, the event is processed and every listener is called acordingly, more the event is saved in bus memory state for later use. If a new listener (that listens for this particular event) is registered after the post of the sticky event, then the bus executes immediately the event for that listener. This is a runtime feature and can be used when a listener cannot be instantiated and registered to the bus when the application start, and has all the drawbacks related to the sticky events theory and application state, since a sticky event basically can be a sort of application memory extension if used in a wrong way. Use sticky events wisely and only when really needed. The ```postSticky()``` and ```removeSticky()``` methods are idempotent in their bus implementations since an internal HashMap is used. 
+When posted, the event is processed and every listener is called acordingly. More, the event is saved in bus memory state for later use. If a new listener (that listens for this particular event) is registered after the post of the sticky event, then the bus executes immediately the event for that listener. This is a runtime feature and can be used when a listener cannot be instantiated and registered to the bus when the application start, and has all the drawbacks related to the sticky events theory and application state, since a sticky event basically can be a sort of application memory extension if used in a wrong way. So, use sticky events wisely and only when really needed. The ```postSticky()``` and ```removeSticky()``` methods are idempotent in their bus implementations since an internal HashMap is used. 
  
 ```java
 //lest's define a listener that listen to even Event
@@ -194,7 +194,7 @@ public class Listener {
 //let a poster post an event as sticky
 eventbus.postSticky(new Event());
 
-//after that if the listener is registered to the bus it can receive the sticky event
+//after that if the listener is registered to the bus it can receive immediately the sticky event
 eventbus.register(new Listener());
 
 //a sticky event can be removed
@@ -202,3 +202,13 @@ eventbus.removeSticky(Event.class);
 //after that if a listener registers for Event on the bus nothing will happen
 ```
 
+### Asynchronous Queries
+
+Ufo eventbus right now implements a single query using java Completable futures. However is a good architecture to query the bus for informations. We intentionally did not implement some queries because according to us they are not needed (for example querying the bus for the presence of a sticky event since the remove command is idempotent), but we are open to implement anything needed in future.
+Queries are executed in the Memory State Manager and never passed to a worker since usually the time to execute it is very fast. So the Future will be completed in the fastest way possible.
+Right now you can query the bus for the presence of a registered listener. The parameter to pass is the Object of the listener to query.
+The return value is a boolean.
+
+```java
+Future<Boolean> isRegistered(Object possibleRegisteredListener)
+```

@@ -87,16 +87,26 @@ ufoEventBus.register(listener); // The 'register' method throws an EventBusExcep
 
 // Post messages on the bus. This will call the listener method!
 ufoEventBus.post(new Event()); // The 'post' method throws an EventBusException
-```  
+```
 
 ## Internal Architecture Overview and detailed documentation
-You can read detailed documentation here [UFO Eventbus documentation](documentation/Documentation.md).
+You can read detailed documentation [here](documentation/Documentation.md).
+
+You can acces the javadoc documentation [here](https://www.rebirth-project.it/ufoeventbus/documentation/index.html).
+
+## Roadmap and Contributions
+Right now the next big thing for the bus will be:
+
+* event runtime filters (block at runtime the delivery of an event using a filter)
+* rework the exception system if needed
+
+Interested persons and contributors can just use the standard githib tools interact with the project. For communications you can use this email [rebirthproject2021@gmail.com](mailto:rebirthproject2021@gmail.com)
 
 ## Credits and License
 Copyright (C) 2021/2022 [Andrea Paternesi](https://github.com/patton73)
  
 Copyright (C) 2021/2022 [Matteo Veroni](https://github.com/mavek87)  
 
-[Rebirth Project](https://www.rebirth-project.it)
+Current website under creation [Rebirth Project](https://www.rebirth-project.it)
 
 Ufo Eventbus binaries and source code can be used according to the [Apache License, Version 2.0](LICENSE.md).
