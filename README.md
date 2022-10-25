@@ -94,13 +94,16 @@ You can read detailed documentation [here](documentation/Documentation.md).
 
 You can acces the javadoc documentation [here](https://www.rebirth-project.it/ufoeventbus/documentation/index.html).
 
-## Roadmap and Contributions
+## Roadmap
 Right now the next big thing for the bus will be:
 
 * event runtime filters (block at runtime the delivery of an event using a filter)
 * rework the exception system if needed
 
-Interested persons and contributors can just use the standard githib tools interact with the project. For communications you can use this email [rebirthproject2021@gmail.com](mailto:rebirthproject2021@gmail.com)
+## Contributors
+Interested persons and contributors can just use the standard github tools to interact with the project.
+ 
+For communications you can use this email [rebirthproject2021@gmail.com](mailto:rebirthproject2021@gmail.com)
 
 ## Credits and License
 Copyright (C) 2021/2022 [Andrea Paternesi](https://github.com/patton73)
