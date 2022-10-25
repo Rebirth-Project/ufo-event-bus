@@ -94,11 +94,24 @@ You can read detailed documentation [here](documentation/Documentation.md).
 
 You can acces the javadoc documentation [here](https://www.rebirth-project.it/ufoeventbus/documentation/index.html).
 
+#### Examples of usages
+How to use the bus in android [here](https://github.com/Rebirth-Project/ufo-event-bus/tree/main/android-app-example).
+
+How to use the bus with javafx [here](https://github.com/Rebirth-Project/ufo-event-bus/tree/main/javafx-app-example).
+
+How to use the bus with plain java [here](https://github.com/Rebirth-Project/ufo-event-bus/tree/main/plain-java-example).
+
+#### Benckmarks with jmh
+
+Some detailed benckmarks for the UFO eventbs using jmh framework [here](https://github.com/Rebirth-Project/ufo-event-bus/tree/main/benchmark).
+
+Similar benckmarks for Grenrobot eventbs using jmh framework [here](https://github.com/Rebirth-Project/ufo-event-bus/tree/main/benchmark-greb).
+
 ## Roadmap
-Right now the next big thing for the bus will be:
+Right now the next big things for the bus will be:
 
 * event runtime filters (block at runtime the delivery of an event using a filter)
-* rework the exception system if needed
+* rework the exception system if necessary or asked
 
 ## Contributors
 Interested persons and contributors can just use the standard github tools to interact with the project.
