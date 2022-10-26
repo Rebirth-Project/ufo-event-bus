@@ -1,33 +1,35 @@
 # UFO Eventbus ![Ufo Eventbus Icon](documentation/UfoEventBus.png)
-UFO Event bus (Ultra Fast Object-oriented Event bus) is a powerful asynchronous, lightweight and scalable publish/subscribe event 
-system written in Java.
+UFO Event Bus (Ultra Fast Object-oriented Event bus) is a powerful asynchronous, lightweight and scalable [publish/subscribe event 
+system](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern) written in Java.
 
 It was inspired by [Greenrobot eventbus](https://github.com/greenrobot/EventBus), but basically coded from scratch.
 
-* is parallel and scalable
-* is completely asynchronous
-* is very tiny (~50k jar)
+![Build Status](https://github.com/Rebirth-Project/ufo-event-bus/actions/workflows/build.yml/badge.svg?raw=true)
+
+## Main features
+
+* completely asynchronous
+* parallel and scalable
+* very tiny (~50k jar)
 * performs well with Android and Java
-* used with java > 9 is compiled as module increasing encapsulation
-* it has no dependencies but SLF4J library for enabling logging 
+* is fast in almost every situation and loads and can be configured
+* used with Java > 9 is compiled as module increasing encapsulation
+* it has no dependencies but only uses [SLF4J](https://www.slf4j.org/) as logging facade
 * can simplify the communication between components since it decouples event posters and listeners
-* is fast in almost every situations and loads and can be configured
 * has advanced features like listener priorities, events inheritance, listeners inheritance, inbound event order
 * is entirely documented
 * the code is clean, testable, compact and very easy to understand and mantain
-* is covered with unit test in basically every part of logical code
-
-![Build Status](https://github.com/Rebirth-Project/ufo-event-bus/actions/workflows/build.yml/badge.svg?raw=true)
+* is completely covered with a large number of unit tests
 
 ## Goals
-  * Provide a simple to use library to allow messaging within the app's objects
-  * Make a completely asynchronous message passing system
-  * Make a fast and reliable message passing system 
-  * Make a library with no architectural dependencies (code must depend only on standard Java libraries)
+  * Provide a simple-to-use library to allow messaging within the app's objects
+  * Create a completely asynchronous, fast and reliable message passing system
   * Make the code as cleaner and testable as possible
+  * Don't rely on any other third-party library except than standard Java libraries
+  * Obtain a jar as small as possible
 
 ## Requirements
-- Minumum Java version: 8
+- Minimum Java version: 8
 - Minimum Android version: 8.0 minSdkVersion 26
 
 ## Add Ufo Eventbus in your project
@@ -53,7 +55,7 @@ dependencies {
 
 ##### First step - Create an event:
 ``` java
-// Create an event as a simple java class with necessary fields
+// Create an event as a simple Java class with necessary fields
 public class Event { // Add fields if needed }
 ```
 
@@ -92,20 +94,20 @@ ufoEventBus.post(new Event()); // The 'post' method throws an EventBusException
 ## Internal Architecture Overview and detailed documentation
 You can read detailed documentation [here](documentation/Documentation.md).
 
-You can acces the javadoc documentation [here](https://www.rebirth-project.it/ufoeventbus/javadoc/index.html).
+You can access the javadoc documentation [here](https://www.rebirth-project.it/ufoeventbus/javadoc/index.html).
 
 #### Examples of usages
-How to use the bus in android [here](https://github.com/Rebirth-Project/ufo-event-bus/tree/main/android-app-example).
+How to use the bus in Android [here](https://github.com/Rebirth-Project/ufo-event-bus/tree/main/android-app-example).
 
-How to use the bus with javafx [here](https://github.com/Rebirth-Project/ufo-event-bus/tree/main/javafx-app-example).
+How to use the bus with JavaFX [here](https://github.com/Rebirth-Project/ufo-event-bus/tree/main/javafx-app-example).
 
-How to use the bus with plain java [here](https://github.com/Rebirth-Project/ufo-event-bus/tree/main/plain-java-example).
+How to use the bus with plain Java [here](https://github.com/Rebirth-Project/ufo-event-bus/tree/main/plain-java-example).
 
 #### Benckmarks with jmh
 
-Some detailed benckmarks for the UFO eventbs using jmh framework [here](https://github.com/Rebirth-Project/ufo-event-bus/tree/main/benchmark).
+Some detailed benchmarks for the UFO eventbus using jmh framework [here](https://github.com/Rebirth-Project/ufo-event-bus/tree/main/benchmark).
 
-Similar benckmarks for Grenrobot eventbs using jmh framework [here](https://github.com/Rebirth-Project/ufo-event-bus/tree/main/benchmark-greb).
+Similar benchmarks for Greenrobot eventbus using jmh framework [here](https://github.com/Rebirth-Project/ufo-event-bus/tree/main/benchmark-greb).
 
 ## Roadmap
 Right now the next big things for the bus will be:
@@ -114,9 +116,9 @@ Right now the next big things for the bus will be:
 * rework the exception system if necessary or asked
 
 ## Contributors
-Interested persons and contributors can just use the standard github tools to interact with the project.
+Interested persons and contributors can just use the standard GitHub tools to interact with the project.
  
-For communications you can use this [email](mailto:rebirthproject2021@gmail.com)
+For communications, you can use this [email](mailto:rebirthproject2021@gmail.com)
 
 ## Credits and License
 Copyright (C) 2021/2022 [Andrea Paternesi](https://github.com/patton73)
