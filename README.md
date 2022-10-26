@@ -17,7 +17,7 @@ It was inspired by [Greenrobot eventbus](https://github.com/greenrobot/EventBus)
 * it has no dependencies but only uses [SLF4J](https://www.slf4j.org/) as logging facade
 * can simplify the communication between components since it decouples event posters and listeners
 * has advanced features like listener priorities, events inheritance, listeners inheritance, inbound event order
-* is entirely documented
+* entirely documented
 * the code is clean, testable, compact and very easy to understand and mantain
 * is completely covered with a large number of unit tests
 
