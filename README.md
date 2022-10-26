@@ -53,13 +53,13 @@ dependencies {
 
 ## Quick Start
 
-##### First step - Create an event:
+##### 1. Create an event:
 ``` java
 // Create an event as a simple Java class with necessary fields
 public class Event { // Add fields if needed }
 ```
 
-##### Second step - Create an event listener:
+##### 2. Create an event listener:
 ``` java
 import it.rebirthproject.ufoeb.eventannotation.Listen;
 
@@ -73,7 +73,7 @@ public class ListenerForEvent {
 }
 ```
 
-##### Third step - Create the bus, register the listeners and send the events:
+##### 3. Create the bus, register the listeners and send the events:
 
 ``` java
 // Instantiate the listener
