@@ -56,6 +56,7 @@ dependencies {
 ##### 1. Create an event:
 ``` java
 // Create an event as a simple Java class with necessary fields
+// Most of the times a simple POJO (Plain Old Java Object) with getters and setters should be enough
 public class Event { // Add fields if needed }
 ```
 
