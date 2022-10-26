@@ -116,7 +116,7 @@ Right now the next big things for the bus will be:
 ## Contributors
 Interested persons and contributors can just use the standard github tools to interact with the project.
  
-For communications you can use this email [rebirthproject2021@gmail.com](mailto:rebirthproject2021@gmail.com)
+For communications you can use this [email](mailto:rebirthproject2021@gmail.com)
 
 ## Credits and License
 Copyright (C) 2021/2022 [Andrea Paternesi](https://github.com/patton73)
