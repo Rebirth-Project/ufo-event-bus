@@ -32,7 +32,7 @@ It was inspired by [Greenrobot eventbus](https://github.com/greenrobot/EventBus)
 - Minimum Java version: 8
 - Minimum Android version: 8.0 minSdkVersion 26
 
-## Add Ufo Eventbus in your project
+## How to add Ufo Eventbus dependency in your project
 
 ##### Gradle:
 
