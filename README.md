@@ -57,7 +57,7 @@ dependencies {
 ``` java
 // Create an event as a simple Java class with necessary fields
 // Most of the times a simple POJO (Plain Old Java Object) with getters and setters should be enough
-public class Event { // Add fields if needed }
+public class Event { /* Add fields if needed */ }
 ```
 
 ##### 2. Create an event listener:
@@ -114,6 +114,7 @@ Similar benchmarks for Greenrobot eventbus using jmh framework [here](https://gi
 Right now the next big things for the bus will be:
 
 * event runtime filters (block at runtime the delivery of an event using a filter)
+* block even inheritance if events are not application's defined classes and extend or implement Java or Android internal classes/interfaces
 * rework the exception system if necessary or asked
 
 ## Contributors
