@@ -27,6 +27,7 @@ It was inspired by [Greenrobot eventbus](https://github.com/greenrobot/EventBus)
   * Make the code as cleaner and testable as possible
   * Don't rely on any other third-party library except than standard Java libraries
   * Obtain a jar as small as possible
+  * Write good documentation for the library usage and internals
 
 ## Requirements
 - Minimum Java version: 8

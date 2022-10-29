@@ -44,6 +44,22 @@ If your configuration for registered/unregistered listeners does not change at r
 
 Another important feature of the bus is that it uses reflection to execute listeners' registered methods. Hence, an annotation is used to register a listener's method and, by default, reflection's ```method.invoke()``` is used. Is also provided a faster way to execute events by setting the correct parameter (**useLambdaFactoryInsteadOfStandardReflection**). This will use a LambdaFactory to create methods handlers (a lot faster than standard reflection). This method can be used always but in combination with modules as explained [here](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/invoke/MethodHandles.Lookup.html), so this is not the default behaviour of the bus. 
 
+### What is an event? How to listen for an event?
+
+UFO eventbus is a message passing system. An event basically is a message that carries some data or information (it can carry also no data and be defined only by the name). An event should be a java POJO and nothing more. However, bus can handle inheritance over events. So that you can define and event E that inherits from a super event EP. You can even use java interfaces while defining events. This way, you will be able to handle many complex situations. Inheritance is good, but can be also evil. Maybe you will be tempted to make an event that inherits from a Java SDK class or an Android sdk class. <ins>**DO NOT DO THAT**</ins>. This is not a good idea and the bus right now will not block you in doing that, and problably you will get exceptions. Maybe in future a code that checks the event structure will be added, but since it brings overhead we did not add it. So please just do not inherit from classes that are not defined by yourself in your own application. <br/>
+To listen from an event you must use the provided annotation ```Listen```. The annotation does have also an attribute to deal with evens' [priority](#listeners-event-priority).
+
+```java
+@Listen
+public void someMethod(Event event) {
+	// Do something useful here.. Maybe using some data taken from the event...
+}
+
+@Listen(priority = 1)
+public void someMethod(Event event) {
+	// Do something useful here.. Maybe using some data taken from the event...
+}
+```
 ### Eventbus' builder and configuration's options
 
 To build the eventbus you must use the provided builder. It is a standard builder with fluent syntax. It returns a completely configured bus.
