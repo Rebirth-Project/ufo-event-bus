@@ -20,9 +20,9 @@ package it.rebirthproject.ufoeb.exceptions;
 import it.rebirthproject.ufoeb.architecture.eventbus.EventBus;
 
 /**
- * An {@link Exception} thrown if something goes wrong using the {@link EventBus}.
+ * An {@link RuntimeException} thrown if something goes wrong using the {@link EventBus}.
  */
-public class EventBusException extends Exception {
+public class EventBusException extends RuntimeException {
 
     /**
      * Constructor for creating an EventBusException, passing a message for the exception

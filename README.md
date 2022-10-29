@@ -92,6 +92,11 @@ ufoEventBus.register(listener); // The 'register' method throws an EventBusExcep
 // Post messages on the bus. This will call the listener method!
 ufoEventBus.post(new Event()); // The 'post' method throws an EventBusException
 ```
+##### 4. Shutdown the bus
+``` java
+//This will shutdown gracefully the UFO eventbus' infrastructure
+ufoEventBus.shutdown();
+```
 
 ## Internal Architecture Overview and detailed documentation
 You can read detailed documentation [here](documentation/Documentation.md).

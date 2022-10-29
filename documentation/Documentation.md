@@ -27,7 +27,7 @@ Basically there are four architectural blocks:
 * The execution pool where workers deliver events to the listeners (default value is to have 1 worker)
 
 The bus internally uses messages. Those messages are divided in command and queries, a concept very similar to the CQRS standard architecture. A command tells the bus to do something, for example a post of an event, or a post af a sticky event. A query asks the bus to return some information. The actual difference between a command and a query is that the command does not return any value while the query returns a completable future (perhaps this will be changed in future).
-In the standard configuration bus guarantees event execution order since it uses only a worker to send events. This is a blocking configuration and must be used when computation after event delivery is fast. Otherwise, you should configure the bus to have a major number of workers (parallel execution), that unfortunately cannot guarantee the finishing order for the events' computations.
+In the standard configuration bus guarantees event execution order since it uses only a worker to execute events. This is a blocking configuration and must be used when computation after event delivery is fast. Otherwise, you should configure the bus to have a major number of workers (parallel execution), that unfortunately cannot guarantee the finishing order for the events' computations.
 So basically: 
 
 * if you want scalability you can guarantee events' order execution but cannot guarantee computations' finishing order. 
@@ -35,6 +35,8 @@ So basically:
 
 <ins>Please keep in mind that workers are threads and have an overhead</ins>. So for very fast computation environments (in memory computation) is not needed to change the workers' number or the queue length. A worker and the standard queue's length will guarantee the fastest performances. 
 However, you can change those values passing the right parameters to the builder.
+
+The internal queue is a blocking queue and has a configurable size. We want a blocking queue to avoid out of memory exceptions. Please use configuration parameters to handle scalability.
 
 The bus keeps inside the memory state the current status of listeners' registration. A listener will register to the bus on particular events. So can happen that many listeners register to the bus for the same event. Therefore, when an event is posted to the bus a registration list is created and sent to the workers. A worker 
 take the list and iterate over registrations to execute them all. Order of registration is guaranteed. So if a listener registers before another events will be delivered accordingly. 
@@ -46,7 +48,8 @@ Another important feature of the bus is that it uses reflection to execute liste
 
 ### What is an event? How to listen for an event?
 
-UFO eventbus is a message passing system. An event basically is a message that carries some data or information (it can carry also no data and be defined only by the name). An event should be a java POJO and nothing more. However, bus can handle inheritance over events. So that you can define and event E that inherits from a super event EP. You can even use java interfaces while defining events. This way, you will be able to handle many complex situations. Inheritance is good, but can be also evil. Maybe you will be tempted to make an event that inherits from a Java SDK class or an Android sdk class. <ins>**DO NOT DO THAT**</ins>. This is not a good idea and the bus right now will not block you in doing that, and problably you will get exceptions. Maybe in future a code that checks the event structure will be added, but since it brings overhead we did not add it. So please just do not inherit from classes that are not defined by yourself in your own application. <br/>
+UFO eventbus is a message passing system. An event basically is a message that carries some data or information (it can carry also no data and be defined only by the name). An event should be a java POJO and nothing more. However, bus can handle inheritance over events. So that you can define and event E that inherits from a super event EP. You can even use java interfaces while defining events. This way, you will be able to handle many complex situations. Inheritance is good, but can be also evil. Maybe you will be tempted to make an event that inherits from a Java SDK class or an Android sdk class. <ins>**DO NOT DO THAT**</ins>. This is not a good idea and the bus right now will not block you in doing that, and problably you will get exceptions. Maybe in future a code that checks the event structure will be added, but since it brings overhead we did not add it. So please just do not inherit from classes that are not defined by yourself in your own application. 
+
 To listen from an event you must use the provided annotation ```Listen```. The annotation does have also an attribute to deal with evens' [priority](#listeners-event-priority).
 
 ```java

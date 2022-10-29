@@ -59,8 +59,8 @@ public class EventExecutor implements Runnable {
         for (Registration registration : registrationList) {
             try {
                 registration.process(eventToPost);
-            } catch (Exception ex) {
-                logger.error("Message " + eventToPost.getClass().getCanonicalName() + " cannot be delivered to Object " + registration.getListener().getClass().getCanonicalName() + ".");
+            } catch (Throwable ex) {
+                logger.error("Message " + eventToPost.getClass().getCanonicalName() + " cannot be delivered to Object " + registration.getListener().getClass().getCanonicalName() + ".", ex);
             }
         }
         logger.debug("All messages are been delivered");
