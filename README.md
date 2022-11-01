@@ -39,7 +39,7 @@ It was inspired by [Greenrobot eventbus](https://github.com/greenrobot/EventBus)
 
 ```
 dependencies {
-    implementation "it.rebirthproject:ufoeventbus:1.0.0"
+    implementation "it.rebirthproject:ufo-event-bus:1.0.0"
 }
 ```
 ##### Maven:
@@ -47,7 +47,7 @@ dependencies {
 ```
 <dependency>
     <groupId>it.rebirthproject</groupId>
-    <artifactId>ufoeventbus</artifactId>
+    <artifactId>ufo-event-bus</artifactId>
     <version>1.0.0</version>
 </dependency>
 ```
