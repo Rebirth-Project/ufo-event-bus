@@ -173,7 +173,7 @@ signing {
 release {
     failOnSnapshotDependencies = false
     git {
-        requireBranch.set('') // consente di produrre release da branch != master
+        requireBranch.set('') // you can release from a branch != master
     }
 }
 
