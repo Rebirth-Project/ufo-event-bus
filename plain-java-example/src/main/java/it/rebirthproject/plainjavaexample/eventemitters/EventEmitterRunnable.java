@@ -37,9 +37,9 @@ public class EventEmitterRunnable implements Runnable {
 
     @Override
     public void run() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             try {
-                Thread.sleep(2000);
+                Thread.sleep(1500);
                 eventBus.post(new EventMessage((i + 1), UUID.randomUUID().toString()));
             } catch (Exception ex) {
                 log.error("Error", ex);

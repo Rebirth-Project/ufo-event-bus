@@ -21,7 +21,6 @@ import it.rebirthproject.plainjavaexample.eventemitters.EventEmitterRunnable;
 import it.rebirthproject.plainjavaexample.listeners.EventListener;
 import it.rebirthproject.ufoeb.architecture.eventbus.EventBus;
 import it.rebirthproject.ufoeb.architecture.eventbus.EventBusBuilder;
-import it.rebirthproject.ufoeb.exceptions.EventBusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,39 +28,30 @@ public class App {
 
     private final Logger log = LoggerFactory.getLogger(App.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         new App().start();
     }
 
-    private void start() {
-        EventBus eventBus = null;
-        try {
-            // Building the event bus
-            eventBus = new EventBusBuilder()
-                    .setNumberOfWorkers(1)
-                    .build();
+    private void start() throws InterruptedException {
+        // Building the event bus
+        EventBus eventBus = new EventBusBuilder()
+                .setNumberOfWorkers(1)
+                .build();
 
-            // Building the event listener
-            EventListener listener = new EventListener();
+        // Building the event listener
+        EventListener listener = new EventListener();
 
-            // Registering the listener
-            eventBus.register(listener);
+        // Registering the listener
+        eventBus.register(listener);
 
-            // Creating an event emitter
-            Thread eventEmitterThread = new Thread(new EventEmitterRunnable(eventBus));
-            eventEmitterThread.start();
+        // Creating an event emitter
+        Thread eventEmitterThread = new Thread(new EventEmitterRunnable(eventBus));
+        eventEmitterThread.start();
 
-            // Waiting until the emitter thread stops
-            eventEmitterThread.join();
-        } catch (EventBusException ex1) {
-            log.error("EventBus error occurred", ex1);
-        } catch (InterruptedException ex2) {
-            log.error("Error occurred", ex2);
-        } finally {
-            // Eventbus shutdown
-            if (eventBus != null) {
-                eventBus.shutdownBus();
-            }
-        }
+        // Wait until the emitter thread stops
+        eventEmitterThread.join();
+
+        // Shutdown the bus
+        eventBus.shutdownBus();
     }
 }

@@ -45,7 +45,7 @@ public class App extends Application {
     }
 
     @Override
-    public void init() throws Exception {
+    public void init() {
         eventBus = new EventBusBuilder()
                 .setNumberOfWorkers(1)
                 .build();
