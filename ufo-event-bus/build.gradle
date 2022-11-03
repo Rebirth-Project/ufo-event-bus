@@ -178,6 +178,3 @@ release {
 }
 
 //afterReleaseBuild.dependsOn publish
-
-//test.mustRunAfter(build)
-//signing.mustRunAfter(test)
