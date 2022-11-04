@@ -122,7 +122,7 @@ Right now the next big things for the bus will be:
 * event runtime filters (block at runtime the delivery of an event using a filter)
 * block event inheritance if events are not application's defined classes and extend or implement Java or Android internal classes/interfaces
 * rework the exception system if necessary or asked
-* maybe make a specifi sub implementation for libgdx and gwt refelction problems
+* maybe make a specifi sub implementation for libgdx and gwt reflection problems
 
 ## Contributors
 Interested people and contributors can just use the standard GitHub tools to interact with the project.
