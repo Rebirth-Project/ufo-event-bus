@@ -6,6 +6,10 @@ It was inspired by [Greenrobot eventbus](https://github.com/greenrobot/EventBus)
 
 ![Build Status](https://github.com/Rebirth-Project/ufo-event-bus/actions/workflows/build.yml/badge.svg?raw=true)
 
+## Requirements
+- Minimum Java version: 8
+- Minimum Android version: 8.0 minSdkVersion 26
+
 ## Main features
 
 * completely asynchronous
@@ -28,10 +32,6 @@ It was inspired by [Greenrobot eventbus](https://github.com/greenrobot/EventBus)
   * Don't rely on any other third-party library except than standard Java libraries
   * Obtain a jar as small as possible
   * Write good documentation for the library usage and internals
-
-## Requirements
-- Minimum Java version: 8
-- Minimum Android version: 8.0 minSdkVersion 26
 
 ## How to add Ufo Eventbus dependency in your project
 
