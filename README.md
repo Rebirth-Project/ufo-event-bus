@@ -124,7 +124,7 @@ Right now the next big things for the bus will be:
 * rework the exception system if necessary or asked
 
 ## Contributors
-Interested persons and contributors can just use the standard GitHub tools to interact with the project.
+Interested people and contributors can just use the standard GitHub tools to interact with the project.
  
 For communications, you can use this [email](mailto:rebirthproject2021@gmail.com)
 
