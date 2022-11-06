@@ -25,7 +25,7 @@ repositories {
 
 dependencies {    
     testImplementation 'org.greenrobot:eventbus-java:3.3.1'
-    testImplementation 'ch.qos.logback:logback-classic:1.4.3'
+    testImplementation 'ch.qos.logback:logback-classic:1.4.4'
     jmh 'org.openjdk.jmh:jmh-core:1.35'
     jmh 'org.openjdk.jmh:jmh-generator-annprocess:1.35'
 }
