@@ -19,6 +19,7 @@ repositories {
 }
 
 android {
+    namespace "it.rebirthproject.myapplication"
     compileSdkVersion 32
     buildToolsVersion "32.0.0"
 
