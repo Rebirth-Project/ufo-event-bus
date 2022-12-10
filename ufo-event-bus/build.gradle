@@ -177,4 +177,5 @@ release {
     }
 }
 
+sourcesJar.mustRunAfter(compileModuleInfoJava)
 //afterReleaseBuild.dependsOn publish
