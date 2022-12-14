@@ -4,6 +4,8 @@ system](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern) written
 
 It was inspired by [Greenrobot eventbus](https://github.com/greenrobot/EventBus), but basically coded from scratch.
 
+**```Latest Version 1.0.0```**
+
 ![Build Status](https://github.com/Rebirth-Project/ufo-event-bus/actions/workflows/build.yml/badge.svg?raw=true)
 
 ## Requirements
@@ -125,9 +127,16 @@ Right now the next big things for the bus will be:
 * maybe make a specific sub implementation for libgdx and gwt reflection problems
 
 ## Contributors
-Interested people and contributors can just use the standard GitHub tools to interact with the project.
+
+If you would like to help, but don't know where to start, please note that finding bugs and debugging the code is always a good start.
+Simple Pull Requests that fix anything other than UFO Event Bus core code (documentation, JavaDoc, typos, test cases, etc) are 
+always appreciated and would be merged quickly.
+However, if you want or feel the need to change the main code or add a new functionality, please do not issue a pull request 
+without [creating a new  issue](https://github.com/Rebirth-Project/ufo-event-bus/issues/new) and discussing your desired 
+changes,  _**before you start working on it**_.
+It would be a shame to reject your pull request if it might not align with the project's goals, design expectations or planned functionality.
  
-For communications, you can use this [email](mailto:rebirthproject2021@gmail.com)
+For direct communications, you can use this [email](mailto:rebirthproject2021@gmail.com)
 
 ## Credits and License
 Copyright (C) 2021/2022 [Andrea Paternesi](https://github.com/patton73)
