@@ -130,14 +130,15 @@ final class EventBusInfrastructure {
      */
     void shutdown() {
         logger.debug("Shutting down command for the bus system");        
-        sendShutdownStateManagerMessage();
         try {
+            sendShutdownStateManagerMessage();        
             countDownLatch.await();
             busMemoryStateManagerThread.join();
+            workersPoolExecutor.shutdownNow();
         } catch (InterruptedException ex) {
             logger.error("Error during the shutdown", ex);
         }
-        workersPoolExecutor.shutdownNow();
+        
     }
 
     /**
