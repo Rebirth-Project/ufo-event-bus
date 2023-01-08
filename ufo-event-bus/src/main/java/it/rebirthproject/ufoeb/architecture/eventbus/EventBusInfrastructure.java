@@ -46,14 +46,7 @@ final class EventBusInfrastructure {
      * A {@link Thread} used by the {@link BusMemoryStateManager} to work
      * asynchronously.
      */
-    private final Thread busMemoryStateManagerThread;
-    /**
-     * During the shutdown phase the {@link EventBusInfrastructure} will send a
-     * shutdown message to each {@link EventExecutor}'s worker and to the
-     * {@link BusMemoryStateManager}. This {@link CountDownLatch} is used to
-     * wait until each eventbus component is being shutdown.
-     */
-    private final CountDownLatch countDownLatch;
+    private final Thread busMemoryStateManagerThread;    
     /**
      * A blocking queue used to communicate internal messages to other
      * {@link EventBus}'s components.
@@ -87,14 +80,13 @@ final class EventBusInfrastructure {
      * @see ListenerMethodFinder
      * @see InheritancePolicy
      */
-    EventBusInfrastructure(ListenerMethodFinder listenerMethodFinder, InheritancePolicy inheritancePolicy, int queueLength, int numberOfWorkers, boolean safeRegistrationsListNeeded, boolean throwNoRegistrationsWarning, boolean verboseLogging) {       
+    EventBusInfrastructure(ListenerMethodFinder listenerMethodFinder, InheritancePolicy inheritancePolicy, int queueLength, int numberOfWorkers, boolean safeRegistrationsListNeeded, boolean throwNoRegistrationsWarning, boolean verboseLogging) {
         this.messageQueue = new LinkedBlockingQueue<>(queueLength);
         this.numberOfWorkers = numberOfWorkers;
-        this.countDownLatch = new CountDownLatch(1);
         this.workersPoolExecutor = Executors.newFixedThreadPool(numberOfWorkers);
         MemoryState memoryState = new MemoryState(safeRegistrationsListNeeded, inheritancePolicy, verboseLogging);
-        BusMemoryStateManager busMemoryStateManager = new BusMemoryStateManager(messageQueue, workersPoolExecutor, countDownLatch, memoryState, listenerMethodFinder, throwNoRegistrationsWarning);
-        this.busMemoryStateManagerThread = new Thread(busMemoryStateManager);        
+        BusMemoryStateManager busMemoryStateManager = new BusMemoryStateManager(messageQueue, workersPoolExecutor, memoryState, listenerMethodFinder, throwNoRegistrationsWarning);
+        this.busMemoryStateManagerThread = new Thread(busMemoryStateManager);
     }
 
     /**
@@ -102,7 +94,7 @@ final class EventBusInfrastructure {
      */
     void startup() {
         logger.debug("nr workers {}", numberOfWorkers);
-        busMemoryStateManagerThread.start();       
+        busMemoryStateManagerThread.start();
     }
 
     /**
@@ -129,16 +121,39 @@ final class EventBusInfrastructure {
      * order to shut down.
      */
     void shutdown() {
-        logger.debug("Shutting down command for the bus system");        
+        logger.debug("Shutting down command for the bus system");
         try {
-            sendShutdownStateManagerMessage();        
-            countDownLatch.await();
+            sendShutdownStateManagerMessage();
+            //countDownLatch.await();
             busMemoryStateManagerThread.join();
-            workersPoolExecutor.shutdownNow();
+            shutdownAndAwaitTermination(workersPoolExecutor);
+//            workersPoolExecutor.shutdownNow();
+            
         } catch (InterruptedException ex) {
             logger.error("Error during the shutdown", ex);
         }
-        
+
+    }
+
+    void shutdownAndAwaitTermination(ExecutorService pool) {
+        // Disable new tasks from being submitted
+        pool.shutdown();
+        try {
+            // Wait a while for existing tasks to terminate
+            if (!pool.awaitTermination(60, TimeUnit.SECONDS)) {
+                // Cancel currently executing tasks forcefully
+                pool.shutdownNow();
+                // Wait a while for tasks to respond to being cancelled
+                if (!pool.awaitTermination(60, TimeUnit.SECONDS)) {
+                    System.err.println("Pool did not terminate");
+                }
+            }
+        } catch (InterruptedException ex) {
+            // (Re-)Cancel if current thread also interrupted
+            pool.shutdownNow();
+            // Preserve interrupt status
+            Thread.currentThread().interrupt();
+        }
     }
 
     /**

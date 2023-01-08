@@ -38,7 +38,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
 
 public class BusMemoryStateManagerCompleteInheritanceTest extends BaseTest {
 
@@ -49,12 +49,12 @@ public class BusMemoryStateManagerCompleteInheritanceTest extends BaseTest {
 
     @BeforeEach
     public void beforeEach() {
-        countDownLatch = new CountDownLatch(1);
-        fakeMessageEmitter = new FakeMessageEmitter(messageQueue, countDownLatch);
+        executorService = Executors.newSingleThreadExecutor();
+        fakeMessageEmitter = new FakeMessageEmitter(messageQueue);
         fakePoolExecutor = new FakePoolExecutor();
 
         memoryState = new MemoryState(!SAFE_REGISTRATIONS_NEEDED, FactoryInheritancePolicy.createInheritancePolicy(InheritancePolicyType.COMPLETE_EVENT_INHERITANCE), VERBOSE_LOGGING);
-        busMemoryStateManager = new BusMemoryStateManager(messageQueue, fakePoolExecutor, countDownLatch, memoryState, listenerMethodFinder, THROW_NO_REGISTRATIONS_WARNING);
+        busMemoryStateManager = new BusMemoryStateManager(messageQueue, fakePoolExecutor, memoryState, listenerMethodFinder, THROW_NO_REGISTRATIONS_WARNING);
         executorService.submit(busMemoryStateManager);
     }
 
@@ -66,8 +66,9 @@ public class BusMemoryStateManagerCompleteInheritanceTest extends BaseTest {
         fakeMessageEmitter
                 .sendMessage(new RegisterMessage(listener))
                 .sendMessage(new PostEventMessage(blackTriangularPenEvent))
-                .sendMessage(new ShutdownStateManagerMessage())
-                .awaitUntilExecutorFinishToWorkAndDie();
+                .sendMessage(new ShutdownStateManagerMessage());
+
+        awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
         messageListVerifier.assertAsExpected(returnMessageList,
@@ -90,8 +91,9 @@ public class BusMemoryStateManagerCompleteInheritanceTest extends BaseTest {
         fakeMessageEmitter
                 .sendMessage(new RegisterMessage(listener))
                 .sendMessage(new PostEventMessage(blackPenEvent))
-                .sendMessage(new ShutdownStateManagerMessage())
-                .awaitUntilExecutorFinishToWorkAndDie();
+                .sendMessage(new ShutdownStateManagerMessage());
+
+        awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
         messageListVerifier.assertAsExpected(returnMessageList,
@@ -122,8 +124,9 @@ public class BusMemoryStateManagerCompleteInheritanceTest extends BaseTest {
         fakeMessageEmitter
                 .sendMessage(new RegisterMessage(listener))
                 .sendMessage(new PostEventMessage(blackTriangularPenEvent))
-                .sendMessage(new ShutdownStateManagerMessage())
-                .awaitUntilExecutorFinishToWorkAndDie();
+                .sendMessage(new ShutdownStateManagerMessage());
+
+        awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
         messageListVerifier.assertAsExpected(returnMessageList,
@@ -180,8 +183,9 @@ public class BusMemoryStateManagerCompleteInheritanceTest extends BaseTest {
                 .sendMessage(new RegisterMessage(listenerSquared))
                 .sendMessage(new RegisterMessage(listenerAll))
                 .sendMessage(new PostEventMessage(blackSquaredPen))
-                .sendMessage(new ShutdownStateManagerMessage())
-                .awaitUntilExecutorFinishToWorkAndDie();
+                .sendMessage(new ShutdownStateManagerMessage());
+
+        awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
         messageListVerifier.assertAsExpected(returnMessageList,
