@@ -171,9 +171,7 @@ public class BusMemoryStateManager implements Runnable {
                         memoryState.printState();
                         break;
                     }
-                    default: {
-                        //logger.debug("A command for the executor arrived. Sending to the executor!!");
-                        //workerMessageQueue.put(message);
+                    default: {                        
                         break;
                     }
                 }
