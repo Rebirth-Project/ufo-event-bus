@@ -55,7 +55,6 @@ public abstract class BaseTest {
     protected static BlockingQueue<Message> messageQueue;
     protected static BlockingQueue<Message> eventWorkerQueue;
     protected static ListenerMethodFinder listenerMethodFinder;
-    protected static CountDownLatch countDownLatch;
     protected static ExecutorService executorService;
     protected static ListVerifier<Message, ExpectedMessage> messageListVerifier;
     protected static ListVerifier<Registration, ExpectedRegistration> registrationListVerifier;

@@ -57,14 +57,7 @@ public class BusMemoryStateManager implements Runnable {
      * This is the thread pool cache that handles thread
      * parallelism to obtain bus scalability.
      */   
-    private final ExecutorService workersPoolExecutor;
-
-    /**
-     * A {@link CountDownLatch} used during the shutdown phase to notify when
-     * the {@link BusMemoryStateManager} is shutting down.
-     */
-    //private final CountDownLatch countDownLatch;
-
+    private final ExecutorService workersPoolExecutor;   
     /**
      * The {@link MemoryState} of the {@link EventBus}
      */
@@ -105,8 +98,7 @@ public class BusMemoryStateManager implements Runnable {
      */
     public BusMemoryStateManager(BlockingQueue<Message> commandQueryMessageQueue, ExecutorService workersPoolExecutor, MemoryState memoryState, ListenerMethodFinder listenerMethodFinder, boolean throwNoRegistrationsWarning) {
         this.commandQueryMessageQueue = commandQueryMessageQueue;       
-        this.workersPoolExecutor = workersPoolExecutor;
-        //this.countDownLatch = countDownLatch;
+        this.workersPoolExecutor = workersPoolExecutor;        
         this.memoryState = memoryState;
         this.listenerMethodFinder = listenerMethodFinder;
         this.throwNoRegistrationsWarning = throwNoRegistrationsWarning;
