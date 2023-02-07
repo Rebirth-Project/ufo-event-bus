@@ -139,9 +139,9 @@ It would be a shame to reject your pull request if it might not align with the p
 For direct communications, you can use this [email](mailto:rebirthproject2021@gmail.com)
 
 ## Credits and License
-Copyright (C) 2021/2022 [Andrea Paternesi](https://github.com/patton73)
+Copyright (C) 2022/2023 [Andrea Paternesi](https://github.com/patton73)
  
-Copyright (C) 2021/2022 [Matteo Veroni](https://github.com/mavek87)  
+Copyright (C) 2022/2023 [Matteo Veroni](https://github.com/mavek87)  
 
 Current website under creation [Rebirth Project](https://www.rebirth-project.it)
 
