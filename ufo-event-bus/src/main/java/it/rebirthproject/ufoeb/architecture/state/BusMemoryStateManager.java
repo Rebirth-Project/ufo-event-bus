@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2021/2022 Andrea Paternesi Rebirth project
- * Modifications copyright (C) 2021/2022 Matteo Veroni Rebirth project
+ * Copyright (C) 2021/2023 Andrea Paternesi Rebirth project
+ * Modifications copyright (C) 2021/2023 Matteo Veroni Rebirth project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -58,14 +57,7 @@ public class BusMemoryStateManager implements Runnable {
      * This is the thread pool cache that handles thread
      * parallelism to obtain bus scalability.
      */   
-    private final ExecutorService workersPoolExecutor;
-
-    /**
-     * A {@link CountDownLatch} used during the shutdown phase to notify when
-     * the {@link BusMemoryStateManager} is shutting down.
-     */
-    private final CountDownLatch countDownLatch;
-
+    private final ExecutorService workersPoolExecutor;   
     /**
      * The {@link MemoryState} of the {@link EventBus}
      */
@@ -94,9 +86,7 @@ public class BusMemoryStateManager implements Runnable {
      * <pre>example: (REGISTER_MESSAGE, UNREGISTER_MESSAGE, SHUTDOWN_STATE_MANAGER, etc... )</pre>
      * Once one of those messages is received, it will be handled accordingly.          
      * @param workersPoolExecutor This is the thread pool cache that handles thread
-     * parallelism to obtain bus scalability.
-     * @param countDownLatch A countDownLatch used during the shutdown phase to
-     * notify when the {@link BusMemoryStateManager} is shutting down.
+     * parallelism to obtain bus scalability.    
      * @param memoryState The {@link MemoryState} of the {@link EventBus}
      * @param listenerMethodFinder The {@link ListenerMethodFinder} is a service
      * used to retrieve registered listeners methods annotated with
@@ -106,10 +96,9 @@ public class BusMemoryStateManager implements Runnable {
      * no warning be will be thrown when an event is posted and no listeners are
      * registered to listen to that precise event.
      */
-    public BusMemoryStateManager(BlockingQueue<Message> commandQueryMessageQueue, ExecutorService workersPoolExecutor, CountDownLatch countDownLatch, MemoryState memoryState, ListenerMethodFinder listenerMethodFinder, boolean throwNoRegistrationsWarning) {
+    public BusMemoryStateManager(BlockingQueue<Message> commandQueryMessageQueue, ExecutorService workersPoolExecutor, MemoryState memoryState, ListenerMethodFinder listenerMethodFinder, boolean throwNoRegistrationsWarning) {
         this.commandQueryMessageQueue = commandQueryMessageQueue;       
-        this.workersPoolExecutor = workersPoolExecutor;
-        this.countDownLatch = countDownLatch;
+        this.workersPoolExecutor = workersPoolExecutor;        
         this.memoryState = memoryState;
         this.listenerMethodFinder = listenerMethodFinder;
         this.throwNoRegistrationsWarning = throwNoRegistrationsWarning;
@@ -128,17 +117,17 @@ public class BusMemoryStateManager implements Runnable {
                 switch (message.getMessageType()) {
                     case SHUTDOWN_STATE_MANAGER: {
                         logger.debug("Shutdown bus memory state manager");
-                        countDownLatch.countDown();
                         return;
                     }
                     case REGISTER_LISTENER_MESSAGE: {
                         logger.debug("A new Registration arrived!!");
                         RegisterMessage registerMessage = (RegisterMessage) message;
                         listenerMethodFinder.findListenerMethods(registerMessage.getListenerToRegister(), memoryState);
+                        
                         EventsRegistrationsMap foundStickyEventsRegistrations = memoryState.getFoundListenerStickyEventsRegistrations();
                         for (BusEventKey busEventKey : foundStickyEventsRegistrations.keySet()) {
                             workersPoolExecutor.execute(new EventExecutor(foundStickyEventsRegistrations.get(busEventKey),memoryState.getStickyEvent(busEventKey)));
-                        }
+                        }                        
                         break;
                     }
                     case UNREGISTER_LISTENER_MESSAGE: {
@@ -182,9 +171,7 @@ public class BusMemoryStateManager implements Runnable {
                         memoryState.printState();
                         break;
                     }
-                    default: {
-                        //logger.debug("A command for the executor arrived. Sending to the executor!!");
-                        //workerMessageQueue.put(message);
+                    default: {                        
                         break;
                     }
                 }

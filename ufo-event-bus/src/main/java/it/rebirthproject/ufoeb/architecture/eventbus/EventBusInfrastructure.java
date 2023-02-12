@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021/2022 Matteo Veroni Rebirth project
+ * Copyright (C) 2021/2023 Matteo Veroni Rebirth project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,14 +46,7 @@ final class EventBusInfrastructure {
      * A {@link Thread} used by the {@link BusMemoryStateManager} to work
      * asynchronously.
      */
-    private final Thread busMemoryStateManagerThread;
-    /**
-     * During the shutdown phase the {@link EventBusInfrastructure} will send a
-     * shutdown message to each {@link EventExecutor}'s worker and to the
-     * {@link BusMemoryStateManager}. This {@link CountDownLatch} is used to
-     * wait until each eventbus component is being shutdown.
-     */
-    private final CountDownLatch countDownLatch;
+    private final Thread busMemoryStateManagerThread;    
     /**
      * A blocking queue used to communicate internal messages to other
      * {@link EventBus}'s components.
@@ -87,14 +80,13 @@ final class EventBusInfrastructure {
      * @see ListenerMethodFinder
      * @see InheritancePolicy
      */
-    EventBusInfrastructure(ListenerMethodFinder listenerMethodFinder, InheritancePolicy inheritancePolicy, int queueLength, int numberOfWorkers, boolean safeRegistrationsListNeeded, boolean throwNoRegistrationsWarning, boolean verboseLogging) {       
+    EventBusInfrastructure(ListenerMethodFinder listenerMethodFinder, InheritancePolicy inheritancePolicy, int queueLength, int numberOfWorkers, boolean safeRegistrationsListNeeded, boolean throwNoRegistrationsWarning, boolean verboseLogging) {
         this.messageQueue = new LinkedBlockingQueue<>(queueLength);
         this.numberOfWorkers = numberOfWorkers;
-        this.countDownLatch = new CountDownLatch(1);
         this.workersPoolExecutor = Executors.newFixedThreadPool(numberOfWorkers);
         MemoryState memoryState = new MemoryState(safeRegistrationsListNeeded, inheritancePolicy, verboseLogging);
-        BusMemoryStateManager busMemoryStateManager = new BusMemoryStateManager(messageQueue, workersPoolExecutor, countDownLatch, memoryState, listenerMethodFinder, throwNoRegistrationsWarning);
-        this.busMemoryStateManagerThread = new Thread(busMemoryStateManager);        
+        BusMemoryStateManager busMemoryStateManager = new BusMemoryStateManager(messageQueue, workersPoolExecutor, memoryState, listenerMethodFinder, throwNoRegistrationsWarning);
+        this.busMemoryStateManagerThread = new Thread(busMemoryStateManager);
     }
 
     /**
@@ -102,7 +94,7 @@ final class EventBusInfrastructure {
      */
     void startup() {
         logger.debug("nr workers {}", numberOfWorkers);
-        busMemoryStateManagerThread.start();       
+        busMemoryStateManagerThread.start();
     }
 
     /**
@@ -129,15 +121,15 @@ final class EventBusInfrastructure {
      * order to shut down.
      */
     void shutdown() {
-        logger.debug("Shutting down command for the bus system");        
-        sendShutdownStateManagerMessage();
+        logger.debug("Shutting down command for the bus system");
         try {
-            countDownLatch.await();
+            sendShutdownStateManagerMessage();
             busMemoryStateManagerThread.join();
+            workersPoolExecutor.shutdownNow();            
         } catch (InterruptedException ex) {
             logger.error("Error during the shutdown", ex);
         }
-        workersPoolExecutor.shutdownNow();
+
     }
 
     /**

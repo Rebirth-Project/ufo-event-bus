@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2021/2022 Andrea Paternesi Rebirth project
- * Modifications copyright (C) 2021/2022 Matteo Veroni Rebirth project
+ * Copyright (C) 2021/2023 Andrea Paternesi Rebirth project
+ * Modifications copyright (C) 2021/2023 Matteo Veroni Rebirth project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,18 +20,15 @@ import it.rebirthproject.ufoeb.architecture.messages.interfaces.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CountDownLatch;
 
 public class FakeMessageEmitter {
 
     private static final Logger logger = LoggerFactory.getLogger(FakeMessageEmitter.class);
 
     private final BlockingQueue<Message> messageQueue;
-    private final CountDownLatch countDownLatch;
 
-    public FakeMessageEmitter(BlockingQueue<Message> messageQueue, CountDownLatch countDownLatch) {
+    public FakeMessageEmitter(BlockingQueue<Message> messageQueue) {
         this.messageQueue = messageQueue;
-        this.countDownLatch = countDownLatch;
     }
 
     public FakeMessageEmitter sendMessage(Message message) throws InterruptedException {
@@ -50,9 +47,5 @@ public class FakeMessageEmitter {
         }
         logger.info("delay method done ({}ms)", timeInMillis);
         return this;
-    }
-
-    public void awaitUntilExecutorFinishToWorkAndDie() throws InterruptedException {
-        countDownLatch.await();
     }
 }

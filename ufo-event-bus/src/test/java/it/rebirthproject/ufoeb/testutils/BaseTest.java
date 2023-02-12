@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2021/2022 Andrea Paternesi Rebirth project
- * Modifications copyright (C) 2021/2022 Matteo Veroni Rebirth project
+ * Copyright (C) 2021/2023 Andrea Paternesi Rebirth project
+ * Modifications copyright (C) 2021/2023 Matteo Veroni Rebirth project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@ import it.rebirthproject.ufoeb.testutils.validators.ExpectedRegistration;
 import it.rebirthproject.ufoeb.testutils.validators.NonBlockingExpectedRegistration;
 import it.rebirthproject.ufoeb.testutils.verifiers.ListVerifier;
 import it.rebirthproject.ufoeb.testutils.verifiers.UnorderedListVerifier;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +55,6 @@ public abstract class BaseTest {
     protected static BlockingQueue<Message> messageQueue;
     protected static BlockingQueue<Message> eventWorkerQueue;
     protected static ListenerMethodFinder listenerMethodFinder;
-    protected static CountDownLatch countDownLatch;
     protected static ExecutorService executorService;
     protected static ListVerifier<Message, ExpectedMessage> messageListVerifier;
     protected static ListVerifier<Registration, ExpectedRegistration> registrationListVerifier;
@@ -94,13 +92,12 @@ public abstract class BaseTest {
         messageQueue = new ArrayBlockingQueue<>(QUEUE_LENGHT);
         eventWorkerQueue = new LinkedBlockingQueue<>(QUEUE_LENGHT);
         listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, THROW_NO_LISTENERS_EXCEPTION, USE_LAMBDAFACTORY_INSTEAD_OF_STANDARD_REFLECTION, EMPTY_INHERITANCE_FRONTIER_PATH);
-        executorService = Executors.newSingleThreadExecutor();
         messageListVerifier = new ListVerifier<>();
         registrationListVerifier = new ListVerifier<>();
     }
 
-    @AfterAll
-    public static void afterAll() {
+    public void awaitUntilExecutorFinishToWorkAndDie() throws InterruptedException {
         executorService.shutdown();
+        executorService.awaitTermination(60, TimeUnit.SECONDS);
     }
 }
