@@ -34,7 +34,7 @@ compileJava {
 
 dependencies {
     implementation project(':ufo-event-bus')
-    implementation 'ch.qos.logback:logback-classic:1.4.4'
+    implementation 'ch.qos.logback:logback-classic:1.4.5'
 }
 
 tasks.withType(Jar) {
