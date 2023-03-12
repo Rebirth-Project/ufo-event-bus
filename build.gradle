@@ -25,7 +25,8 @@ buildscript {
 }
 
 wrapper() {
-    gradleVersion = '8.0.2'
+    //Do not touch this wrapper until org.javamodularity.moduleplugin will be compatible with gradle 8.
+    gradleVersion = '7.5.1'
 }
 
 project(':ufo-event-bus') {

@@ -28,7 +28,7 @@ plugins {
 group = 'it.rebirthproject'
 archivesBaseName = 'ufoeventbus'
 
-//modularity.mixedJavaRelease 8
+modularity.mixedJavaRelease 8
 
 Date buildTimeAndDate = new Date()
 ext {   
@@ -177,5 +177,6 @@ release {
     }
 }
 
-//sourcesJar.mustRunAfter(compileModuleInfoJava)
+//Do not touch this line because it compiles with java 8 compatibility
+sourcesJar.mustRunAfter(compileModuleInfoJava)
 //afterReleaseBuild.dependsOn publish
