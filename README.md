@@ -112,6 +112,8 @@ How to use the bus with JavaFX [here](https://github.com/Rebirth-Project/ufo-eve
 
 How to use the bus with plain Java [here](https://github.com/Rebirth-Project/ufo-event-bus/tree/main/plain-java-example).
 
+How to use the bus with Libgdx [here](https://github.com/Rebirth-Project/ufo-event-bus/tree/main/libgdx-app-example).
+
 #### Benckmarks with jmh
 
 Some detailed benchmarks for the UFO eventbus using jmh framework [here](https://github.com/Rebirth-Project/ufo-event-bus/tree/main/benchmark).
@@ -124,7 +126,6 @@ Right now the next big things for the bus will be:
 * event runtime filters (block at runtime the delivery of an event using a filter)
 * block event inheritance if events are not application's defined classes and extend or implement Java or Android internal classes/interfaces
 * rework the exception system if necessary or asked
-* maybe make a specific sub implementation for libgdx and gwt reflection problems
 
 ## Contributors
 
