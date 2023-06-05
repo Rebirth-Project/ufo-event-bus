@@ -13,10 +13,6 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.* See the License for the specific language governing permissions and* limitations under the License.
  */
 
-plugins {
-    id 'application'   
-}
-
 group = 'it.rebirthproject'
 
 application {    
@@ -33,7 +29,6 @@ compileJava {
 }
 
 dependencies {
-    implementation project(':ufo-event-bus')
     implementation 'ch.qos.logback:logback-classic:1.4.5'
 }
 

@@ -1,0 +1,27 @@
+
+button.png
+size: 1024, 64
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+clicked
+  rotate: false
+  xy: 204, 2
+  size: 200, 60
+  orig: 200, 60
+  offset: 0, 0
+  index: -1
+hover
+  rotate: false
+  xy: 406, 2
+  size: 200, 60
+  orig: 200, 60
+  offset: 0, 0
+  index: -1
+normal
+  rotate: false
+  xy: 2, 2
+  size: 200, 60
+  orig: 200, 60
+  offset: 0, 0
+  index: -1

@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2021/2023 Andrea Paternesi Rebirth project
- * Copyright (C) 2021/2023 Matteo Veroni Rebirth project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,4 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-include 'ufo-event-bus', 'benchmark', 'benchmark-greb', 'plain-java-example', 'javafx-app-example', 'android-app-example', 'libgdx-app-example'
+package it.rebirthproject.eventbusdemo.core.camera;
+
+import com.badlogic.gdx.graphics.OrthographicCamera;
+
+public class BasicCamera extends OrthographicCamera {
+
+    public BasicCamera(float width, float height) {
+
+        super((float) width, (float) height);
+        this.position.x = (float) (width / 2);
+        this.position.y = (float) (height / 2);
+    }
+}

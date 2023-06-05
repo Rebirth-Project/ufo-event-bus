@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2021/2023 Andrea Paternesi Rebirth project
- * Copyright (C) 2021/2023 Matteo Veroni Rebirth project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,4 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-include 'ufo-event-bus', 'benchmark', 'benchmark-greb', 'plain-java-example', 'javafx-app-example', 'android-app-example', 'libgdx-app-example'
+package it.rebirthproject.eventbusdemo.core.listener;
+
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import it.rebirthproject.eventbusdemo.core.events.EventMessage;
+import it.rebirthproject.ufoeb.eventannotation.Listen;
+
+public class LabelListener extends Label {
+    
+    public LabelListener(CharSequence text, LabelStyle style) {
+        super(text, style);
+    }
+    
+    @Listen
+    public void printEvent(EventMessage event) {
+        setText("Received message number: " + event.getMessage());
+    }
+}

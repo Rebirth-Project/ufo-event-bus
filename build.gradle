@@ -43,6 +43,14 @@ project(':benchmark') {
 project(':benchmark-greb') {    
 }
 
+project(':plain-java-example') {
+    apply plugin: 'application'
+
+    dependencies {
+        implementation project(':ufo-event-bus')
+    }
+}
+
 project(':javafx-app-example') {
     apply plugin: 'application'
 
@@ -53,6 +61,14 @@ project(':javafx-app-example') {
 
 project(':android-app-example') {
     apply plugin: 'com.android.application'
+
+    dependencies {
+        implementation project(':ufo-event-bus')
+    }
+}
+
+project(':libgdx-app-example') {
+    apply plugin: "java-library"
 
     dependencies {
         implementation project(':ufo-event-bus')
