@@ -23,6 +23,7 @@ import it.rebirthproject.ufoeb.dto.events.eventinterface.EventInterfaceExtending
 import it.rebirthproject.ufoeb.dto.objectstoregister.statemanager.*;
 import it.rebirthproject.ufoeb.dto.objectstoregister.statemanager.sticky.RegisteredClass1ToStickyEvent1;
 import it.rebirthproject.ufoeb.dto.registrations.Registration;
+import it.rebirthproject.ufoeb.services.ClassProcessableService;
 import it.rebirthproject.ufoeb.services.ListenerMethodFinder;
 import it.rebirthproject.ufoeb.testutils.validators.ExpectedMessage;
 import it.rebirthproject.ufoeb.testutils.validators.ExpectedRegistration;
@@ -55,6 +56,7 @@ public abstract class BaseTest {
     protected static BlockingQueue<Message> messageQueue;
     protected static BlockingQueue<Message> eventWorkerQueue;
     protected static ListenerMethodFinder listenerMethodFinder;
+    protected static ClassProcessableService classProcessableService;
     protected static ExecutorService executorService;
     protected static ListVerifier<Message, ExpectedMessage> messageListVerifier;
     protected static ListVerifier<Registration, ExpectedRegistration> registrationListVerifier;
@@ -87,11 +89,11 @@ public abstract class BaseTest {
 
     @BeforeAll
     public static void beforeAll() {
-        logger.info("Java version: {}", System.getProperty("java.version"));
-
+        logger.info("Java version: {}", System.getProperty("java.version"));        
         messageQueue = new ArrayBlockingQueue<>(QUEUE_LENGHT);
         eventWorkerQueue = new LinkedBlockingQueue<>(QUEUE_LENGHT);
-        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, THROW_NO_LISTENERS_EXCEPTION, USE_LAMBDAFACTORY_INSTEAD_OF_STANDARD_REFLECTION, EMPTY_INHERITANCE_FRONTIER_PATH);
+        classProcessableService = new ClassProcessableService(EMPTY_INHERITANCE_FRONTIER_PATH);
+        listenerMethodFinder = new ListenerMethodFinder(LISTENER_SUPERCLASS_INHERITANCE, THROW_NOT_VALID_METHOD_EXCEPTION, THROW_NO_LISTENERS_EXCEPTION, USE_LAMBDAFACTORY_INSTEAD_OF_STANDARD_REFLECTION, classProcessableService);
         messageListVerifier = new ListVerifier<>();
         registrationListVerifier = new ListVerifier<>();
     }

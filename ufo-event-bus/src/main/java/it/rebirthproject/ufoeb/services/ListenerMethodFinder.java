@@ -23,7 +23,6 @@ import it.rebirthproject.ufoeb.dto.BusEventKey;
 import it.rebirthproject.ufoeb.dto.registrations.Registration;
 import it.rebirthproject.ufoeb.eventannotation.Listen;
 import it.rebirthproject.ufoeb.exceptions.EventBusException;
-import it.rebirthproject.ufoeb.architecture.eventbus.EventBus;
 import it.rebirthproject.ufoeb.dto.registrations.RegistrationMethodHandler;
 import it.rebirthproject.ufoeb.dto.registrations.RegistrationStandardReflection;
 
@@ -68,10 +67,7 @@ public class ListenerMethodFinder {
      * related javadoc</a>
      */
     private static final int MODIFIERS_IGNORE = Modifier.ABSTRACT | Modifier.STATIC | BRIDGE | SYNTHETIC;
-    /**
-     * A default empty inheritance package frontier path
-     */
-    private static final String EMPTY_INHERITANCE_PACKAGE_FRONTIER_PATH = "";
+    
     /**
      * This parameter should be used when you want to use inheritance over a
      * listener and all its superclasses. Enabling it will let the bus look for
@@ -103,15 +99,9 @@ public class ListenerMethodFinder {
      * @see EventBusBuilder#setUseLambdaFactoryInsteadOfStandardReflection()
      */
     private final boolean useLambdaFactoryInsteadOfStandardReflection;
-    /**
-     * Sets the package used to stop the iteration over classes while using
-     * event inheritance. If a class belongs to the set package then the
-     * iteration stops. This parameter must be used only when event inheritance
-     * policy is enabled otherwise it is useless even if set.
-     *
-     * @see EventBusBuilder#setInheritancePackageFrontierPath(String)
-     */
-    private final String inheritancePackageFrontierPath;
+    
+    
+    private final ClassProcessableService classProcessableService;
 
     /**
      * Class constructor used to build a ListenerMethodFinder
@@ -125,15 +115,14 @@ public class ListenerMethodFinder {
      * @param useLambdaFactoryInsteadOfStandardReflection Parameter used to
      * initialize the attribute
      * {@link #useLambdaFactoryInsteadOfStandardReflection}
-     * @param inheritancePackageFrontierPath Parameter used to initialize the
-     * attribute {@link #inheritancePackageFrontierPath}
+     * @param classProcessableService service used to see if a class/interface should be processable via reflection
      */
-    public ListenerMethodFinder(boolean listenerSuperclassInheritance, boolean throwNotValidMethodException, boolean throwNoListenerAnnotationException, boolean useLambdaFactoryInsteadOfStandardReflection, String inheritancePackageFrontierPath) {
+    public ListenerMethodFinder(boolean listenerSuperclassInheritance, boolean throwNotValidMethodException, boolean throwNoListenerAnnotationException, boolean useLambdaFactoryInsteadOfStandardReflection, ClassProcessableService classProcessableService) {
         this.listenerSuperclassInheritance = listenerSuperclassInheritance;
         this.throwNotValidMethodException = throwNotValidMethodException;
         this.throwNoListenerAnnotationException = throwNoListenerAnnotationException;
         this.useLambdaFactoryInsteadOfStandardReflection = useLambdaFactoryInsteadOfStandardReflection;
-        this.inheritancePackageFrontierPath = (inheritancePackageFrontierPath == null) ? EMPTY_INHERITANCE_PACKAGE_FRONTIER_PATH : inheritancePackageFrontierPath;
+        this.classProcessableService = classProcessableService;        
     }
 
     /**
@@ -153,7 +142,7 @@ public class ListenerMethodFinder {
         String clazzName = clazz.getName();
 
         // need to iterate through hierarchy in order to retrieve methods from above the current instance
-        while (isClassProcessableByPackage(clazzName)) {
+        while (classProcessableService.isClassProcessableByPackage(clazzName)) {
             // iterate through the list of methods declared in the class represented by clazz variable, and add those annotated with the specified annotation
             for (final Method method : findAllMethods(clazz)) {
                 int modifiers = method.getModifiers();
@@ -204,24 +193,7 @@ public class ListenerMethodFinder {
         }
     }
 
-    /**
-     * This method is used to check if the listener class is processable
-     * analyzing its package. There are two methods: - the check over a given
-     * inheritance frontier path package (for example the package of the
-     * application that uses the {@link EventBus}). - the check over hardcoded
-     * basic java packages (that can depends even on Android platform). This
-     * method is used only when the frontier path is not specified.
-     *
-     * @param className The listener class
-     * @return A boolean that states if the loop must continue or not.
-     */
-    private boolean isClassProcessableByPackage(String className) {
-        if (inheritancePackageFrontierPath.trim().isEmpty()) {
-            return !className.startsWith("java.") && !className.startsWith("javax.") && !className.startsWith("android.") && !className.startsWith("androidx.");
-        } else {
-            return className.startsWith(inheritancePackageFrontierPath);
-        }
-    }
+   
 
     /**
      * This method finds all methods defined in a given class.

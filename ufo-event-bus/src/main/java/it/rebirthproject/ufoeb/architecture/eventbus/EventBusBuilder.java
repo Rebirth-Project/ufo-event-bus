@@ -29,6 +29,7 @@ import it.rebirthproject.ufoeb.eventinheritancepolicy.policies.NoEventInheritanc
 import it.rebirthproject.ufoeb.exceptions.EventBusException;
 import it.rebirthproject.ufoeb.services.ListenerMethodFinder;
 import static it.rebirthproject.ufoeb.eventinheritancepolicy.base.InheritancePolicyType.INTERFACE_EVENT_INHERITANCE;
+import it.rebirthproject.ufoeb.services.ClassProcessableService;
 
 /**
  * A builder which can be used to create an {@link EventBus}
@@ -387,8 +388,9 @@ public final class EventBusBuilder {
      */
     public EventBus build() throws EventBusException {
         try {
+            final ClassProcessableService ClassProcessableService = new ClassProcessableService(inheritancePackageFrontierPath);
             final EventBusInfrastructure eventBusInfrastructure = new EventBusInfrastructure(
-                    new ListenerMethodFinder(listenerSuperclassInheritance, throwNotValidMethodException, throwNoListenerAnnotationException, useLambdaFactoryInsteadOfStandardReflection, inheritancePackageFrontierPath),
+                    new ListenerMethodFinder(listenerSuperclassInheritance, throwNotValidMethodException, throwNoListenerAnnotationException, useLambdaFactoryInsteadOfStandardReflection, ClassProcessableService),
                     eventInheritancePolicy,
                     queueLength,
                     numberOfWorkers,
