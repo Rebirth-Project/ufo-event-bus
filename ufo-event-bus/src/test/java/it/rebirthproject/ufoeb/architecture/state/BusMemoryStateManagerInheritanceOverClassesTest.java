@@ -55,7 +55,7 @@ public class BusMemoryStateManagerInheritanceOverClassesTest extends BaseTest {
         fakeMessageEmitter = new FakeMessageEmitter(messageQueue);
         fakePoolExecutor = new FakePoolExecutor();
 
-        memoryState = new MemoryState(!SAFE_REGISTRATIONS_NEEDED, FactoryInheritancePolicy.createInheritancePolicy(InheritancePolicyType.CLASS_EVENT_INHERITANCE), VERBOSE_LOGGING);
+        memoryState = new MemoryState(!SAFE_REGISTRATIONS_NEEDED, FactoryInheritancePolicy.createInheritancePolicy(InheritancePolicyType.CLASS_EVENT_INHERITANCE,classProcessableService), VERBOSE_LOGGING);
         busMemoryStateManager = new BusMemoryStateManager(messageQueue, fakePoolExecutor, memoryState, listenerMethodFinder, THROW_NO_REGISTRATIONS_WARNING);
         executorService.submit(busMemoryStateManager);
 

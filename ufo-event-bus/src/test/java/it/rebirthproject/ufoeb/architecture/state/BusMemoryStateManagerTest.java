@@ -57,7 +57,7 @@ public class BusMemoryStateManagerTest extends BaseTest {
         fakeMessageEmitter = new FakeMessageEmitter(messageQueue);
         fakePoolExecutor = new FakePoolExecutor();
 
-        memoryState = new MemoryState(!SAFE_REGISTRATIONS_NEEDED, FactoryInheritancePolicy.createInheritancePolicy(InheritancePolicyType.COMPLETE_EVENT_INHERITANCE), VERBOSE_LOGGING);
+        memoryState = new MemoryState(!SAFE_REGISTRATIONS_NEEDED, FactoryInheritancePolicy.createInheritancePolicy(InheritancePolicyType.COMPLETE_EVENT_INHERITANCE, classProcessableService), VERBOSE_LOGGING);
         busMemoryStateManager = new BusMemoryStateManager(messageQueue, fakePoolExecutor, memoryState, listenerMethodFinder, THROW_NO_REGISTRATIONS_WARNING);
         executorService.submit(busMemoryStateManager);
     }
@@ -68,7 +68,7 @@ public class BusMemoryStateManagerTest extends BaseTest {
                 .sendMessage(new RegisterMessage(registeredObject1ToEvent1))
                 .sendMessage(new RegisterMessage(registeredObject1ToEvent1))
                 .sendMessage(new ShutdownStateManagerMessage());
-        
+
         awaitUntilExecutorFinishToWorkAndDie();
 
         List<Registration> registrations = memoryState.getRegistrations(new BusEventKey(TestEvent1.class));
@@ -81,7 +81,7 @@ public class BusMemoryStateManagerTest extends BaseTest {
                 .sendMessage(new RegisterMessage(registeredObject1ToEvent1))
                 .sendMessage(new PostEventMessage(event1))
                 .sendMessage(new ShutdownStateManagerMessage());
-        
+
         awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
@@ -104,7 +104,7 @@ public class BusMemoryStateManagerTest extends BaseTest {
                 .sendMessage(new RegisterMessage(registeredObject2ToEvent1))
                 .sendMessage(new PostEventMessage(event1))
                 .sendMessage(new ShutdownStateManagerMessage());
-        
+
         awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
@@ -129,7 +129,7 @@ public class BusMemoryStateManagerTest extends BaseTest {
                 .sendMessage(new PostEventMessage(event1))
                 .sendMessage(new PostEventMessage(event2))
                 .sendMessage(new ShutdownStateManagerMessage());
-                
+
         awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
@@ -160,7 +160,7 @@ public class BusMemoryStateManagerTest extends BaseTest {
                 .sendMessage(new PostEventMessage(event1))
                 .sendMessage(new PostEventMessage(event1))
                 .sendMessage(new ShutdownStateManagerMessage());
-                
+
         awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
@@ -192,7 +192,7 @@ public class BusMemoryStateManagerTest extends BaseTest {
                 .sendMessage(new PostEventMessage(event1))
                 .sendMessage(new PostEventMessage(event2))
                 .sendMessage(new ShutdownStateManagerMessage());
-        
+
         awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
@@ -224,7 +224,7 @@ public class BusMemoryStateManagerTest extends BaseTest {
                 .sendMessage(new PostEventMessage(event1))
                 .sendMessage(new PostEventMessage(event1))
                 .sendMessage(new ShutdownStateManagerMessage());
-                
+
         awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
@@ -261,7 +261,7 @@ public class BusMemoryStateManagerTest extends BaseTest {
                 .sendMessage(new PostEventMessage(secondEvent1))
                 .sendMessage(new PostEventMessage(secondEvent2))
                 .sendMessage(new ShutdownStateManagerMessage());
-                
+
         awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
@@ -309,7 +309,7 @@ public class BusMemoryStateManagerTest extends BaseTest {
                 .sendMessage(new RegisterMessage(registeredObjectToEvent1WithHighPriority))
                 .sendMessage(new PostEventMessage(event1))
                 .sendMessage(new ShutdownStateManagerMessage());
-                                
+
         awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
@@ -340,7 +340,7 @@ public class BusMemoryStateManagerTest extends BaseTest {
                 .sendMessage(new PostEventMessage(event2))
                 .sendMessage(new PostEventMessage(event1))
                 .sendMessage(new ShutdownStateManagerMessage());
-                
+
         awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
@@ -379,7 +379,7 @@ public class BusMemoryStateManagerTest extends BaseTest {
                 .sendMessage(new RegisterMessage(registeredObject1ToStickyEvent1))
                 .sendMessage(new RegisterMessage(registeredObject1ToEvent2))
                 .sendMessage(new ShutdownStateManagerMessage());
-                
+
         awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
@@ -401,7 +401,7 @@ public class BusMemoryStateManagerTest extends BaseTest {
                 .sendMessage(new RegisterMessage(registeredObject1ToEventInterface))
                 .sendMessage(new PostEventMessage(event1BehindInterface1))
                 .sendMessage(new ShutdownStateManagerMessage());
-                
+
         awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
@@ -423,7 +423,7 @@ public class BusMemoryStateManagerTest extends BaseTest {
                 .sendMessage(new RegisterMessage(registeredObjectToEventInterfaceExtendingInterfaces))
                 .sendMessage(new PostEventMessage(eventBehindInterfaceExtendingInterfaces))
                 .sendMessage(new ShutdownStateManagerMessage());
-                
+
         awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
@@ -447,7 +447,7 @@ public class BusMemoryStateManagerTest extends BaseTest {
                 .sendMessage(new RegisterMessage(registeredObject1ToEvent2))
                 .sendMessage(new PostEventMessage(event2))
                 .sendMessage(new ShutdownStateManagerMessage());
-                
+
         awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
@@ -482,7 +482,7 @@ public class BusMemoryStateManagerTest extends BaseTest {
                 .sendMessage(new RegisterMessage(registeredObject1ToEventInterface))
                 .sendMessage(new PostEventMessage(event1BehindInterface1))
                 .sendMessage(new ShutdownStateManagerMessage());
-                
+
         awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
@@ -508,7 +508,7 @@ public class BusMemoryStateManagerTest extends BaseTest {
                 .sendMessage(new RegisterMessage(registeredObject1ToEventInterface))
                 .sendMessage(new PostEventMessage(eventBehindInterfaceExtendingInterfaces))
                 .sendMessage(new ShutdownStateManagerMessage());
-                
+
         awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
@@ -543,7 +543,7 @@ public class BusMemoryStateManagerTest extends BaseTest {
                 .sendMessage(new RegisterMessage(registeredClassToEventImplementingInterfaceWithParentClass))
                 .sendMessage(new PostEventMessage(testEventParent))
                 .sendMessage(new ShutdownStateManagerMessage());
-                
+
         awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();

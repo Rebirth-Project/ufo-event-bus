@@ -18,6 +18,7 @@ package it.rebirthproject.ufoeb.eventinheritancepolicy.policies;
 
 import it.rebirthproject.ufoeb.dto.registrations.maps.interfaces.EventsRegistrationsMap;
 import it.rebirthproject.ufoeb.eventinheritancepolicy.base.InheritancePolicy;
+import it.rebirthproject.ufoeb.services.ClassProcessableService;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -29,6 +30,18 @@ import java.util.Set;
  * its implemented interfaces (recursively).
  */
 public class InterfaceEventInheritancePolicy implements InheritancePolicy {
+    /**
+     * The service that checks if you are extending or implementing a forbidden type
+     */
+    private final ClassProcessableService classProcessableService;
+
+    /**
+     * 
+     * @param classProcessableService The service that checks if you are extending or implementing a forbidden type
+     */
+    public InterfaceEventInheritancePolicy(ClassProcessableService classProcessableService) {
+        this.classProcessableService = classProcessableService;
+    }
 
     @Override
     public Set<Class<?>> getAllEventInheritanceObjects(Object eventObjectToPost, EventsRegistrationsMap eventsRegistrations, Map<Class<?>, Set<Class<?>>> eventSuperClassesAndInterfacesCache) {

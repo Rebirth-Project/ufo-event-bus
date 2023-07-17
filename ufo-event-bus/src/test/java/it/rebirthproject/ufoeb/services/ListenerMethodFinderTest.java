@@ -46,7 +46,7 @@ public class ListenerMethodFinderTest extends BaseTest {
 
     @BeforeEach
     public void beforeEach() {
-        memoryState = new MemoryState(!SAFE_REGISTRATIONS_NEEDED, FactoryInheritancePolicy.createInheritancePolicy(InheritancePolicyType.COMPLETE_EVENT_INHERITANCE), VERBOSE_LOGGING);
+        memoryState = new MemoryState(!SAFE_REGISTRATIONS_NEEDED, FactoryInheritancePolicy.createInheritancePolicy(InheritancePolicyType.COMPLETE_EVENT_INHERITANCE, classProcessableService), VERBOSE_LOGGING);
         unorderedRegistrationListVerifier = new UnorderedListVerifier<>();
         registrationListVerifier = new ListVerifier<>();
     }

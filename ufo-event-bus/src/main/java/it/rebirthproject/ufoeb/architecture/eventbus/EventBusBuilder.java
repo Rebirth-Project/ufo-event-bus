@@ -77,7 +77,7 @@ public final class EventBusBuilder {
      * eventbus's one. So basically this will work always with java 8. And with
      * java 9> when you do not use modules, for example in an application. If
      * you want to create a library with java 9> that uses the ufoeventbus then
-     * you must use the default method. For more informations see 
+     * you must use the default method. For more informations see
      * https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/invoke/MethodHandles.Lookup.html
      */
     private boolean useLambdaFactoryInsteadOfStandardReflection = false;
@@ -116,14 +116,14 @@ public final class EventBusBuilder {
      */
     private boolean throwNotValidMethodException = true;
     /**
-     * The events {@link InheritancePolicy} used by the eventbus. The default
-     * value for the inheritance policy is {@link NoEventInheritancePolicy}
+     * The events {@link InheritancePolicyType} used by the eventbus. The default
+     * value for the inheritance policy type is {@link NoEventInheritancePolicy}
      *
      * @see InheritancePolicy
      * @see InheritancePolicyType
      * @see NoEventInheritancePolicy
      */
-    private InheritancePolicy eventInheritancePolicy = FactoryInheritancePolicy.createInheritancePolicy(InheritancePolicyType.NO_EVENT_INHERITANCE);
+    private InheritancePolicyType eventInheritancePolicyType = InheritancePolicyType.NO_EVENT_INHERITANCE;
     /**
      * The #inheritancePackageFrontierPath is used to stop the iteration over
      * classes while using event inheritance. If a class belongs to the set
@@ -244,7 +244,7 @@ public final class EventBusBuilder {
      * This set the usage of Lambdafactory instead of standard java reflection
      *
      * @see EventBusBuilder#useLambdaFactoryInsteadOfStandardReflection
-     * 
+     *
      * @return The {@link EventBusBuilder} instance configured to throw a no
      * listener found {@link EventBusException}.
      */
@@ -254,7 +254,7 @@ public final class EventBusBuilder {
     }
 
     /**
-     * Sets the {@link #eventInheritancePolicy} to
+     * Sets the {@link #eventInheritancePolicyType} to
      * {@link ClassEventInheritancePolicy}
      *
      * @return The {@link EventBusBuilder} configured with the
@@ -264,12 +264,12 @@ public final class EventBusBuilder {
      * @see ClassEventInheritancePolicy
      */
     public EventBusBuilder setEventSuperclassInheritance() {
-        this.eventInheritancePolicy = FactoryInheritancePolicy.createInheritancePolicy(InheritancePolicyType.CLASS_EVENT_INHERITANCE);
+        this.eventInheritancePolicyType = InheritancePolicyType.CLASS_EVENT_INHERITANCE; 
         return this;
     }
 
     /**
-     * Sets the {@link #eventInheritancePolicy} to
+     * Sets the {@link #eventInheritancePolicyType} to
      * {@link InterfaceEventInheritancePolicy}
      *
      * @return The {@link EventBusBuilder} configured with the
@@ -279,12 +279,12 @@ public final class EventBusBuilder {
      * @see InterfaceEventInheritancePolicy
      */
     public EventBusBuilder setEventInterfaceInheritance() {
-        this.eventInheritancePolicy = FactoryInheritancePolicy.createInheritancePolicy(INTERFACE_EVENT_INHERITANCE);
+        this.eventInheritancePolicyType = INTERFACE_EVENT_INHERITANCE;
         return this;
     }
 
     /**
-     * Sets the {@link #eventInheritancePolicy} to
+     * Sets the {@link #eventInheritancePolicyType} to
      * {@link CompleteEventInheritancePolicy}
      *
      * @return The {@link EventBusBuilder} configured with the
@@ -294,7 +294,7 @@ public final class EventBusBuilder {
      * @see CompleteEventInheritancePolicy
      */
     public EventBusBuilder setCompleteEventInheritance() {
-        this.eventInheritancePolicy = FactoryInheritancePolicy.createInheritancePolicy(InheritancePolicyType.COMPLETE_EVENT_INHERITANCE);
+        this.eventInheritancePolicyType = InheritancePolicyType.COMPLETE_EVENT_INHERITANCE;
         return this;
     }
 
@@ -389,6 +389,7 @@ public final class EventBusBuilder {
     public EventBus build() throws EventBusException {
         try {
             final ClassProcessableService ClassProcessableService = new ClassProcessableService(inheritancePackageFrontierPath);
+            final InheritancePolicy eventInheritancePolicy = FactoryInheritancePolicy.createInheritancePolicy(eventInheritancePolicyType, ClassProcessableService);
             final EventBusInfrastructure eventBusInfrastructure = new EventBusInfrastructure(
                     new ListenerMethodFinder(listenerSuperclassInheritance, throwNotValidMethodException, throwNoListenerAnnotationException, useLambdaFactoryInsteadOfStandardReflection, ClassProcessableService),
                     eventInheritancePolicy,

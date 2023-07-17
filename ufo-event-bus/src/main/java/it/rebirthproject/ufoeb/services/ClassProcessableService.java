@@ -37,7 +37,7 @@ public class ClassProcessableService {
      *
      * @see EventBusBuilder#setInheritancePackageFrontierPath(String)
      */
-    private final String inheritancePackageFrontierPath;
+    private String inheritancePackageFrontierPath;
 
     /**
      * Class constructor used to build a ListenerMethodFinder
@@ -48,6 +48,10 @@ public class ClassProcessableService {
     public ClassProcessableService(String inheritancePackageFrontierPath) {
         this.inheritancePackageFrontierPath = (inheritancePackageFrontierPath == null) ? EMPTY_INHERITANCE_PACKAGE_FRONTIER_PATH : inheritancePackageFrontierPath;
     }
+
+    public void setInheritancePackageFrontierPath(String inheritancePackageFrontierPath) {
+        this.inheritancePackageFrontierPath = inheritancePackageFrontierPath;
+    }        
 
     /**
      * This method is used to check if the listener class is processable

@@ -22,9 +22,11 @@ import it.rebirthproject.ufoeb.eventinheritancepolicy.policies.NoEventInheritanc
 import it.rebirthproject.ufoeb.eventinheritancepolicy.policies.ClassEventInheritancePolicy;
 import it.rebirthproject.ufoeb.eventinheritancepolicy.policies.CompleteEventInheritancePolicy;
 import it.rebirthproject.ufoeb.eventinheritancepolicy.base.InheritancePolicy;
+import it.rebirthproject.ufoeb.services.ClassProcessableService;
 
 /**
- * The factory used to create an {@link InheritancePolicy}. There are several {@link InheritancePolicyType} to choose.
+ * The factory used to create an {@link InheritancePolicy}. There are several
+ * {@link InheritancePolicyType} to choose.
  *
  * @see InheritancePolicy
  * @see InheritancePolicyType
@@ -38,17 +40,20 @@ public class FactoryInheritancePolicy {
     /**
      * The factory method used to create an {@link InheritancePolicy}
      *
-     * @param inheritancePolicyType The chosen {@link InheritancePolicyType} to create
-     * @return The created {@link InheritancePolicy} corresponding to the specified {@link InheritancePolicyType}
+     * @param inheritancePolicyType The chosen {@link InheritancePolicyType} to
+     * create
+     * @param classProcessableService The service that checks if you are extending or implementing a forbidden type
+     * @return The created {@link InheritancePolicy} corresponding to the
+     * specified {@link InheritancePolicyType}
      */
-    public static InheritancePolicy createInheritancePolicy(InheritancePolicyType inheritancePolicyType) {
+    public static InheritancePolicy createInheritancePolicy(InheritancePolicyType inheritancePolicyType, ClassProcessableService classProcessableService) {
         switch (inheritancePolicyType) {
             case COMPLETE_EVENT_INHERITANCE:
-                return new CompleteEventInheritancePolicy();
+                return new CompleteEventInheritancePolicy(classProcessableService);
             case CLASS_EVENT_INHERITANCE:
-                return new ClassEventInheritancePolicy();
+                return new ClassEventInheritancePolicy(classProcessableService);
             case INTERFACE_EVENT_INHERITANCE:
-                return new InterfaceEventInheritancePolicy();
+                return new InterfaceEventInheritancePolicy(classProcessableService);
             case NO_EVENT_INHERITANCE:
             default:
                 return new NoEventInheritancePolicy();
