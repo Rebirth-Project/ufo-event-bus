@@ -21,14 +21,14 @@ import it.rebirthproject.ufoeb.eventinheritancepolicy.policies.InterfaceEventInh
 import it.rebirthproject.ufoeb.eventinheritancepolicy.policies.NoEventInheritancePolicy;
 import it.rebirthproject.ufoeb.eventinheritancepolicy.policies.ClassEventInheritancePolicy;
 import it.rebirthproject.ufoeb.eventinheritancepolicy.policies.CompleteEventInheritancePolicy;
-import it.rebirthproject.ufoeb.eventinheritancepolicy.base.InheritancePolicy;
 import it.rebirthproject.ufoeb.services.ClassProcessableService;
+import it.rebirthproject.ufoeb.eventinheritancepolicy.base.EventInheritancePolicy;
 
 /**
- * The factory used to create an {@link InheritancePolicy}. There are several
+ * The factory used to create an {@link EventInheritancePolicy}. There are several
  * {@link InheritancePolicyType} to choose.
  *
- * @see InheritancePolicy
+ * @see EventInheritancePolicy
  * @see InheritancePolicyType
  * @see NoEventInheritancePolicy
  * @see InterfaceEventInheritancePolicy
@@ -38,15 +38,15 @@ import it.rebirthproject.ufoeb.services.ClassProcessableService;
 public class FactoryInheritancePolicy {
 
     /**
-     * The factory method used to create an {@link InheritancePolicy}
+     * The factory method used to create an {@link EventInheritancePolicy}
      *
      * @param inheritancePolicyType The chosen {@link InheritancePolicyType} to
      * create
      * @param classProcessableService The service that checks if you are extending or implementing a forbidden type
-     * @return The created {@link InheritancePolicy} corresponding to the
+     * @return The created {@link EventInheritancePolicy} corresponding to the
      * specified {@link InheritancePolicyType}
      */
-    public static InheritancePolicy createInheritancePolicy(InheritancePolicyType inheritancePolicyType, ClassProcessableService classProcessableService) {
+    public static EventInheritancePolicy createInheritancePolicy(InheritancePolicyType inheritancePolicyType, ClassProcessableService classProcessableService) {
         switch (inheritancePolicyType) {
             case COMPLETE_EVENT_INHERITANCE:
                 return new CompleteEventInheritancePolicy(classProcessableService);

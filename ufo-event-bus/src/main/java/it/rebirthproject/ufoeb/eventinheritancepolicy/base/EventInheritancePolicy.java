@@ -17,7 +17,6 @@
 package it.rebirthproject.ufoeb.eventinheritancepolicy.base;
 
 import it.rebirthproject.ufoeb.architecture.eventbus.EventBus;
-import it.rebirthproject.ufoeb.dto.BusEventKey;
 import it.rebirthproject.ufoeb.dto.registrations.Registration;
 import it.rebirthproject.ufoeb.dto.registrations.maps.interfaces.EventsRegistrationsMap;
 import it.rebirthproject.ufoeb.eventinheritancepolicy.policies.ClassEventInheritancePolicy;
@@ -40,7 +39,7 @@ import java.util.Set;
  * @see InterfaceEventInheritancePolicy
  * @see NoEventInheritancePolicy
  */
-public interface InheritancePolicy {
+public interface EventInheritancePolicy {
 
     /**
      * The interface method that returns a set of classes (the implementation
@@ -54,34 +53,5 @@ public interface InheritancePolicy {
      *                                            class/superclasses/interfaces serialization.
      * @return a set of classes based on the chosen inheritance policy.
      */
-    public Set<Class<?>> getAllEventInheritanceObjects(Object eventObjectToPost, EventsRegistrationsMap eventsRegistrations, Map<Class<?>, Set<Class<?>>> eventSuperClassesAndInterfacesCache);
-
-    /**
-     * Method that finds all interfaces given the starting class to serialize
-     * and adds them to the given parameter set (eventClassesAndInterfaces).
-     *
-     * @param eventClassesAndInterfaces The set to populate.
-     * @param eventsRegistrations       The event registration map.
-     * @param clazz                     The class to serialize (we want to find all interfaces)
-     */
-    default void serializeInterfaces(Set<Class<?>> eventClassesAndInterfaces, EventsRegistrationsMap eventsRegistrations, Class<?> clazz) {
-        for (Class<?> interfaceClass : clazz.getInterfaces()) {
-            addClassOrInterfaceToSerializationIfNecessary(eventClassesAndInterfaces, eventsRegistrations, interfaceClass);
-            serializeInterfaces(eventClassesAndInterfaces, eventsRegistrations, interfaceClass);
-        }
-    }
-
-    /**
-     * Method that adds a class to the (eventClassesAndInterfaces) set if the
-     * class is not already contained in the (eventsRegistrations) map.
-     *
-     * @param eventClassesAndInterfaces The set to populate.
-     * @param eventsRegistrations       The event registration map.
-     * @param clazz                     The class to add to the set.
-     */
-    default void addClassOrInterfaceToSerializationIfNecessary(Set<Class<?>> eventClassesAndInterfaces, EventsRegistrationsMap eventsRegistrations, Class<?> clazz) {
-        if (eventsRegistrations.containsKey(new BusEventKey(clazz))) {
-            eventClassesAndInterfaces.add(clazz);
-        }
-    }
+    public Set<Class<?>> getAllEventInheritanceObjects(Object eventObjectToPost, EventsRegistrationsMap eventsRegistrations, Map<Class<?>, Set<Class<?>>> eventSuperClassesAndInterfacesCache);   
 }

@@ -20,7 +20,6 @@ import it.rebirthproject.ufoeb.architecture.state.BusMemoryStateManager;
 import it.rebirthproject.ufoeb.dto.registrations.Registration;
 import it.rebirthproject.ufoeb.eventannotation.Listen;
 import it.rebirthproject.ufoeb.eventinheritancepolicy.FactoryInheritancePolicy;
-import it.rebirthproject.ufoeb.eventinheritancepolicy.base.InheritancePolicy;
 import it.rebirthproject.ufoeb.eventinheritancepolicy.base.InheritancePolicyType;
 import it.rebirthproject.ufoeb.eventinheritancepolicy.policies.ClassEventInheritancePolicy;
 import it.rebirthproject.ufoeb.eventinheritancepolicy.policies.CompleteEventInheritancePolicy;
@@ -30,6 +29,7 @@ import it.rebirthproject.ufoeb.exceptions.EventBusException;
 import it.rebirthproject.ufoeb.services.ListenerMethodFinder;
 import static it.rebirthproject.ufoeb.eventinheritancepolicy.base.InheritancePolicyType.INTERFACE_EVENT_INHERITANCE;
 import it.rebirthproject.ufoeb.services.ClassProcessableService;
+import it.rebirthproject.ufoeb.eventinheritancepolicy.base.EventInheritancePolicy;
 
 /**
  * A builder which can be used to create an {@link EventBus}
@@ -119,7 +119,7 @@ public final class EventBusBuilder {
      * The events {@link InheritancePolicyType} used by the eventbus. The default
      * value for the inheritance policy type is {@link NoEventInheritancePolicy}
      *
-     * @see InheritancePolicy
+     * @see EventInheritancePolicy
      * @see InheritancePolicyType
      * @see NoEventInheritancePolicy
      */
@@ -259,7 +259,7 @@ public final class EventBusBuilder {
      *
      * @return The {@link EventBusBuilder} configured with the
      * {@link ClassEventInheritancePolicy}
-     * @see InheritancePolicy
+     * @see EventInheritancePolicy
      * @see InheritancePolicyType
      * @see ClassEventInheritancePolicy
      */
@@ -274,7 +274,7 @@ public final class EventBusBuilder {
      *
      * @return The {@link EventBusBuilder} configured with the
      * {@link InterfaceEventInheritancePolicy}
-     * @see InheritancePolicy
+     * @see EventInheritancePolicy
      * @see InheritancePolicyType
      * @see InterfaceEventInheritancePolicy
      */
@@ -289,7 +289,7 @@ public final class EventBusBuilder {
      *
      * @return The {@link EventBusBuilder} configured with the
      * {@link CompleteEventInheritancePolicy}
-     * @see InheritancePolicy
+     * @see EventInheritancePolicy
      * @see InheritancePolicyType
      * @see CompleteEventInheritancePolicy
      */
@@ -389,7 +389,7 @@ public final class EventBusBuilder {
     public EventBus build() throws EventBusException {
         try {
             final ClassProcessableService ClassProcessableService = new ClassProcessableService(inheritancePackageFrontierPath);
-            final InheritancePolicy eventInheritancePolicy = FactoryInheritancePolicy.createInheritancePolicy(eventInheritancePolicyType, ClassProcessableService);
+            final EventInheritancePolicy eventInheritancePolicy = FactoryInheritancePolicy.createInheritancePolicy(eventInheritancePolicyType, ClassProcessableService);
             final EventBusInfrastructure eventBusInfrastructure = new EventBusInfrastructure(
                     new ListenerMethodFinder(listenerSuperclassInheritance, throwNotValidMethodException, throwNoListenerAnnotationException, useLambdaFactoryInsteadOfStandardReflection, ClassProcessableService),
                     eventInheritancePolicy,

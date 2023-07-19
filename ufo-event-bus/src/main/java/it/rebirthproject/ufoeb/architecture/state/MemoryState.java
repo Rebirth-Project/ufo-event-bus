@@ -23,10 +23,10 @@ import it.rebirthproject.ufoeb.dto.registrations.Registration;
 import it.rebirthproject.ufoeb.dto.registrations.maps.PriorityEventsRegistrationsMap;
 import it.rebirthproject.ufoeb.dto.registrations.maps.UnorderedEventsRegistrationsMap;
 import it.rebirthproject.ufoeb.dto.registrations.maps.interfaces.EventsRegistrationsMap;
-import it.rebirthproject.ufoeb.eventinheritancepolicy.base.InheritancePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.*;
+import it.rebirthproject.ufoeb.eventinheritancepolicy.base.EventInheritancePolicy;
 
 /**
  * The memory state of the {@link EventBus}. This class contains data structures
@@ -74,9 +74,9 @@ public class MemoryState {
     /**
      * The chosen system inheritancePolicy is stored here.
      *
-     * @see InheritancePolicy
+     * @see EventInheritancePolicy
      */
-    private final InheritancePolicy inheritancePolicy;
+    private final EventInheritancePolicy inheritancePolicy;
     /**
      * Attribute set to true if verbose logging is enabled or to false otherwise
      */
@@ -90,7 +90,7 @@ public class MemoryState {
      * @param inheritancePolicy The chosen system inheritancePolicy to use
      * @param verboseLogging If set to true verbose logging will be enabled
      */
-    public MemoryState(boolean safeRegistrationsListNeeded, InheritancePolicy inheritancePolicy, boolean verboseLogging) {
+    public MemoryState(boolean safeRegistrationsListNeeded, EventInheritancePolicy inheritancePolicy, boolean verboseLogging) {
         this.safeRegistrationsListNeeded = safeRegistrationsListNeeded;
         this.inheritancePolicy = inheritancePolicy;
         this.verboseLogging = verboseLogging;
@@ -266,12 +266,12 @@ public class MemoryState {
 
     /**
      * Gets all the superclasses and interfaces for the event to post regarding
-     * the current {@link InheritancePolicy}
+     * the current {@link EventInheritancePolicy}
      *
      * @param eventObjectToPost The event to post
      * @return all the superclasses and interfaces for the event to post
-     * regarding the current {@link InheritancePolicy}
-     * @see InheritancePolicy
+     * regarding the current {@link EventInheritancePolicy}
+     * @see EventInheritancePolicy
      */
     public Set<Class<?>> getEventSuperClassesAndInterfaces(Object eventObjectToPost) {
         return inheritancePolicy.getAllEventInheritanceObjects(eventObjectToPost, eventsRegistrations, eventSuperClassesAndInterfacesCache);

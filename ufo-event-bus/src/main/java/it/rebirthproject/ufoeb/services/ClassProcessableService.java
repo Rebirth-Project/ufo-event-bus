@@ -62,7 +62,7 @@ public class ClassProcessableService {
      * method is used only when the frontier path is not specified.
      *
      * @param className The listener class
-     * @return A boolean that states if the loop must continue or not.
+     * @return A boolean that states if the class can be processed or not.
      */
     public boolean isClassProcessableByPackage(String className) {
         if (inheritancePackageFrontierPath.trim().isEmpty()) {

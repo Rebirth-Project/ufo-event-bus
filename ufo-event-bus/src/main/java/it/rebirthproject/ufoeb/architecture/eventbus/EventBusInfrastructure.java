@@ -21,12 +21,12 @@ import it.rebirthproject.ufoeb.architecture.messages.interfaces.Message;
 import it.rebirthproject.ufoeb.architecture.state.BusMemoryStateManager;
 import it.rebirthproject.ufoeb.architecture.state.MemoryState;
 import it.rebirthproject.ufoeb.eventannotation.Listen;
-import it.rebirthproject.ufoeb.eventinheritancepolicy.base.InheritancePolicy;
 import it.rebirthproject.ufoeb.exceptions.EventBusException;
 import it.rebirthproject.ufoeb.services.ListenerMethodFinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.concurrent.*;
+import it.rebirthproject.ufoeb.eventinheritancepolicy.base.EventInheritancePolicy;
 
 /**
  * The data structures composing the infrastructure of the {@link EventBus}.
@@ -64,7 +64,7 @@ final class EventBusInfrastructure {
      * @param listenerMethodFinder The {@link ListenerMethodFinder} is a service
      * used to retrieve registered listeners methods annotated with
      * {@link Listen} and to store them inside the {@link MemoryState}
-     * @param inheritancePolicy The event {@link InheritancePolicy} used by the
+     * @param inheritancePolicy The event {@link EventInheritancePolicy} used by the
      * bus
      * @param numberOfWorkers The number of workers ({@link EventExecutor}s)
      * used by the bus behind the scenes to deliver events.
@@ -78,9 +78,9 @@ final class EventBusInfrastructure {
      * logging is needed
      * @see EventBusBuilder
      * @see ListenerMethodFinder
-     * @see InheritancePolicy
+     * @see EventInheritancePolicy
      */
-    EventBusInfrastructure(ListenerMethodFinder listenerMethodFinder, InheritancePolicy inheritancePolicy, int queueLength, int numberOfWorkers, boolean safeRegistrationsListNeeded, boolean throwNoRegistrationsWarning, boolean verboseLogging) {
+    EventBusInfrastructure(ListenerMethodFinder listenerMethodFinder, EventInheritancePolicy inheritancePolicy, int queueLength, int numberOfWorkers, boolean safeRegistrationsListNeeded, boolean throwNoRegistrationsWarning, boolean verboseLogging) {
         this.messageQueue = new LinkedBlockingQueue<>(queueLength);
         this.numberOfWorkers = numberOfWorkers;
         this.workersPoolExecutor = Executors.newFixedThreadPool(numberOfWorkers);

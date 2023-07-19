@@ -17,11 +17,12 @@
 package it.rebirthproject.ufoeb.eventinheritancepolicy.policies;
 
 import it.rebirthproject.ufoeb.dto.registrations.maps.interfaces.EventsRegistrationsMap;
-import it.rebirthproject.ufoeb.eventinheritancepolicy.base.InheritancePolicy;
+import it.rebirthproject.ufoeb.eventinheritancepolicy.base.AbstractEventInheritancePolicy;
 import it.rebirthproject.ufoeb.services.ClassProcessableService;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import it.rebirthproject.ufoeb.eventinheritancepolicy.base.EventInheritancePolicy;
 
 /**
  * This implementation of the {@link InheritancePolicy} interface searches for
@@ -30,13 +31,7 @@ import java.util.Set;
  * class, all its extended superclasses and all its implemented interfaces
  * (recursively).
  */
-public class CompleteEventInheritancePolicy implements InheritancePolicy {
-
-    /**
-     * The service that checks if you are extending or implementing a forbidden type
-     */
-    private final ClassProcessableService classProcessableService;
-
+public class CompleteEventInheritancePolicy extends AbstractEventInheritancePolicy {  
     /**
      *
      * @param classProcessableService The service that checks if you are extending or implementing a forbidden type

@@ -17,17 +17,17 @@
 package it.rebirthproject.ufoeb.eventinheritancepolicy.policies;
 
 import it.rebirthproject.ufoeb.dto.registrations.maps.interfaces.EventsRegistrationsMap;
-import it.rebirthproject.ufoeb.eventinheritancepolicy.base.InheritancePolicy;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import it.rebirthproject.ufoeb.eventinheritancepolicy.base.EventInheritancePolicy;
 
 /**
- * The simpler implementation of the {@link InheritancePolicy} interface. With
+ * The simpler implementation of the {@link EventInheritancePolicy} interface. With
  * this policy we dont' want to use event inheritance. So only the given class is added to
  * the eventSuperClassesAndInterfacesCache set.
  */
-public class NoEventInheritancePolicy implements InheritancePolicy {
+public class NoEventInheritancePolicy implements EventInheritancePolicy {
     
     @Override
     public Set<Class<?>> getAllEventInheritanceObjects(Object eventObjectToPost, EventsRegistrationsMap eventsRegistrations, Map<Class<?>, Set<Class<?>>> eventSuperClassesAndInterfacesCache) {
