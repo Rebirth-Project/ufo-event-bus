@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * This implementation of the {@link InheritancePolicy} interface searches for
+ * This implementation of the {@link AbstractEventInheritancePolicy} abstract class searches for
  * all superclasses and interfaces given the event class. With this policy the
  * resulting eventSuperClassesAndInterfacesCache set will contain the given
  * class, all its extended superclasses and all its implemented interfaces

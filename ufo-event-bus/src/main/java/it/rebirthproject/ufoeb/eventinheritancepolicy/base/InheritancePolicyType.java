@@ -19,7 +19,7 @@ package it.rebirthproject.ufoeb.eventinheritancepolicy.base;
 /**
  * An enum with all the possible inheritance policies
  *
- * @see InheritancePolicy
+ * @see EventInheritancePolicy
  */
 public enum InheritancePolicyType {
     NO_EVENT_INHERITANCE,

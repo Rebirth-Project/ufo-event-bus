@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package it.rebirthproject.ufoeb.dto.objectstoregister.services;
+package it.rebirthproject.ufoeb.dto.objectstoregister.sonpackage;
 
 import it.rebirthproject.ufoeb.dto.events.TestEvent1;
+import it.rebirthproject.ufoeb.dto.objectstoregister.services.TestClassFatherToRegister;
 import it.rebirthproject.ufoeb.eventannotation.Listen;
 
 public class TestClassSonOnDeepPackageToRegister extends TestClassFatherToRegister {
