@@ -3,34 +3,41 @@ package it.rebirthproject.ufoeb.services;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ClassProcessableServiceTest {
 
-    private static final String REBIRTH_INHERITANCE_PACKAGE_FRONTIER_PATH = "it.rebirthproject";
     private static final String EMPTY_INHERITANCE_PACKAGE_FRONTIER_PATH = "";
 
     private ClassProcessableService classProcessableService;
 
     @ParameterizedTest
-    @ValueSource(strings = {"java.", "javax.", "android.", "java.util.List", "javax.lang.model.util.ElementFilter", "android.view.View"})
-    public void test_not_processable_classes_by_package_with_rebirth_inheritance_package_frontier_path(String notProcessablePackage) {
-        boolean isClassProcessableByPackage = is_class_processable_by_package(REBIRTH_INHERITANCE_PACKAGE_FRONTIER_PATH, notProcessablePackage);
+    @ValueSource(strings = {"it.rebirthproject.ufoeb.services", "it.rebirthproject.ufoeb", "it.rebirthproject", "it", ""})
+    public void test_this_class_is_processable_by_frontier_path(String processableFrontierPath) {
+        classProcessableService = new ClassProcessableService(processableFrontierPath);
 
-        assertFalse(isClassProcessableByPackage, "Error the class should not be processable but it is");
+        boolean isClassProcessableByPackage = classProcessableService.isClassProcessableByPackage(this.getClass().getPackageName());
+
+        assertTrue(isClassProcessableByPackage, "Error this class should be processable but it isn't");
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"java.", "javax.", "android.", "java.util.List", "javax.lang.model.util.ElementFilter", "android.view.View"})
-    public void test_not_processable_classes_by_package_with_empty_inheritance_package_frontier_path(String notProcessablePackage) {
-        boolean isClassProcessableByPackage = is_class_processable_by_package(EMPTY_INHERITANCE_PACKAGE_FRONTIER_PATH, notProcessablePackage);
+    @ValueSource(strings = {"java.util.List", "java.", "javax.", "android.", "java.util.List", "javax.lang.model.util.ElementFilter", "android.view.View", "it.rebirthproject.ufoeb.services.xyz", "abc"})
+    public void test_this_class_is_not_processable_by_frontier_path(String notProcessableFrontierPath) {
+        classProcessableService = new ClassProcessableService(notProcessableFrontierPath);
 
-        assertFalse(isClassProcessableByPackage, "Error the class should not be processable but it is");
+        boolean isClassProcessableByPackage = classProcessableService.isClassProcessableByPackage(this.getClass().getPackageName());
+
+        assertFalse(isClassProcessableByPackage, "Error this class should not be processable but it is");
     }
 
-    private boolean is_class_processable_by_package(String inheritancePackageFrontierPath, String packageName) {
-        classProcessableService = new ClassProcessableService(inheritancePackageFrontierPath);
+    @ParameterizedTest
+    @ValueSource(strings = {"java.util.List", "java.util.List", "javax.lang.model.util.ElementFilter", "android.view.View"})
+    public void test_internal_java_classes_not_processable_if_package_frontier_path_is_empty(String internalJavaClass) {
+        classProcessableService = new ClassProcessableService(EMPTY_INHERITANCE_PACKAGE_FRONTIER_PATH);
 
-        return classProcessableService.isClassProcessableByPackage(packageName);
+        boolean isClassProcessableByPackage = classProcessableService.isClassProcessableByPackage(internalJavaClass);
+
+        assertFalse(isClassProcessableByPackage, "Error the internal java class " + internalJavaClass + " should not be processable but it is");
     }
-
 }
