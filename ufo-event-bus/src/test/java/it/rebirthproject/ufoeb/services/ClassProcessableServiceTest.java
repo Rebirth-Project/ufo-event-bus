@@ -12,7 +12,7 @@ class ClassProcessableServiceTest {
     private ClassProcessableService classProcessableService;
 
     @ParameterizedTest
-    @ValueSource(strings = {"java.", "javax.", "android.", "java.util.List", "android.view.View"})
+    @ValueSource(strings = {"java.", "javax.", "android.", "java.util.List", "javax.lang.model.util.ElementFilter", "android.view.View"})
     public void test_not_processable_classes_by_package_with_rebirth_inheritance_package_frontier_path(String notProcessablePackage) {
         boolean isClassProcessableByPackage = is_class_processable_by_package(REBIRTH_INHERITANCE_PACKAGE_FRONTIER_PATH, notProcessablePackage);
 
@@ -20,7 +20,7 @@ class ClassProcessableServiceTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"java.", "javax.", "android.", "java.util.List", "android.view.View"})
+    @ValueSource(strings = {"java.", "javax.", "android.", "java.util.List", "javax.lang.model.util.ElementFilter", "android.view.View"})
     public void test_not_processable_classes_by_package_with_empty_inheritance_package_frontier_path(String notProcessablePackage) {
         boolean isClassProcessableByPackage = is_class_processable_by_package(EMPTY_INHERITANCE_PACKAGE_FRONTIER_PATH, notProcessablePackage);
 
