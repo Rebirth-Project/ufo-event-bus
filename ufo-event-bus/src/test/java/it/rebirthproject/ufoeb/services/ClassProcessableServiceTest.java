@@ -5,18 +5,22 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class ClassProcessableServiceTest {
+public class ClassProcessableServiceTest {
 
     private static final String EMPTY_INHERITANCE_PACKAGE_FRONTIER_PATH = "";
-
+    private final String thisClassPackage;
     private ClassProcessableService classProcessableService;
+
+    public ClassProcessableServiceTest() {
+        thisClassPackage = this.getClass().getPackageName();
+    }
 
     @ParameterizedTest
     @ValueSource(strings = {"it.rebirthproject.ufoeb.services", "it.rebirthproject.ufoeb", "it.rebirthproject", "it", ""})
     public void test_this_class_is_processable_by_frontier_path(String processableFrontierPath) {
         classProcessableService = new ClassProcessableService(processableFrontierPath);
 
-        boolean isClassProcessableByPackage = classProcessableService.isClassProcessableByPackage(this.getClass().getPackageName());
+        boolean isClassProcessableByPackage = classProcessableService.isClassProcessableByPackage(thisClassPackage);
 
         assertTrue(isClassProcessableByPackage, "Error this class should be processable but it isn't");
     }
@@ -26,7 +30,7 @@ class ClassProcessableServiceTest {
     public void test_this_class_is_not_processable_by_frontier_path(String notProcessableFrontierPath) {
         classProcessableService = new ClassProcessableService(notProcessableFrontierPath);
 
-        boolean isClassProcessableByPackage = classProcessableService.isClassProcessableByPackage(this.getClass().getPackageName());
+        boolean isClassProcessableByPackage = classProcessableService.isClassProcessableByPackage(thisClassPackage);
 
         assertFalse(isClassProcessableByPackage, "Error this class should not be processable but it is");
     }
