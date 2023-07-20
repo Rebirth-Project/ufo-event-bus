@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021/2023 Matteo Veroni Rebirth project
+ * Copyright (C) 2021/2023 Andrea Paternesi Rebirth project 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package it.rebirthproject.ufoeb.dto.objectstoregister.listenermethodfinder;
+package it.rebirthproject.ufoeb.dto.events;
 
-import it.rebirthproject.ufoeb.eventannotation.Listen;
+public class ConcreteEventImplementingJavaLibInterface implements Comparable {      
 
-public class ClassWithValidListenerMethodAnnotation {
-
-    @Listen
-    public void onEvent(Object event) {
+    @Override
+    public int compareTo(Object o) {
+        return 0;
     }
 }

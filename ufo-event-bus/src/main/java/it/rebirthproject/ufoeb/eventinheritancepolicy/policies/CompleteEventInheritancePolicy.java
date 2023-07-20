@@ -22,7 +22,6 @@ import it.rebirthproject.ufoeb.services.ClassProcessableService;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-import it.rebirthproject.ufoeb.eventinheritancepolicy.base.EventInheritancePolicy;
 
 /**
  * This implementation of the {@link InheritancePolicy} interface searches for

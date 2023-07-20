@@ -61,19 +61,19 @@ public class BusMemoryStateManagerInheritanceOverInterfaceTest extends BaseTest 
 
     @Test
     public void send_event_which_implements_interface() throws Exception {
-        Event1 event1 = new Event1();
+        Event1 event_1 = new Event1();
 
         fakeMessageEmitter
                 .sendMessage(new RegisterMessage(listener))
-                .sendMessage(new PostEventMessage(event1))
+                .sendMessage(new PostEventMessage(event_1))
                 .sendMessage(new ShutdownStateManagerMessage());
 
         awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
         messageListVerifier.assertAsExpected(returnMessageList,
-                Arrays.asList(new ExpectedMessage(event1),
-                        new ExpectedMessage(event1))
+                Arrays.asList(new ExpectedMessage(event_1),
+                        new ExpectedMessage(event_1))
         );
 
         FakeMessage message = (FakeMessage) returnMessageList.get(0);
@@ -93,19 +93,19 @@ public class BusMemoryStateManagerInheritanceOverInterfaceTest extends BaseTest 
 
     @Test
     public void send_event_which_implements_interface_but_doesnt_send_to_superclass() throws Exception {
-        Event2 event2 = new Event2();
+        Event2 event_2 = new Event2();
 
         fakeMessageEmitter
                 .sendMessage(new RegisterMessage(listener))
-                .sendMessage(new PostEventMessage(event2))
+                .sendMessage(new PostEventMessage(event_2))
                 .sendMessage(new ShutdownStateManagerMessage());
 
         awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
         messageListVerifier.assertAsExpected(returnMessageList,
-                Arrays.asList(new ExpectedMessage(event2),
-                        new ExpectedMessage(event2))
+                Arrays.asList(new ExpectedMessage(event_2),
+                        new ExpectedMessage(event_2))
         );
 
         FakeMessage message = (FakeMessage) returnMessageList.get(0);
@@ -125,18 +125,18 @@ public class BusMemoryStateManagerInheritanceOverInterfaceTest extends BaseTest 
 
     @Test
     public void doesnt_send_to_superclasses() throws Exception {
-        Event3 event3 = new Event3();
+        Event3 event_3 = new Event3();
 
         fakeMessageEmitter
                 .sendMessage(new RegisterMessage(listener))
-                .sendMessage(new PostEventMessage(event3))
+                .sendMessage(new PostEventMessage(event_3))
                 .sendMessage(new ShutdownStateManagerMessage());
 
         awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
         messageListVerifier.assertAsExpected(returnMessageList,
-                Arrays.asList(new ExpectedMessage(event3))
+                Arrays.asList(new ExpectedMessage(event_3))
         );
 
         FakeMessage message = (FakeMessage) returnMessageList.get(0);
@@ -149,18 +149,18 @@ public class BusMemoryStateManagerInheritanceOverInterfaceTest extends BaseTest 
 
     @Test
     public void test_for_interfaces_cascading_on_superclasses_when_listener_doesnt_listen_to_the_class() throws Exception {
-        Event5 event5 = new Event5();
+        Event5 event_5 = new Event5();
 
         fakeMessageEmitter
                 .sendMessage(new RegisterMessage(listener))
-                .sendMessage(new PostEventMessage(event5))
+                .sendMessage(new PostEventMessage(event_5))
                 .sendMessage(new ShutdownStateManagerMessage());
 
         awaitUntilExecutorFinishToWorkAndDie();
 
         List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
         messageListVerifier.assertAsExpected(returnMessageList,
-                Arrays.asList(new ExpectedMessage(event5))
+                Arrays.asList(new ExpectedMessage(event_5))
         );
 
         FakeMessage message = (FakeMessage) returnMessageList.get(0);

@@ -6,8 +6,6 @@ import it.rebirthproject.ufoeb.endtoend.dto.events.Event1;
 import it.rebirthproject.ufoeb.endtoend.dto.objectstoregister.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -15,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestBusEndToEnd {
 
-    private static final Logger logger = LoggerFactory.getLogger(TestBusEndToEnd.class);
     private static EventBus bus;
 
     @BeforeEach
