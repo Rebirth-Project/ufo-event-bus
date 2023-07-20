@@ -26,7 +26,7 @@ public class ClassProcessableServiceTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"java.util.List", "java.", "javax.", "android.", "java.util.List", "javax.lang.model.util.ElementFilter", "android.view.View", "it.rebirthproject.ufoeb.services.xyz", "abc"})
+    @ValueSource(strings = {"java.", "javax.", "android.", "java.util.List", "javax.lang.model.util.ElementFilter", "android.view.View", "it.rebirthproject.ufoeb.services.xyz", "abc"})
     public void test_this_class_is_not_processable_by_frontier_path(String notProcessableFrontierPath) {
         classProcessableService = new ClassProcessableService(notProcessableFrontierPath);
 
@@ -36,7 +36,7 @@ public class ClassProcessableServiceTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"java.util.List", "java.util.List", "javax.lang.model.util.ElementFilter", "android.view.View"})
+    @ValueSource(strings = {"java.util.List", "javax.lang.model.util.ElementFilter", "android.view.View"})
     public void test_internal_java_classes_not_processable_if_package_frontier_path_is_empty(String internalJavaClass) {
         classProcessableService = new ClassProcessableService(EMPTY_INHERITANCE_PACKAGE_FRONTIER_PATH);
 
