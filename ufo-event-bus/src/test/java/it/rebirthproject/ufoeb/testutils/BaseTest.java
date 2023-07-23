@@ -80,7 +80,8 @@ public abstract class BaseTest {
 
     protected static Event event1BehindInterface1 = new TestEvent1();
     protected static EventInterfaceExtendingInterfaces eventBehindInterfaceExtendingInterfaces = new ConcreteEventInterfaceExtendingInterfaces();
-    protected static ConcreteEventImplementingInterfaceWithParentClass eventImplementingInterfaceWithParentClass = new ConcreteEventImplementingInterfaceWithParentClass();
+    //TODO see why this one is not used. Do we lost a test or we lack as well?
+    //protected static ConcreteEventImplementingInterfaceWithParentClass eventImplementingInterfaceWithParentClass = new ConcreteEventImplementingInterfaceWithParentClass();
     protected static TestEvent1 event1 = new TestEvent1();
     protected static TestEvent1 secondEvent1 = new TestEvent1();
     protected static TestEvent2 event2 = new TestEvent2();

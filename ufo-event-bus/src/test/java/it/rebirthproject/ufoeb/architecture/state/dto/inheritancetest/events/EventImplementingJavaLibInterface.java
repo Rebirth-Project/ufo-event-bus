@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021/2023 Andrea Paternesi Rebirth project
+ * Copyright (C) 2021/2023 Andrea Paternesi Rebirth project 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package it.rebirthproject.ufoeb.dto.objectstoregister.services;
+package it.rebirthproject.ufoeb.architecture.state.dto.inheritancetest.events;
 
-import it.rebirthproject.ufoeb.dto.events.ConcreteEventImplementingJavaLibInterface;
-import it.rebirthproject.ufoeb.architecture.state.dto.inheritancetest.events.*;
-import it.rebirthproject.ufoeb.eventannotation.Listen;
+public class EventImplementingJavaLibInterface implements Comparable {      
 
-public class ListenerForForbiddenEvent2 {
-
-    @Listen
-    public void method1(ConcreteEventImplementingJavaLibInterface event) {
+    @Override
+    public int compareTo(Object o) {
+        return 0;
     }
 }

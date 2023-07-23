@@ -28,7 +28,6 @@ import it.rebirthproject.ufoeb.architecture.messages.query.IsListenerRegisteredM
 import it.rebirthproject.ufoeb.dto.BusEventKey;
 import it.rebirthproject.ufoeb.dto.registrations.maps.interfaces.EventsRegistrationsMap;
 import it.rebirthproject.ufoeb.eventannotation.Listen;
-import it.rebirthproject.ufoeb.exceptions.EventBusException;
 import it.rebirthproject.ufoeb.services.ListenerMethodFinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -125,7 +124,7 @@ public class BusMemoryStateManager implements Runnable {
                         listenerMethodFinder.findListenerMethods(registerMessage.getListenerToRegister(), memoryState);
                         
                         EventsRegistrationsMap foundStickyEventsRegistrations = memoryState.getFoundListenerStickyEventsRegistrations();
-                        for (BusEventKey busEventKey : foundStickyEventsRegistrations.keySet()) {
+                        for (BusEventKey busEventKey : foundStickyEventsRegistrations.keySet()) {                            
                             workersPoolExecutor.execute(new EventExecutor(foundStickyEventsRegistrations.get(busEventKey),memoryState.getStickyEvent(busEventKey)));
                         }                        
                         break;
@@ -164,8 +163,7 @@ public class BusMemoryStateManager implements Runnable {
                         } else {
                             isListenerRegisteredMessage.complete(false);
                         }
-                        break;
-                        //isListenerRegisteredMessage.completeWithException(new IllegalArgumentException("Eccezione!"));
+                        break;                       
                     }
                     case PRINT_STATE: {
                         memoryState.printState();
@@ -175,8 +173,8 @@ public class BusMemoryStateManager implements Runnable {
                         break;
                     }
                 }
-            } catch (EventBusException | InterruptedException ex) {
-                logger.error("Something went wrong while elaborating bus messages", ex);
+            } catch ( InterruptedException ex) {
+                logger.error("I got an InterruptedException but I managed it: something went wrong while reading bus messages from the queue.", ex);
             }
         }
     }
@@ -187,11 +185,9 @@ public class BusMemoryStateManager implements Runnable {
      * and then call the {@link #postEvent(Object, Class)} method to notify an
      * event to {@link EventExecutor}s
      *
-     * @param eventObjectToPost The event to post {@link EventExecutor}s
-     * @throws InterruptedException If there is an exception trying to send an
-     * event to workers.
+     * @param eventObjectToPost The event to post {@link EventExecutor}s     
      */
-    private void manageEventToPost(Object eventObjectToPost) throws InterruptedException {
+    private void manageEventToPost(Object eventObjectToPost) {
         Set<Class<?>> eventSuperClassesAndInterfacesList = memoryState.getEventSuperClassesAndInterfaces(eventObjectToPost);
         if (eventSuperClassesAndInterfacesList != null) {
             for (Class<?> eventClass : eventSuperClassesAndInterfacesList) {
@@ -204,11 +200,9 @@ public class BusMemoryStateManager implements Runnable {
      * Private method used to send an event to {@link EventExecutor}s workers
      *
      * @param eventObjectToPost The event to post to {@link EventExecutor}s
-     * @param eventClass The event class
-     * @throws InterruptedException If there is an exception trying to send an
-     * event to workers.
+     * @param eventClass The event class   
      */
-    private void postEvent(Object eventObjectToPost, Class<?> eventClass) throws InterruptedException {
+    private void postEvent(Object eventObjectToPost, Class<?> eventClass) {
         BusEventKey busEventKey = new BusEventKey(eventClass);
         if (memoryState.registrationMapContainsKey(busEventKey)) {
             workersPoolExecutor.execute(new EventExecutor(memoryState.getRegistrations(busEventKey),eventObjectToPost));

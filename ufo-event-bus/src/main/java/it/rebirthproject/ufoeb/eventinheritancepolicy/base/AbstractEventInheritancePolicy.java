@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.Set;
 
 public abstract class AbstractEventInheritancePolicy implements EventInheritancePolicy {
+    
+    public static String INHERITANCE_ERROR = "You have defined an Event that extends/implements a Java or Android class or does not belong to the eventually defined inheritance frontier path. This is terribly wrong.";
 
     /**
      * The service that checks if you are extending or implementing a forbidden
@@ -70,16 +72,16 @@ public abstract class AbstractEventInheritancePolicy implements EventInheritance
      * @param eventClassesAndInterfaces The set to populate.
      * @param eventsRegistrations The event registration map.
      * @param clazz The class to add to the set.
-     * 
+     *
      * @trows EventBusException
      */
     protected void addClassOrInterfaceToSerializationIfNecessary(Set<Class<?>> eventClassesAndInterfaces, EventsRegistrationsMap eventsRegistrations, Class<?> clazz) {
-        if (eventsRegistrations.containsKey(new BusEventKey(clazz))) {
-            if (classProcessableService.isClassProcessableByPackage(clazz.getName())) {
+        if (classProcessableService.isClassProcessableByPackage(clazz.getName())) {
+            if (eventsRegistrations.containsKey(new BusEventKey(clazz))) {
                 eventClassesAndInterfaces.add(clazz);
-            } else {
-                throw new EventBusException("You have defined an Event that extends/implements a Java or Android class or does not belong to the eventually defined inheritance frontier path. This is terribly wrong.");
             }
+        } else {
+            throw new EventBusException(INHERITANCE_ERROR);
         }
     }
 }

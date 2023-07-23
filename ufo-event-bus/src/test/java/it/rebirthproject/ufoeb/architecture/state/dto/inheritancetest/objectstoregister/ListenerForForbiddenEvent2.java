@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021/2023 Andrea Paternesi Rebirth project 
+ * Copyright (C) 2021/2023 Andrea Paternesi Rebirth project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package it.rebirthproject.ufoeb.dto.events;
+package it.rebirthproject.ufoeb.architecture.state.dto.inheritancetest.objectstoregister;
 
-import java.util.ArrayList;
+import it.rebirthproject.ufoeb.architecture.state.dto.inheritancetest.events.EventImplementingJavaLibInterface;
+import it.rebirthproject.ufoeb.eventannotation.Listen;
 
-public class ConcreteEventExtendingJavaLibClass extends ArrayList<String> {      
+public class ListenerForForbiddenEvent2 {
+
+    @Listen
+    public void method1(EventImplementingJavaLibInterface event) {
+    }
 }
