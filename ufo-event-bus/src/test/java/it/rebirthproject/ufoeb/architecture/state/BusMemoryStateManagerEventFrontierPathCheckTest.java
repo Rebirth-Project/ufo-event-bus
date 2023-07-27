@@ -27,7 +27,6 @@ import it.rebirthproject.ufoeb.eventinheritancepolicy.FactoryInheritancePolicy;
 import it.rebirthproject.ufoeb.eventinheritancepolicy.base.AbstractEventInheritancePolicy;
 import it.rebirthproject.ufoeb.eventinheritancepolicy.base.InheritancePolicyType;
 import it.rebirthproject.ufoeb.exceptions.EventBusException;
-import it.rebirthproject.ufoeb.services.ClassProcessableService;
 import it.rebirthproject.ufoeb.testutils.BaseTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -84,9 +83,7 @@ public class BusMemoryStateManagerEventFrontierPathCheckTest extends BaseTest {
         //We override the Processable service setting the frontier path
         //we set a different frontier path and we use an event that does not belong to that frontier path
         classProcessableService.setInheritancePackageFrontierPath("it.rebirthproject.ufoeb.architecture.state.dto.inheritancetest.objectstoregister");
-        //memoryState = new MemoryState(!SAFE_REGISTRATIONS_NEEDED, FactoryInheritancePolicy.createInheritancePolicy(InheritancePolicyType.COMPLETE_EVENT_INHERITANCE, classProcessableService), VERBOSE_LOGGING);
-        //busMemoryStateManager = new BusMemoryStateManager(messageQueue, fakePoolExecutor, memoryState, listenerMethodFinder, THROW_NO_REGISTRATIONS_WARNING);
-
+      
         EventExtendingJavaLibClass eventExtendingJavaLibClass = new EventExtendingJavaLibClass();
         ListenerForForbiddenEvent1 listener = new ListenerForForbiddenEvent1();
 
