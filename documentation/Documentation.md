@@ -83,7 +83,7 @@ There are various parameters you can use to configure the bus:
 
 * **listenerSuperclassInheritance** Use this parameter if you want the bus keep track of listeners classes inheritance. This value by default is switched off. So the bus will not iterate through parent classes to search for listening methods, but will find only the listener main class' methods. If you want to iterate through the parent classes just use this parameter. Please <ins>note</ins> that using this feature is dangerous because by default reflection will stop only in certain cases (when package does not contain java or android classes). Sometimes this does not work. So to be sure to avoid problems using always also the next parameter.
 
-* **inheritancePackageFrontierPath** Use this parameter to tell the bus where to stop when iterating between parent classes. This should be always used to speedup methods search and to avoid strange exceptions at runtime. The back iteration will stop when the package is different from the provided one.
+* **inheritancePackageFrontierPath** Use this parameter to tell the bus where to stop when iterating between parent classes. This should be always used to speedup methods search and to avoid strange exceptions at runtime. The back iteration will stop when the package is different from the provided one. The frontier path also applies to Event Inheritance.
 Usually what you want is to look for classes in your project's package. So we recommend to always use this parameter in the following way:
 ```java 
   builder.setInheritancePackageFrontierPath("com.mycompany.mypackage"); 
