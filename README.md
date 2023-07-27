@@ -124,7 +124,6 @@ Similar benchmarks for Greenrobot eventbus using jmh framework [here](https://gi
 Right now the next big things for the bus will be:
 
 * event runtime filters (block at runtime the delivery of an event using a filter)
-* block event inheritance if events are not application's defined classes and extend or implement Java or Android internal classes/interfaces
 * rework the exception system if necessary or asked
 
 ## Contributors
