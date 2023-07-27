@@ -20,11 +20,14 @@ import it.rebirthproject.ufoeb.architecture.messages.commands.RegisterMessage;
 import it.rebirthproject.ufoeb.architecture.state.mock.FakeMessageEmitter;
 import it.rebirthproject.ufoeb.architecture.state.mock.FakePoolExecutor;
 import it.rebirthproject.ufoeb.architecture.state.dto.inheritancetest.events.EventExtendingJavaLibClass;
+import it.rebirthproject.ufoeb.architecture.state.dto.inheritancetest.events.EventImplementingJavaLibInterface;
 import it.rebirthproject.ufoeb.architecture.state.dto.inheritancetest.objectstoregister.ListenerForForbiddenEvent1;
+import it.rebirthproject.ufoeb.architecture.state.dto.inheritancetest.objectstoregister.ListenerForForbiddenEvent2;
 import it.rebirthproject.ufoeb.eventinheritancepolicy.FactoryInheritancePolicy;
 import it.rebirthproject.ufoeb.eventinheritancepolicy.base.AbstractEventInheritancePolicy;
 import it.rebirthproject.ufoeb.eventinheritancepolicy.base.InheritancePolicyType;
 import it.rebirthproject.ufoeb.exceptions.EventBusException;
+import it.rebirthproject.ufoeb.services.ClassProcessableService;
 import it.rebirthproject.ufoeb.testutils.BaseTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,11 +57,46 @@ public class BusMemoryStateManagerEventFrontierPathCheckTest extends BaseTest {
         fakeMessageEmitter
                 .sendMessage(new RegisterMessage(listener))
                 .sendMessage(new PostEventMessage(eventExtendingJavaLibClass));
-        
-        try {
+
+        EventBusException exception = Assertions.assertThrows(EventBusException.class, () -> {
             busMemoryStateManager.run();
-        } catch (EventBusException e) {
-            Assertions.assertTrue(e.getMessage().equals(AbstractEventInheritancePolicy.INHERITANCE_ERROR), "");
-        }
+        });
+        Assertions.assertTrue(exception.getMessage().equals(AbstractEventInheritancePolicy.INHERITANCE_ERROR), "");
+    }
+
+    @Test
+    public void finder_stop_reflection_if_event_listened_class_hierachy_contains_forbidden_interface_type() throws Exception {
+        EventImplementingJavaLibInterface eventImplementingJavaLibInterface = new EventImplementingJavaLibInterface();
+        ListenerForForbiddenEvent2 listener = new ListenerForForbiddenEvent2();
+
+        fakeMessageEmitter
+                .sendMessage(new RegisterMessage(listener))
+                .sendMessage(new PostEventMessage(eventImplementingJavaLibInterface));
+
+        EventBusException exception = Assertions.assertThrows(EventBusException.class, () -> {
+            busMemoryStateManager.run();
+        });
+        Assertions.assertTrue(exception.getMessage().equals(AbstractEventInheritancePolicy.INHERITANCE_ERROR), "");
+    }
+
+    @Test
+    public void finder_stop_reflection_if_event_listened_class_hierachy_does_not_belong_to_the_correct_frontier_path() throws Exception {
+        //We override the Processable service setting the frontier path
+        //we set a different frontier path and we use an event that does not belong to that frontier path
+        classProcessableService.setInheritancePackageFrontierPath("it.rebirthproject.ufoeb.architecture.state.dto.inheritancetest.objectstoregister");
+        //memoryState = new MemoryState(!SAFE_REGISTRATIONS_NEEDED, FactoryInheritancePolicy.createInheritancePolicy(InheritancePolicyType.COMPLETE_EVENT_INHERITANCE, classProcessableService), VERBOSE_LOGGING);
+        //busMemoryStateManager = new BusMemoryStateManager(messageQueue, fakePoolExecutor, memoryState, listenerMethodFinder, THROW_NO_REGISTRATIONS_WARNING);
+
+        EventExtendingJavaLibClass eventExtendingJavaLibClass = new EventExtendingJavaLibClass();
+        ListenerForForbiddenEvent1 listener = new ListenerForForbiddenEvent1();
+
+        fakeMessageEmitter
+                .sendMessage(new RegisterMessage(listener))
+                .sendMessage(new PostEventMessage(eventExtendingJavaLibClass));
+
+        EventBusException exception = Assertions.assertThrows(EventBusException.class, () -> {
+            busMemoryStateManager.run();
+        });
+        Assertions.assertTrue(exception.getMessage().equals(AbstractEventInheritancePolicy.INHERITANCE_ERROR), "");
     }
 }

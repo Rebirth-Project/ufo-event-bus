@@ -68,7 +68,7 @@ public class ClassProcessableService {
         if (inheritancePackageFrontierPath.trim().isEmpty()) {
             return !className.startsWith("java.") && !className.startsWith("javax.") && !className.startsWith("android.") && !className.startsWith("androidx.");
         } else {
-            return className.startsWith(inheritancePackageFrontierPath);
+            return !className.endsWith(",Object") &&  className.startsWith(inheritancePackageFrontierPath);
         }
     }
 }
