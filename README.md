@@ -4,7 +4,7 @@ system](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern) written
 
 It was inspired by [Greenrobot eventbus](https://github.com/greenrobot/EventBus), but basically coded from scratch.
 
-**```Latest Version 1.0.1```**
+**```Latest Version 1.0.2```**
 
 ![Build Status](https://github.com/Rebirth-Project/ufo-event-bus/actions/workflows/build.yml/badge.svg?raw=true)
 
@@ -41,7 +41,7 @@ It was inspired by [Greenrobot eventbus](https://github.com/greenrobot/EventBus)
 
 ```
 dependencies {
-    implementation "it.rebirthproject:ufo-event-bus:1.0.1"
+    implementation "it.rebirthproject:ufo-event-bus:1.0.2"
 }
 ```
 ##### Maven:
@@ -50,7 +50,7 @@ dependencies {
 <dependency>
     <groupId>it.rebirthproject</groupId>
     <artifactId>ufo-event-bus</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
