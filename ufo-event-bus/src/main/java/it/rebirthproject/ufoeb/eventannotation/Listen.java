@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2012-2016 Markus Junginger, greenrobot (http://greenrobot.org)
- * Modifications copyright (C) 2021/2023 Andrea Paternesi Rebirth project
- * Modifications copyright (C) 2021/2023 Matteo Veroni Rebirth project
+ * Modifications copyright (C) 2021/2024 Andrea Paternesi Rebirth project
+ * Modifications copyright (C) 2021/2024 Matteo Veroni Rebirth project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

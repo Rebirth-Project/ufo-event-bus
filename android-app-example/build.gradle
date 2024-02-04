@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2021/2023 Andrea Paternesi Rebirth project
- * Copyright (C) 2021/2023 Matteo Veroni Rebirth project
+ * Copyright (C) 2021/2024 Andrea Paternesi Rebirth project
+ * Copyright (C) 2021/2024 Matteo Veroni Rebirth project
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,13 +20,13 @@ repositories {
 
 android {
     namespace "it.rebirthproject.myapplication"
-    compileSdkVersion 32
-    buildToolsVersion "32.0.0"
+    compileSdkVersion 34
+    buildToolsVersion "34.0.0"
 
     defaultConfig {
         applicationId "it.rebirthproject.myapplication"
         minSdkVersion 26
-        targetSdkVersion 32
+        targetSdkVersion 34
         versionCode 1
         versionName "1.0"
     }
@@ -47,9 +47,9 @@ android {
 }
 
 dependencies {
-    implementation 'com.google.android.material:material:1.9.0'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.navigation:navigation-fragment:2.5.3'
-    implementation 'androidx.navigation:navigation-ui:2.5.3'
+    implementation 'androidx.navigation:navigation-fragment:2.7.6'
+    implementation 'androidx.navigation:navigation-ui:2.7.6'
 }

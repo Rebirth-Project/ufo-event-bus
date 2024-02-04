@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021/2023 Andrea Paternesi Rebirth project
+ * Copyright (C) 2021/2024 Andrea Paternesi Rebirth project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,15 @@ repositories {
 }
 
 ext {
-    gdxVersion = '1.11.0'
+    gdxVersion = '1.12.1'
     mainClassName = "it.rebirthproject.eventbusdemo.main.DesktopLauncher"
     assetsDir = new File("./assets")
 }
 
-sourceCompatibility = 1.8
+java {
+    sourceCompatibility = 1.8
+}
+
 sourceSets.main.resources.srcDirs = ["./assets"]
 
 compileJava {
@@ -62,7 +65,7 @@ task debug(dependsOn: classes, type: JavaExec) {
 }
 
 dependencies {
-    implementation 'ch.qos.logback:logback-classic:1.4.5'
+    implementation 'ch.qos.logback:logback-classic:1.4.14'
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion:sources"    
     implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"

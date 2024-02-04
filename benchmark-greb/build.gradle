@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2021/2023 Andrea Paternesi Rebirth project
- * Modifications copyright (C) 2021/2023 Matteo Veroni Rebirth project
+ * Copyright (C) 2021/2024 Andrea Paternesi Rebirth project
+ * Modifications copyright (C) 2021/2024 Matteo Veroni Rebirth project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
  */
 
 plugins {
-    id "me.champeau.jmh" version "0.6.8"
+    id "me.champeau.jmh" version "0.7.2"
 }
 
 repositories {
@@ -25,9 +25,9 @@ repositories {
 
 dependencies {    
     testImplementation 'org.greenrobot:eventbus-java:3.3.1'
-    testImplementation 'ch.qos.logback:logback-classic:1.4.5'
-    jmh 'org.openjdk.jmh:jmh-core:1.35'
-    jmh 'org.openjdk.jmh:jmh-generator-annprocess:1.35'
+    testImplementation 'ch.qos.logback:logback-classic:1.4.14'
+    jmh 'org.openjdk.jmh:jmh-core:1.37'
+    jmh 'org.openjdk.jmh:jmh-generator-annprocess:1.37'
 }
 
 tasks.named('test') {
