@@ -24,8 +24,7 @@ buildscript {
     }
 }
 
-wrapper() {
-    //Do not touch this wrapper until org.javamodularity.moduleplugin will be compatible with gradle 8.
+wrapper() {    
     gradleVersion = '8.5'
 }
 
