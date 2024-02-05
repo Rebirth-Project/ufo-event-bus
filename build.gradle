@@ -20,13 +20,13 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.android.tools.build:gradle:8.2.2'
     }
 }
 
 wrapper() {
     //Do not touch this wrapper until org.javamodularity.moduleplugin will be compatible with gradle 8.
-    gradleVersion = '7.5.1'
+    gradleVersion = '8.5'
 }
 
 project(':ufo-event-bus') {
