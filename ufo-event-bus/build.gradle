@@ -22,7 +22,7 @@ plugins {
     id "signing"
     id "java-library"
     id 'maven-publish'
-    id 'org.javamodularity.moduleplugin' version '1.8.12' 
+    id 'org.javamodularity.moduleplugin' version '1.8.15' 
     id 'net.researchgate.release' version '3.0.2'
 }
 
