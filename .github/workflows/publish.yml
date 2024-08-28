@@ -25,8 +25,8 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew publish  
         env:
-            ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.SONATYPE_PASSWORD }}
-            ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.SONATYPE_USERNAME }}
+            ORG_GRADLE_PROJECT_sonatypeTokenPassword: ${{ secrets.SONATYPE_TOKEN_PASSWORD }}
+            ORG_GRADLE_PROJECT_sonatypeTokenUsername: ${{ secrets.SONATYPE_TOKEN_USERNAME }}
             ORG_GRADLE_PROJECT_signingKey: ${{ secrets.REBIRTH_GPG_SECRET_KEY }}
             ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.REBIRTH_GPG_SECRET_KEY_PASSWORD }}        
   

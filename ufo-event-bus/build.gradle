@@ -127,8 +127,8 @@ publishing {
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
             
             credentials {
-                username = project.hasProperty('LocalSonatypeUsername') ? project.LocalSonatypeUsername : findProperty("sonatypeUsername")
-                password = project.hasProperty('LocalSonatypePassword') ? project.LocalSonatypePassword : findProperty("sonatypePassword")
+                username = project.hasProperty('LocalOssrhTokenUsername') ? project.LocalOssrhTokenUsername : findProperty("sonatypeTokenUsername")
+                password = project.hasProperty('LocalOssrhTokenPassword') ? project.LocalOssrhTokenPassword : findProperty("sonatypeTokenPassword")
             }
         }
     }
@@ -168,14 +168,14 @@ publishing {
 }
 
 signing {       
-        //If we are in guthub then we will find those properties otherwise we are in local PC and we use directly gpg keyring (default)    
-        if(project.hasProperty('signingKey') && project.hasProperty('signingPassword')) {            
-            def signingKey = findProperty("signingKey")
-            def signingPassword = findProperty("signingPassword")        
-            useInMemoryPgpKeys(signingKey, signingPassword)
-        }                
-        //sign configurations.archives  
-        sign publishing.publications.mavenJava
+    //If we are in guthub then we will find those properties otherwise we are in local PC and we use directly gpg keyring (default)    
+    if(project.hasProperty('signingKey') && project.hasProperty('signingPassword')) {            
+        def signingKey = findProperty("signingKey")
+        def signingPassword = findProperty("signingPassword")        
+        useInMemoryPgpKeys(signingKey, signingPassword)
+    }                
+    //sign configurations.archives  
+    sign publishing.publications.mavenJava
 }
 
 release {
