@@ -14,17 +14,17 @@ It was inspired by [Greenrobot eventbus](https://github.com/greenrobot/EventBus)
 
 ## Main features
 
-* completely asynchronous
-* parallel and scalable
-* very tiny (~50k jar)
+* completely **asynchronous**
+* **parallel** and **scalable**
+* very **tiny** (~50k jar)
 * performs well with Android and Java
-* is fast in almost every situation and loads and can be configured
+* is **fast** in almost every situation and loads and can be configured
 * when used with Java >= 9 is compiled as module increasing encapsulation
-* it has no dependencies but only uses [SLF4J](https://www.slf4j.org/) as logging facade
+* it has **no dependencies** but only uses [SLF4J](https://www.slf4j.org/) as logging facade
 * can simplify the communication between components since it decouples event posters and listeners
 * has advanced features like listener priorities, events inheritance, listeners inheritance, inbound event order
 * entirely documented
-* the code is clean, testable, compact and very easy to understand and maintain
+* the **code is clean**, testable, compact and very easy to understand and maintain
 * is completely covered with a large number of unit tests
 
 ## Goals
