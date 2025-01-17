@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2021/2024 Andrea Paternesi Rebirth project
- * Modifications copyright (C) 2021/2024 Matteo Veroni Rebirth project
+ * Copyright (C) 2021/2025 Andrea Paternesi Rebirth project
+ * Modifications copyright (C) 2021/2025 Matteo Veroni Rebirth project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,9 +25,9 @@ repositories {
 
 dependencies {    
     testImplementation project(':ufo-event-bus')
-    testImplementation 'ch.qos.logback:logback-classic:1.4.14'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
+    testImplementation 'ch.qos.logback:logback-classic:1.5.16'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.4'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.11.4'
     jmh 'org.openjdk.jmh:jmh-core:1.37'
     jmh 'org.openjdk.jmh:jmh-generator-annprocess:1.37'
 }

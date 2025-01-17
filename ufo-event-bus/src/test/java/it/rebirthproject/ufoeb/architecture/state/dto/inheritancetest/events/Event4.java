@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2021/2024 Matteo Veroni Rebirth project
- * Modifications copyright (C) 2021/2024 Andrea Paternesi Rebirth project
+ * Copyright (C) 2021/2025 Matteo Veroni Rebirth project
+ * Modifications copyright (C) 2021/2025 Andrea Paternesi Rebirth project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
