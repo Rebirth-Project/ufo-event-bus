@@ -22,7 +22,7 @@ plugins {
     id "signing"
     id "java-library"
     id 'maven-publish'
-    id 'org.javamodularity.moduleplugin' version '1.8.15' 
+    id 'org.javamodularity.moduleplugin' version '2.0.0' 
     id 'net.researchgate.release' version '3.1.0'
 }
 
@@ -44,6 +44,11 @@ repositories {
     mavenCentral()
 }
 
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
 compileJava {
     options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     options.encoding = "UTF-8"
@@ -58,11 +63,13 @@ compileTestJava {
 }
 
 dependencies {
-    api 'org.slf4j:slf4j-api:2.0.16'
-    testImplementation 'ch.qos.logback:logback-classic:1.5.16'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.4'
-    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.11.4'
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.11.4'
+    api 'org.slf4j:slf4j-api:2.0.17'
+    testImplementation 'ch.qos.logback:logback-classic:1.5.32'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:6.0.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:6.0.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:6.0.3'
+    
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 if (JavaVersion.current().isJava8Compatible()) {
@@ -95,20 +102,6 @@ javadoc {
     options.setWindowTitle("UfoEventBus JavaDoc")
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    archiveClassifier.set("javadoc")   
-    from javadoc
-}
-
-task sourcesJar(type: Jar) {
-    archiveClassifier.set("sources")
-    from sourceSets.main.allSource    
-}
-
-artifacts {
-    archives jar, javadocJar, sourcesJar
-}
-
 test {
     //    debug = true
     useJUnitPlatform()
@@ -134,9 +127,7 @@ publishing {
     }
     publications {
         mavenJava(MavenPublication) {
-            from(components.java)
-            artifact(tasks["sourcesJar"])
-            artifact(tasks["javadocJar"])
+            from(components.java)          
             pom {
                 name = 'ufoeventbus'
                 description = 'UFO EventBus: Ultra Fast Object oriented event bus for Java and Android'

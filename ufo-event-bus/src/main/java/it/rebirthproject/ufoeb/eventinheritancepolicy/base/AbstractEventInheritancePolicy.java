@@ -73,7 +73,7 @@ public abstract class AbstractEventInheritancePolicy implements EventInheritance
      * @param eventsRegistrations The event registration map.
      * @param clazz The class to add to the set.
      *
-     * @trows EventBusException
+     * @throws EventBusException
      */
     protected void addClassOrInterfaceToSerializationIfNecessary(Set<Class<?>> eventClassesAndInterfaces, EventsRegistrationsMap eventsRegistrations, Class<?> clazz) {
         if (classProcessableService.isClassProcessableByPackage(clazz.getName())) {

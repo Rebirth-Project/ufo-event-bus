@@ -21,7 +21,7 @@ repositories {
 }
 
 ext {
-    gdxVersion = '1.13.1'
+    gdxVersion = '1.14.0'
     mainClassName = "it.rebirthproject.eventbusdemo.main.DesktopLauncher"
     assetsDir = new File("./assets")
 }
@@ -65,7 +65,7 @@ task debug(dependsOn: classes, type: JavaExec) {
 }
 
 dependencies {
-    implementation 'ch.qos.logback:logback-classic:1.5.16'
+    implementation 'ch.qos.logback:logback-classic:1.5.32'
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion:sources"    
     implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"

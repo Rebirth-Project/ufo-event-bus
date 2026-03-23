@@ -20,12 +20,12 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.8.0'
+        classpath("com.android.tools.build:gradle:9.1.0")
     }
 }
 
 wrapper() {    
-    gradleVersion = '8.12'
+    gradleVersion = '9.4.0'
 }
 
 project(':ufo-event-bus') {

@@ -21,7 +21,7 @@ repositories {
 android {
     namespace="it.rebirthproject.myapplication"
     compileSdkVersion 34
-    buildToolsVersion "35.0.0"
+    buildToolsVersion "36.0.0"
 
     defaultConfig {
         applicationId "it.rebirthproject.myapplication"
