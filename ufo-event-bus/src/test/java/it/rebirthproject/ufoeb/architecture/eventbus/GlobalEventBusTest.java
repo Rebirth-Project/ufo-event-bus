@@ -53,6 +53,7 @@ public class GlobalEventBusTest {
         }, "Error, calling setup more than once doesn't throw exception as expected");
     }
 
+    @Test
     public void everytime_getInstance_is_called_the_same_singleton_instance_is_returned() throws InterruptedException, EventBusException {
         GlobalEventBus.setup(new EventBusBuilder().setNumberOfWorkers(1));
 
