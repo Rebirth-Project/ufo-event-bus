@@ -27,7 +27,6 @@ import it.rebirthproject.ufoeb.architecture.messages.query.IsListenerRegisteredM
 import it.rebirthproject.ufoeb.exceptions.EventBusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.Objects;
 import java.util.concurrent.Future;
 
 /**
@@ -58,62 +57,50 @@ final class UfoEventBus implements EventBus {
 
     @Override
     public void register(Object listenerToRegister) throws EventBusException {
-        try {
-            Objects.requireNonNull(listenerToRegister);
-            eventBusInfrastructure.sendMessage(new RegisterMessage(listenerToRegister));
-        } catch (NullPointerException ex) {
+        if (listenerToRegister == null) {
             throw new EventBusException("The listener to register is null");
         }
+        eventBusInfrastructure.sendMessage(new RegisterMessage(listenerToRegister));
     }
 
     @Override
     public void unregister(Object listenerToUnregister) throws EventBusException {
-        try {
-            Objects.requireNonNull(listenerToUnregister);
-            eventBusInfrastructure.sendMessage(new UnregisterListenerMessage(listenerToUnregister));
-        } catch (NullPointerException ex) {
+        if (listenerToUnregister == null) {
             throw new EventBusException("The listener to unregister is null");
         }
+        eventBusInfrastructure.sendMessage(new UnregisterListenerMessage(listenerToUnregister));
     }
 
     @Override
     public void post(Object event) throws EventBusException {
-        try {
-            Objects.requireNonNull(event);
-            eventBusInfrastructure.sendMessage(new PostEventMessage(event));
-        } catch (NullPointerException ex) {
+        if (event == null) {
             throw new EventBusException("The event to post is null");
         }
+        eventBusInfrastructure.sendMessage(new PostEventMessage(event));
     }
 
     @Override
     public void postSticky(Object event) throws EventBusException {
-        try {
-            Objects.requireNonNull(event);
-            eventBusInfrastructure.sendMessage(new PostStickyEventMessage(event));
-        } catch (NullPointerException ex) {
+        if (event == null) {
             throw new EventBusException("The event to post is null");
         }
+        eventBusInfrastructure.sendMessage(new PostStickyEventMessage(event));
     }
 
     @Override
     public void removeSticky(Class<?> eventClass) throws EventBusException {
-        try {
-            Objects.requireNonNull(eventClass);
-            eventBusInfrastructure.sendMessage(new RemoveStickyEventMessage(eventClass));
-        } catch (NullPointerException ex) {
+        if (eventClass == null) {
             throw new EventBusException("The sticky event class to remove is null");
         }
+        eventBusInfrastructure.sendMessage(new RemoveStickyEventMessage(eventClass));
     }
 
     @Override
     public void removeSticky(Object event) throws EventBusException {
-        try {
-            Objects.requireNonNull(event);
-            eventBusInfrastructure.sendMessage(new RemoveStickyEventMessage(event.getClass()));
-        } catch (NullPointerException ex) {
+        if (event == null) {
             throw new EventBusException("The sticky event to remove is null");
         }
+        eventBusInfrastructure.sendMessage(new RemoveStickyEventMessage(event.getClass()));
     }
 
     @Override
@@ -123,14 +110,12 @@ final class UfoEventBus implements EventBus {
 
     @Override
     public Future<Boolean> isRegistered(Object possibleRegisteredListener) throws EventBusException {
-        try {
-            Objects.requireNonNull(possibleRegisteredListener);
-            IsListenerRegisteredMessage isObjectRegisteredMessage = new IsListenerRegisteredMessage(possibleRegisteredListener);
-            eventBusInfrastructure.sendMessage(isObjectRegisteredMessage);
-            return isObjectRegisteredMessage.getResponse();
-        } catch (NullPointerException ex) {
+        if (possibleRegisteredListener == null) {
             throw new EventBusException("The listener to check is null");
         }
+        IsListenerRegisteredMessage isObjectRegisteredMessage = new IsListenerRegisteredMessage(possibleRegisteredListener);
+        eventBusInfrastructure.sendMessage(isObjectRegisteredMessage);
+        return isObjectRegisteredMessage.getResponse();
     }
 
     @Override
