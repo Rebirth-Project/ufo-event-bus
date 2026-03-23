@@ -17,6 +17,7 @@
 package it.rebirthproject.ufoeb.architecture.state;
 
 import it.rebirthproject.ufoeb.architecture.messages.commands.PostEventMessage;
+import it.rebirthproject.ufoeb.architecture.messages.commands.PostStickyEventMessage;
 import it.rebirthproject.ufoeb.architecture.messages.commands.RegisterMessage;
 import it.rebirthproject.ufoeb.architecture.messages.commands.ShutdownStateManagerMessage;
 import it.rebirthproject.ufoeb.architecture.messages.interfaces.Message;
@@ -39,6 +40,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.concurrent.Executors;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BusMemoryStateManagerNoInheritanceTest extends BaseTest {
 
@@ -123,5 +125,18 @@ public class BusMemoryStateManagerNoInheritanceTest extends BaseTest {
         messageListVerifier.assertAsExpected(
                 returnMessageList, Arrays.asList()
         );
+    }
+
+    @Test
+    public void should_ReplayOnlyExactSticky_When_NoInheritancePolicy() throws Exception {
+        fakeMessageEmitter
+                .sendMessage(new PostStickyEventMessage(event2))
+                .sendMessage(new RegisterMessage(registeredObject1ToEventInterface))
+                .sendMessage(new ShutdownStateManagerMessage());
+
+        awaitUntilExecutorFinishToWorkAndDie();
+
+        List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
+        assertEquals(0, returnMessageList.size(), "No inheritance policy must replay sticky events only for exact event class listeners.");
     }
 }

@@ -19,6 +19,7 @@ package it.rebirthproject.ufoeb.architecture.state;
 import it.rebirthproject.ufoeb.architecture.messages.commands.PostEventMessage;
 import it.rebirthproject.ufoeb.architecture.messages.commands.PostStickyEventMessage;
 import it.rebirthproject.ufoeb.architecture.messages.commands.RegisterMessage;
+import it.rebirthproject.ufoeb.architecture.messages.commands.RemoveStickyEventMessage;
 import it.rebirthproject.ufoeb.architecture.messages.commands.ShutdownStateManagerMessage;
 import it.rebirthproject.ufoeb.architecture.messages.commands.UnregisterListenerMessage;
 import it.rebirthproject.ufoeb.architecture.messages.interfaces.Message;
@@ -39,9 +40,11 @@ import it.rebirthproject.ufoeb.testutils.BaseTest;
 import it.rebirthproject.ufoeb.testutils.validators.ExpectedMessage;
 import it.rebirthproject.ufoeb.testutils.validators.ExpectedRegistration;
 import java.util.Arrays;
+import java.util.HashSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -566,6 +569,141 @@ public class BusMemoryStateManagerTest extends BaseTest {
                 registrationsList2,
                 Arrays.asList(new ExpectedRegistration(registeredObject1ToEventInterface, EventPriority.NONE, "onEvent", Event.class))
         );
+    }
+
+    @Test
+    public void should_ReplayStickyEvent_When_ListenerRegistersAfterStickyPost() throws Exception {
+        fakeMessageEmitter
+                .sendMessage(new PostStickyEventMessage(event1))
+                .sendMessage(new RegisterMessage(registeredObject1ToStickyEvent1))
+                .sendMessage(new ShutdownStateManagerMessage());
+
+        awaitUntilExecutorFinishToWorkAndDie();
+
+        List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
+        messageListVerifier.assertAsExpected(returnMessageList,
+                Arrays.asList(new ExpectedMessage(event1))
+        );
+
+        FakeMessage message = (FakeMessage) returnMessageList.get(0);
+        List<Registration> registrationsList = message.getRegistrationsList();
+        registrationListVerifier.assertAsExpected(
+                registrationsList,
+                Arrays.asList(new ExpectedRegistration(registeredObject1ToStickyEvent1, EventPriority.NONE, "onEvent1", TestEvent1.class))
+        );
+    }
+
+    @Test
+    public void should_ReplayStickyOnlyToNewlyRegisteredMatchingListener_When_RegisteringMixedListeners() throws Exception {
+        fakeMessageEmitter
+                .sendMessage(new PostStickyEventMessage(event1))
+                .sendMessage(new RegisterMessage(registeredObject1ToEvent2))
+                .sendMessage(new RegisterMessage(registeredObject1ToStickyEvent1))
+                .sendMessage(new ShutdownStateManagerMessage());
+
+        awaitUntilExecutorFinishToWorkAndDie();
+
+        List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
+        messageListVerifier.assertAsExpected(returnMessageList,
+                Arrays.asList(new ExpectedMessage(event1))
+        );
+    }
+
+    @Test
+    public void should_NotReplaySticky_When_StickyWasRemovedBeforeRegistration() throws Exception {
+        fakeMessageEmitter
+                .sendMessage(new PostStickyEventMessage(event1))
+                .sendMessage(new RemoveStickyEventMessage(TestEvent1.class))
+                .sendMessage(new RegisterMessage(registeredObject1ToStickyEvent1))
+                .sendMessage(new ShutdownStateManagerMessage());
+
+        awaitUntilExecutorFinishToWorkAndDie();
+
+        List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
+        assertEquals(0, returnMessageList.size(), "No sticky event should be replayed after removal.");
+    }
+
+    @Test
+    public void should_ReplayAllMatchingStickyEvents_When_ListenerRegistersToMultipleEvents() throws Exception {
+        fakeMessageEmitter
+                .sendMessage(new PostStickyEventMessage(event1))
+                .sendMessage(new PostStickyEventMessage(event2))
+                .sendMessage(new RegisterMessage(registeredObjectToTwoEvents))
+                .sendMessage(new ShutdownStateManagerMessage());
+
+        awaitUntilExecutorFinishToWorkAndDie();
+
+        List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
+        assertEquals(2, returnMessageList.size(), "The listener should receive both sticky events it listens to.");
+
+        Set<Class<?>> receivedEventClasses = new HashSet<>();
+        for (Message message : returnMessageList) {
+            FakeMessage fakeMessage = (FakeMessage) message;
+            receivedEventClasses.add(fakeMessage.getEventToPost().getClass());
+        }
+
+        Set<Class<?>> expectedEventClasses = new HashSet<>();
+        expectedEventClasses.add(TestEvent1.class);
+        expectedEventClasses.add(TestEvent2.class);
+        assertEquals(expectedEventClasses, receivedEventClasses, "Sticky replay should include both TestEvent1 and TestEvent2 regardless of delivery order.");
+    }
+
+    @Test
+    public void should_NotDuplicateStickyReplay_When_ListenerRegistersOnce() throws Exception {
+        fakeMessageEmitter
+                .sendMessage(new PostStickyEventMessage(event1))
+                .sendMessage(new RegisterMessage(registeredObject1ToStickyEvent1))
+                .sendMessage(new ShutdownStateManagerMessage());
+
+        awaitUntilExecutorFinishToWorkAndDie();
+
+        List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
+        assertEquals(1, returnMessageList.size(), "Sticky replay must happen once for a single registration.");
+    }
+
+    @Test
+    public void should_KeepNormalPostDispatchUnchanged_AfterStickyUnification() throws Exception {
+        fakeMessageEmitter
+                .sendMessage(new RegisterMessage(registeredObject1ToEvent1))
+                .sendMessage(new PostEventMessage(event1))
+                .sendMessage(new ShutdownStateManagerMessage());
+
+        awaitUntilExecutorFinishToWorkAndDie();
+
+        List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
+        messageListVerifier.assertAsExpected(returnMessageList,
+                Arrays.asList(new ExpectedMessage(event1))
+        );
+    }
+
+    @Test
+    public void should_RespectInheritanceDuringStickyReplay_When_InheritanceEnabled() throws Exception {
+        fakeMessageEmitter
+                .sendMessage(new PostStickyEventMessage(event2))
+                .sendMessage(new RegisterMessage(registeredObject1ToEventInterface))
+                .sendMessage(new ShutdownStateManagerMessage());
+
+        awaitUntilExecutorFinishToWorkAndDie();
+
+        List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
+        messageListVerifier.assertAsExpected(returnMessageList,
+                Arrays.asList(new ExpectedMessage(event2))
+        );
+    }
+
+    @Test
+    public void should_NotDeliverStickyAfterUnregister_When_ReRegisterNotDone() throws Exception {
+        fakeMessageEmitter
+                .sendMessage(new PostStickyEventMessage(event1))
+                .sendMessage(new RegisterMessage(registeredObject1ToStickyEvent1))
+                .sendMessage(new UnregisterListenerMessage(registeredObject1ToStickyEvent1))
+                .sendMessage(new PostStickyEventMessage(secondEvent1))
+                .sendMessage(new ShutdownStateManagerMessage());
+
+        awaitUntilExecutorFinishToWorkAndDie();
+
+        List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
+        assertEquals(1, returnMessageList.size(), "Unregistered listener must not receive sticky events unless it registers again.");
     }
 
     @Test

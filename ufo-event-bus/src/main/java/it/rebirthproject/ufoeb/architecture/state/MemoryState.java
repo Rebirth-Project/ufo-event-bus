@@ -164,8 +164,14 @@ public class MemoryState {
             listenerToEventsMap.put(listener, eventKeys);
             eventsRegistrations.addRegistration(eventKey, registration);
 
-            if (isStickyEventRegistered(eventKey)) {
-                foundListenerStickyEventsRegistrations.addRegistration(eventKey, registration);
+            if (!stickyEventsMap.isEmpty()) {
+                for (Map.Entry<BusEventKey, Object> stickyEntry : stickyEventsMap.entrySet()) {
+                    Object stickyEvent = stickyEntry.getValue();
+                    Set<Class<?>> stickyEventInheritanceObjects = getEventSuperClassesAndInterfaces(stickyEvent);
+                    if (stickyEventInheritanceObjects != null && stickyEventInheritanceObjects.contains(eventKey.getEventClass())) {
+                        foundListenerStickyEventsRegistrations.addRegistration(stickyEntry.getKey(), registration);
+                    }
+                }
             }
             logger.debug("Registered new event {}", eventKey.getEventClass());
             logger.debug("Registrations sticky size: {}", foundListenerStickyEventsRegistrations.containsKey(eventKey) ? foundListenerStickyEventsRegistrations.get(eventKey).size() : 0);
