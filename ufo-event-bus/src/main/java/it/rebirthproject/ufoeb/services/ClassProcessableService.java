@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021/2025 Andrea Paternesi Rebirth project
+ * Copyright (C) 2021/2026 Andrea Paternesi Rebirth project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,7 +68,7 @@ public class ClassProcessableService {
         if (inheritancePackageFrontierPath.trim().isEmpty()) {
             return !className.startsWith("java.") && !className.startsWith("javax.") && !className.startsWith("android.") && !className.startsWith("androidx.");
         } else {
-            return !className.endsWith(",Object") &&  className.startsWith(inheritancePackageFrontierPath);
+            return !className.endsWith(".Object") && className.startsWith(inheritancePackageFrontierPath);
         }
     }
 }

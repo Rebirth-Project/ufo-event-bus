@@ -2,6 +2,7 @@ package it.rebirthproject.ufoeb.services;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -43,5 +44,14 @@ public class ClassProcessableServiceTest {
         boolean isClassProcessableByPackage = classProcessableService.isClassProcessableByPackage(internalJavaClass);
 
         assertFalse(isClassProcessableByPackage, "Error the internal java class " + internalJavaClass + " should not be processable but it is");
+    }
+
+    @Test
+    public void should_NotProcessClassEndingWithObject_When_FrontierPathIsSet() {
+        classProcessableService = new ClassProcessableService("it.rebirthproject.ufoeb");
+
+        boolean isClassProcessableByPackage = classProcessableService.isClassProcessableByPackage("it.rebirthproject.ufoeb.Object");
+
+        assertFalse(isClassProcessableByPackage, "Error class ending with .Object should not be processable when a frontier path is set");
     }
 }
