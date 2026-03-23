@@ -37,6 +37,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executors;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BusMemoryStateManagerInheritanceOverInterfaceTest extends BaseTest {
 
@@ -169,5 +170,21 @@ public class BusMemoryStateManagerInheritanceOverInterfaceTest extends BaseTest 
                 registrationsList,
                 Arrays.asList(new ExpectedRegistration(listener, EventPriority.NONE, "method1", EventInterface1.class))
         );
+    }
+
+    @Test
+    public void should_DeliverEventsPostedAfterLateRegistration_When_InterfaceInheritanceCacheWasBuiltWithoutRegistrations() throws Exception {
+        Event5 event5 = new Event5();
+
+        fakeMessageEmitter
+                .sendMessage(new PostEventMessage(event5))
+                .sendMessage(new RegisterMessage(listener))
+                .sendMessage(new PostEventMessage(event5))
+                .sendMessage(new ShutdownStateManagerMessage());
+
+        awaitUntilExecutorFinishToWorkAndDie();
+
+        List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
+        assertEquals(1, returnMessageList.size(), "With interface inheritance, the second post must be delivered to EventInterface1 listener even if the first post happened before registration.");
     }
 }

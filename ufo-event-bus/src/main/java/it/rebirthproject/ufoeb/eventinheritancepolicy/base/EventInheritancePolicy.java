@@ -17,8 +17,6 @@
 package it.rebirthproject.ufoeb.eventinheritancepolicy.base;
 
 import it.rebirthproject.ufoeb.architecture.eventbus.EventBus;
-import it.rebirthproject.ufoeb.dto.registrations.Registration;
-import it.rebirthproject.ufoeb.dto.registrations.maps.interfaces.EventsRegistrationsMap;
 import it.rebirthproject.ufoeb.eventinheritancepolicy.policies.ClassEventInheritancePolicy;
 import it.rebirthproject.ufoeb.eventinheritancepolicy.policies.CompleteEventInheritancePolicy;
 import it.rebirthproject.ufoeb.eventinheritancepolicy.policies.InterfaceEventInheritancePolicy;
@@ -47,11 +45,11 @@ public interface EventInheritancePolicy {
      * chosen inheritance policy.
      *
      * @param eventObjectToPost                   The event object to post.
-     * @param eventsRegistrations                 The complete map of events'
-     *                                            {@link Registration}s.
      * @param eventSuperClassesAndInterfacesCache The cache used to save event
      *                                            class/superclasses/interfaces serialization.
+     *                                            This cache only depends on type hierarchy,
+     *                                            not on current listener registrations.
      * @return a set of classes based on the chosen inheritance policy.
      */
-    public Set<Class<?>> getAllEventInheritanceObjects(Object eventObjectToPost, EventsRegistrationsMap eventsRegistrations, Map<Class<?>, Set<Class<?>>> eventSuperClassesAndInterfacesCache);   
+    public Set<Class<?>> getAllEventInheritanceObjects(Object eventObjectToPost, Map<Class<?>, Set<Class<?>>> eventSuperClassesAndInterfacesCache);
 }

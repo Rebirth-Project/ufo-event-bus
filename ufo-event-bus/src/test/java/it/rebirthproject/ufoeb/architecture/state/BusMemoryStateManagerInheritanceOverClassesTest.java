@@ -39,6 +39,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executors;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BusMemoryStateManagerInheritanceOverClassesTest extends BaseTest {
 
@@ -148,5 +149,21 @@ public class BusMemoryStateManagerInheritanceOverClassesTest extends BaseTest {
                 registrationsList2,
                 Arrays.asList(new ExpectedRegistration(listener, EventPriority.NONE, "method2", Event1.class))
         );
+    }
+
+    @Test
+    public void should_DeliverEventsPostedAfterLateRegistration_When_ClassInheritanceCacheWasBuiltWithoutRegistrations() throws Exception {
+        Event5 event5 = new Event5();
+
+        fakeMessageEmitter
+                .sendMessage(new PostEventMessage(event5))
+                .sendMessage(new RegisterMessage(listener))
+                .sendMessage(new PostEventMessage(event5))
+                .sendMessage(new ShutdownStateManagerMessage());
+
+        awaitUntilExecutorFinishToWorkAndDie();
+
+        List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
+        assertEquals(2, returnMessageList.size(), "With class inheritance, the second post must be delivered to Event2 and Event1 listeners even if the first post happened before registration.");
     }
 }

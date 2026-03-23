@@ -20,6 +20,8 @@ import it.rebirthproject.ufoeb.architecture.messages.commands.PostEventMessage;
 import it.rebirthproject.ufoeb.architecture.messages.commands.RegisterMessage;
 import it.rebirthproject.ufoeb.architecture.messages.commands.ShutdownStateManagerMessage;
 import it.rebirthproject.ufoeb.architecture.messages.interfaces.Message;
+import it.rebirthproject.ufoeb.architecture.state.dto.inheritancetest.events.Event5;
+import it.rebirthproject.ufoeb.architecture.state.dto.inheritancetest.objectstoregister.Listener;
 import it.rebirthproject.ufoeb.architecture.state.dto.complextest.events.*;
 import it.rebirthproject.ufoeb.architecture.state.dto.complextest.objectstoregister.ListenerToRegisterOnAllEvents;
 import it.rebirthproject.ufoeb.architecture.state.dto.complextest.objectstoregister.ListenerToRegisterOnBlackPen;
@@ -39,6 +41,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executors;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BusMemoryStateManagerCompleteInheritanceTest extends BaseTest {
 
@@ -216,5 +219,22 @@ public class BusMemoryStateManagerCompleteInheritanceTest extends BaseTest {
                 registrationsList3,
                 Arrays.asList(new ExpectedRegistration(listenerAll, EventPriority.NONE, "method1", BlackColorInterface.class))
         );
+    }
+
+    @Test
+    public void should_DeliverEventsPostedAfterLateRegistration_When_CompleteInheritanceCacheWasBuiltWithoutRegistrations() throws Exception {
+        Event5 event5 = new Event5();
+        Listener inheritanceListener = new Listener();
+
+        fakeMessageEmitter
+                .sendMessage(new PostEventMessage(event5))
+                .sendMessage(new RegisterMessage(inheritanceListener))
+                .sendMessage(new PostEventMessage(event5))
+                .sendMessage(new ShutdownStateManagerMessage());
+
+        awaitUntilExecutorFinishToWorkAndDie();
+
+        List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
+        assertEquals(3, returnMessageList.size(), "With complete inheritance, the second post must be delivered to Event2, Event1 and EventInterface1 listeners even if the first post happened before registration.");
     }
 }

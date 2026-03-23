@@ -274,7 +274,7 @@ public class MemoryState {
      * @see EventInheritancePolicy
      */
     public Set<Class<?>> getEventSuperClassesAndInterfaces(Object eventObjectToPost) {
-        return inheritancePolicy.getAllEventInheritanceObjects(eventObjectToPost, eventsRegistrations, eventSuperClassesAndInterfacesCache);
+        return inheritancePolicy.getAllEventInheritanceObjects(eventObjectToPost, eventSuperClassesAndInterfacesCache);
     }
 
     /**
@@ -303,7 +303,7 @@ public class MemoryState {
         logger.info("--- Events registrations ---");
         logger.info("Number of registered events: " + eventsRegistrations.size());
         for (BusEventKey eventKey : eventsRegistrations.keySet()) {
-            logger.info("Event:" + eventKey.getClass().getName());
+            logger.info("Event:" + eventKey.getEventClass().getName());
             List<Registration> registrationsList = getRegistrations(eventKey);
             logger.info("Number of registrations per event: " + registrationsList.size());
             for (Registration registration : registrationsList) {

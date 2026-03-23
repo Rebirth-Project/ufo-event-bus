@@ -16,7 +16,6 @@
  */
 package it.rebirthproject.ufoeb.eventinheritancepolicy.policies;
 
-import it.rebirthproject.ufoeb.dto.registrations.maps.interfaces.EventsRegistrationsMap;
 import it.rebirthproject.ufoeb.eventinheritancepolicy.base.AbstractEventInheritancePolicy;
 import it.rebirthproject.ufoeb.services.ClassProcessableService;
 import java.util.LinkedHashSet;
@@ -39,11 +38,11 @@ public class ClassEventInheritancePolicy extends AbstractEventInheritancePolicy 
     }
         
     @Override
-    public Set<Class<?>> getAllEventInheritanceObjects(Object eventObjectToPost, EventsRegistrationsMap eventsRegistrations, Map<Class<?>, Set<Class<?>>> eventSuperClassesAndInterfacesCache) {
+    public Set<Class<?>> getAllEventInheritanceObjects(Object eventObjectToPost, Map<Class<?>, Set<Class<?>>> eventSuperClassesAndInterfacesCache) {
         Class<? extends Object> eventClassToPost = eventObjectToPost.getClass();
         Set<Class<?>> eventSuperClasses = eventSuperClassesAndInterfacesCache.get(eventClassToPost);
         if (eventSuperClasses == null) {
-            eventSuperClasses = serializeEventStructure(eventObjectToPost.getClass(), eventsRegistrations);
+            eventSuperClasses = serializeEventStructure(eventObjectToPost.getClass());
             eventSuperClassesAndInterfacesCache.put(eventClassToPost, eventSuperClasses);
         }
         return eventSuperClasses;
@@ -56,15 +55,14 @@ public class ClassEventInheritancePolicy extends AbstractEventInheritancePolicy 
      *
      * @param eventClass The class to serialize (we want to find all
      * superclasses).
-     * @param eventsRegistrations The event registration map.          
      * @return The complete set of classes.
      */
-    private Set<Class<?>> serializeEventStructure(Class<?> eventClass, EventsRegistrationsMap eventsRegistrations) {
+    private Set<Class<?>> serializeEventStructure(Class<?> eventClass) {
         Set<Class<?>> eventClassesAndInterfaces = new LinkedHashSet<>();
         Class<?> clazz = eventClass;
         // clazz != null is needed to avoid NullPointerExceptions. e.g. If class is an interface then clazz.getSuperclass() returns null
         while (clazz != null && clazz != Object.class) {
-            addClassOrInterfaceToSerializationIfNecessary(eventClassesAndInterfaces, eventsRegistrations, clazz);
+            addClassOrInterfaceToSerializationIfNecessary(eventClassesAndInterfaces, clazz);
             clazz = clazz.getSuperclass();
         }
         return eventClassesAndInterfaces;

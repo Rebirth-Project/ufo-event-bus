@@ -16,7 +16,6 @@
  */
 package it.rebirthproject.ufoeb.eventinheritancepolicy.policies;
 
-import it.rebirthproject.ufoeb.dto.registrations.maps.interfaces.EventsRegistrationsMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -30,7 +29,7 @@ import it.rebirthproject.ufoeb.eventinheritancepolicy.base.EventInheritancePolic
 public class NoEventInheritancePolicy implements EventInheritancePolicy {
     
     @Override
-    public Set<Class<?>> getAllEventInheritanceObjects(Object eventObjectToPost, EventsRegistrationsMap eventsRegistrations, Map<Class<?>, Set<Class<?>>> eventSuperClassesAndInterfacesCache) {
+    public Set<Class<?>> getAllEventInheritanceObjects(Object eventObjectToPost, Map<Class<?>, Set<Class<?>>> eventSuperClassesAndInterfacesCache) {
         Set<Class<?>> eventInheritanceObjects = new LinkedHashSet<>();
         eventInheritanceObjects.add(eventObjectToPost.getClass());
         return eventInheritanceObjects;

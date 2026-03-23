@@ -16,9 +16,6 @@
  */
 package it.rebirthproject.ufoeb.eventinheritancepolicy.base;
 
-import it.rebirthproject.ufoeb.dto.BusEventKey;
-import it.rebirthproject.ufoeb.dto.registrations.Registration;
-import it.rebirthproject.ufoeb.dto.registrations.maps.interfaces.EventsRegistrationsMap;
 import it.rebirthproject.ufoeb.exceptions.EventBusException;
 import it.rebirthproject.ufoeb.services.ClassProcessableService;
 import java.util.LinkedHashSet;
@@ -41,45 +38,41 @@ public abstract class AbstractEventInheritancePolicy implements EventInheritance
      * chosen inheritance policy.
      *
      * @param eventObjectToPost The event object to post.
-     * @param eventsRegistrations The complete map of events'
-     * {@link Registration}s.
      * @param eventSuperClassesAndInterfacesCache The cache used to save event
      * class/superclasses/interfaces serialization.
+     * This cache only depends on type hierarchy,
+     * not on current listener registrations.
      * @return a set of classes based on the chosen inheritance policy.
      */
     @Override
-    public abstract Set<Class<?>> getAllEventInheritanceObjects(Object eventObjectToPost, EventsRegistrationsMap eventsRegistrations, Map<Class<?>, Set<Class<?>>> eventSuperClassesAndInterfacesCache);
+    public abstract Set<Class<?>> getAllEventInheritanceObjects(Object eventObjectToPost, Map<Class<?>, Set<Class<?>>> eventSuperClassesAndInterfacesCache);
 
     /**
      * Method that finds all interfaces given the starting class to serialize
      * and adds them to the given parameter set (eventClassesAndInterfaces).
      *
      * @param eventClassesAndInterfaces The set to populate.
-     * @param eventsRegistrations The event registration map.
      * @param clazz The class to serialize (we want to find all interfaces)
      */
-    protected void serializeInterfaces(Set<Class<?>> eventClassesAndInterfaces, EventsRegistrationsMap eventsRegistrations, Class<?> clazz) {
+    protected void serializeInterfaces(Set<Class<?>> eventClassesAndInterfaces, Class<?> clazz) {
         for (Class<?> interfaceClass : clazz.getInterfaces()) {
-            addClassOrInterfaceToSerializationIfNecessary(eventClassesAndInterfaces, eventsRegistrations, interfaceClass);
-            serializeInterfaces(eventClassesAndInterfaces, eventsRegistrations, interfaceClass);
+            addClassOrInterfaceToSerializationIfNecessary(eventClassesAndInterfaces, interfaceClass);
+            serializeInterfaces(eventClassesAndInterfaces, interfaceClass);
         }
     }
 
     /**
      * Method that adds a class to the (eventClassesAndInterfaces) set if the
-     * class is not already contained in the (eventsRegistrations) map.
+     * class is processable according to package frontier rules.
      *
      * @param eventClassesAndInterfaces The set to populate.
-     * @param eventsRegistrations The event registration map.
      * @param clazz The class to add to the set.
      *
      * @throws EventBusException
      */
-    protected void addClassOrInterfaceToSerializationIfNecessary(Set<Class<?>> eventClassesAndInterfaces, EventsRegistrationsMap eventsRegistrations, Class<?> clazz) {
+    protected void addClassOrInterfaceToSerializationIfNecessary(Set<Class<?>> eventClassesAndInterfaces, Class<?> clazz) {
         if (classProcessableService.isClassProcessableByPackage(clazz.getName())) {
-            if (eventsRegistrations.containsKey(new BusEventKey(clazz))) {
-                eventClassesAndInterfaces.add(clazz);
-            }
+            eventClassesAndInterfaces.add(clazz);
         } else {
             throw new EventBusException(INHERITANCE_ERROR);
         }
