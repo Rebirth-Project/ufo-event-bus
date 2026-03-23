@@ -34,6 +34,11 @@ import it.rebirthproject.ufoeb.eventinheritancepolicy.base.EventInheritancePolic
 final class EventBusInfrastructure {
 
     /**
+     * Timeout in seconds used to wait for workers graceful shutdown.
+     */
+    private static final int WORKERS_SHUTDOWN_TIMEOUT_SECONDS = 60;
+
+    /**
      * The logger used by this class.
      */
     private static final Logger logger = LoggerFactory.getLogger(EventBusInfrastructure.class);
@@ -109,6 +114,7 @@ final class EventBusInfrastructure {
         try {
             messageQueue.put(message);
         } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
             throw new EventBusException("Error", ex);
         }
     }
@@ -125,8 +131,14 @@ final class EventBusInfrastructure {
         try {
             sendShutdownStateManagerMessage();
             busMemoryStateManagerThread.join();
-            workersPoolExecutor.shutdownNow();            
+            workersPoolExecutor.shutdown();
+            if (!workersPoolExecutor.awaitTermination(WORKERS_SHUTDOWN_TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
+                logger.warn("Workers did not terminate in {} seconds, forcing shutdown.", WORKERS_SHUTDOWN_TIMEOUT_SECONDS);
+                workersPoolExecutor.shutdownNow();
+            }
         } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            workersPoolExecutor.shutdownNow();
             logger.error("Error during the shutdown", ex);
         }
 
@@ -142,6 +154,7 @@ final class EventBusInfrastructure {
             messageQueue.put(message);
             logger.debug("Put into eventsQueue: {}", message);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             logger.error("Error", e);
         }
     }
