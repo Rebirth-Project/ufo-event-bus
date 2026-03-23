@@ -4,7 +4,7 @@ system](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern) written
 
 It was inspired by [Greenrobot eventbus](https://github.com/greenrobot/EventBus), but basically coded from scratch.
 
-**```Latest Version 1.0.2```**
+**```Latest Version 1.0.3```**
 
 ![Build Status](https://github.com/Rebirth-Project/ufo-event-bus/actions/workflows/build.yml/badge.svg?raw=true)
 
@@ -41,7 +41,7 @@ It was inspired by [Greenrobot eventbus](https://github.com/greenrobot/EventBus)
 
 ```
 dependencies {
-    implementation "it.rebirthproject:ufo-event-bus:1.0.2"
+    implementation "it.rebirthproject:ufo-event-bus:1.0.3"
 }
 ```
 ##### Maven:
@@ -50,7 +50,7 @@ dependencies {
 <dependency>
     <groupId>it.rebirthproject</groupId>
     <artifactId>ufo-event-bus</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 </dependency>
 ```
 
@@ -139,9 +139,9 @@ It would be a shame to reject your pull request if it might not align with the p
 For direct communications, you can use this [email](mailto:rebirthproject2021@gmail.com)
 
 ## Credits and License
-Copyright (C) 2021/2025 [Andrea Paternesi](https://github.com/patton73)
+Copyright (C) 2021/2026 [Andrea Paternesi](https://github.com/patton73)
  
-Copyright (C) 2021/2025 [Matteo Veroni](https://github.com/mavek87)
+Copyright (C) 2021/2026 [Matteo Veroni](https://github.com/mavek87)
 
 Current website under creation [Rebirth Project](https://www.rebirth-project.it)
 
