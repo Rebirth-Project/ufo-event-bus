@@ -320,8 +320,15 @@ public final class EventBusBuilder {
      * @param queueLength The length of the infrastructure queues
      * @return The {@link EventBusBuilder} instance configured with the updated
      * number of workers
+     * @throws EventBusException if {@code queueLength} is null or not positive
      */
     public EventBusBuilder setQueuesLength(final Integer queueLength) {
+        if (queueLength == null) {
+            throw new EventBusException("Invalid queueLength: value cannot be null.");
+        }
+        if (queueLength <= 0) {
+            throw new EventBusException("Invalid queueLength: value must be > 0 but was " + queueLength + ".");
+        }
         this.queueLength = queueLength;
         return this;
     }
@@ -333,11 +340,16 @@ public final class EventBusBuilder {
      * @param numberOfWorkers The number of workers used by the eventbus
      * @return The {@link EventBusBuilder} instance configured with the updated
      * number of workers
+     * @throws EventBusException if {@code numberOfWorkers} is null or not positive
      */
     public EventBusBuilder setNumberOfWorkers(final Integer numberOfWorkers) {
-        if (numberOfWorkers != null) {
-            this.numberOfWorkers = numberOfWorkers;
+        if (numberOfWorkers == null) {
+            throw new EventBusException("Invalid numberOfWorkers: value cannot be null.");
         }
+        if (numberOfWorkers <= 0) {
+            throw new EventBusException("Invalid numberOfWorkers: value must be > 0 but was " + numberOfWorkers + ".");
+        }
+        this.numberOfWorkers = numberOfWorkers;
         return this;
     }
 
