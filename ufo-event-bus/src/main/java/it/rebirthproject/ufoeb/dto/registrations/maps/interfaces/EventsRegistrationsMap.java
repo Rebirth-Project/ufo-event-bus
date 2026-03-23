@@ -77,6 +77,15 @@ public abstract class EventsRegistrationsMap {
     }
 
     /**
+     * Removes the entry associated with the specified {@link BusEventKey}.
+     *
+     * @param eventKey The {@link BusEventKey} to remove from the map
+     */
+    public void remove(BusEventKey eventKey) {
+        registrations.remove(eventKey);
+    }
+
+    /**
      * Obtains all the {@link BusEventKey}s contained in the {@link #registrations} map as a java set of keys
      *
      * @return all the {@link BusEventKey}s contained in the {@link #registrations} map as a java set of keys

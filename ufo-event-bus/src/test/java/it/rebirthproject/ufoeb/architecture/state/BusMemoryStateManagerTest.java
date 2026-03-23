@@ -20,6 +20,7 @@ import it.rebirthproject.ufoeb.architecture.messages.commands.PostEventMessage;
 import it.rebirthproject.ufoeb.architecture.messages.commands.PostStickyEventMessage;
 import it.rebirthproject.ufoeb.architecture.messages.commands.RegisterMessage;
 import it.rebirthproject.ufoeb.architecture.messages.commands.ShutdownStateManagerMessage;
+import it.rebirthproject.ufoeb.architecture.messages.commands.UnregisterListenerMessage;
 import it.rebirthproject.ufoeb.architecture.messages.interfaces.Message;
 import it.rebirthproject.ufoeb.architecture.state.mock.FakeMessage;
 import it.rebirthproject.ufoeb.architecture.state.mock.FakeMessageEmitter;
@@ -565,5 +566,31 @@ public class BusMemoryStateManagerTest extends BaseTest {
                 registrationsList2,
                 Arrays.asList(new ExpectedRegistration(registeredObject1ToEventInterface, EventPriority.NONE, "onEvent", Event.class))
         );
+    }
+
+    @Test
+    public void should_NotSubmitExecutorTask_When_LastListenerIsUnregistered() throws Exception {
+        fakeMessageEmitter
+                .sendMessage(new RegisterMessage(registeredObject1ToEvent1))
+                .sendMessage(new UnregisterListenerMessage(registeredObject1ToEvent1))
+                .sendMessage(new PostEventMessage(event1))
+                .sendMessage(new ShutdownStateManagerMessage());
+
+        awaitUntilExecutorFinishToWorkAndDie();
+
+        List<Message> returnMessageList = fakePoolExecutor.getReceivedMessageList();
+        assertEquals(0, returnMessageList.size(), "No executor task should be submitted after unregistering the last listener for an event.");
+    }
+
+    @Test
+    public void should_RemoveEventKey_When_LastListenerIsUnregistered() throws Exception {
+        fakeMessageEmitter
+                .sendMessage(new RegisterMessage(registeredObject1ToEvent1))
+                .sendMessage(new UnregisterListenerMessage(registeredObject1ToEvent1))
+                .sendMessage(new ShutdownStateManagerMessage());
+
+        awaitUntilExecutorFinishToWorkAndDie();
+
+        assertEquals(0, memoryState.getEventEventsRegistrationsSize(), "Event key should be removed when no registrations remain.");
     }
 }

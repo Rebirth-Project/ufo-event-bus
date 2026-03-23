@@ -117,7 +117,11 @@ public class MemoryState {
      * specified {@link BusEventKey} or false otherwise
      */
     public boolean registrationMapContainsKey(BusEventKey busEventKey) {
-        return eventsRegistrations.containsKey(busEventKey);
+        if (!eventsRegistrations.containsKey(busEventKey)) {
+            return false;
+        }
+        List<Registration> registrationsList = eventsRegistrations.get(busEventKey);
+        return registrationsList != null && !registrationsList.isEmpty();
     }
 
     /**
@@ -250,11 +254,19 @@ public class MemoryState {
         Set<EventMethodKey> eventsListenedByListener = listenerToEventsMap.get(listenerToUnregister);
         if (eventsListenedByListener != null) {
             for (EventMethodKey eventMethodKey : eventsListenedByListener) {
-                eventsRegistrations.get(new BusEventKey(eventMethodKey.getEventClass())).removeIf(registration -> {
-                    Object listener = registration.getListener();
-                    logger.debug("Priority={} registeredObject={}", registration.getPriority(), listener.getClass().getName());
-                    return listenerToUnregister.equals(listener);
-                });
+                BusEventKey eventKey = new BusEventKey(eventMethodKey.getEventClass());
+                List<Registration> registrationsList = eventsRegistrations.get(eventKey);
+                if (registrationsList != null) {
+                    registrationsList.removeIf(registration -> {
+                        Object listener = registration.getListener();
+                        logger.debug("Priority={} registeredObject={}", registration.getPriority(), listener.getClass().getName());
+                        return listenerToUnregister.equals(listener);
+                    });
+
+                    if (registrationsList.isEmpty()) {
+                        eventsRegistrations.remove(eventKey);
+                    }
+                }
             }
 
             listenerToEventsMap.remove(listenerToUnregister);
