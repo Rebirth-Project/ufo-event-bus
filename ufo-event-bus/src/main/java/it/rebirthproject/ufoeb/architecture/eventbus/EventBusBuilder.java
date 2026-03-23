@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2021/2025 Andrea Paternesi Rebirth project
- * Modifications copyright (C) 2021/2025 Matteo Veroni Rebirth project
+ * Copyright (C) 2021/2026 Andrea Paternesi Rebirth project
+ * Modifications copyright (C) 2021/2026 Matteo Veroni Rebirth project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,8 +86,13 @@ public final class EventBusBuilder {
      * method or, in case of event inheritance enabled, also its super classes
      * or interfaces does not have any {@link Listen} annotated method, then an
      * {@link EventBusException} is thrown.
+     *
+     * <p>
+     * Default value is {@code false}: this validation is disabled unless
+     * {@link #setThrowNoListenerAnnotationException()} is called.
+     * </p>
      */
-    private boolean throwNoListenerAnnotationException = true;
+    private boolean throwNoListenerAnnotationException = false;
     /**
      * Sets the bus to log warnings when no registration is found for a specific
      * event. If not set, no warning will be printed to the log. This is useful
@@ -99,8 +104,13 @@ public final class EventBusBuilder {
      * Event E is posted to the bus but no Listener is registered to listen to it.
      * </pre>
      * </p>
+     *
+     * <p>
+     * Default value is {@code false}: warnings are disabled unless
+     * {@link #setThrowNoRegistrationsWarning()} is called.
+     * </p>
      */
-    private boolean throwNoRegistrationsWarning = true;
+    private boolean throwNoRegistrationsWarning = false;
     /**
      * if set then an {@link EventBusException} is thrown when an invalid
      * {@link Listen} annotated method is found in a Listener.
@@ -113,8 +123,13 @@ public final class EventBusBuilder {
      * event</li>
      * </ol>
      * </p>
+     *
+     * <p>
+     * Default value is {@code false}: this validation is disabled unless
+     * {@link #setThrowNotValidMethodException()} is called.
+     * </p>
      */
-    private boolean throwNotValidMethodException = true;
+    private boolean throwNotValidMethodException = false;
     /**
      * The events {@link InheritancePolicyType} used by the eventbus. The default
      * value for the inheritance policy type is {@link NoEventInheritancePolicy}
@@ -168,8 +183,8 @@ public final class EventBusBuilder {
      * or interfaces does not have any {@link Listen} annotated method, then an
      * {@link EventBusException} is thrown.
      *
-     * @return The {@link EventBusBuilder} instance configured to throw a no
-     * listener found {@link EventBusException}.
+     * @return The {@link EventBusBuilder} instance with no-listener validation
+     * enabled.
      */
     public EventBusBuilder setThrowNoListenerAnnotationException() {
         this.throwNoListenerAnnotationException = true;
@@ -189,8 +204,8 @@ public final class EventBusBuilder {
      * </ol>
      * </p>
      *
-     * @return The {@link EventBusBuilder} instance configured to throw a not
-     * valid method {@link EventBusException}.
+     * @return The {@link EventBusBuilder} instance with invalid-listener-method
+     * validation enabled.
      */
     public EventBusBuilder setThrowNotValidMethodException() {
         this.throwNotValidMethodException = true;
@@ -209,8 +224,8 @@ public final class EventBusBuilder {
      * </pre>
      * </p>
      *
-     * @return The {@link EventBusBuilder} instance configured to log no
-     * registration found warnings.
+     * @return The {@link EventBusBuilder} instance with no-registration warning
+     * logging enabled.
      */
     public EventBusBuilder setThrowNoRegistrationsWarning() {
         this.throwNoRegistrationsWarning = true;
