@@ -38,11 +38,9 @@ However, you can change those values passing the right parameters to the builder
 
 The internal queue is a blocking queue and has a configurable size. We want a blocking queue to avoid out of memory exceptions. Please use configuration parameters to handle scalability.
 
-The bus keeps inside the memory state the current status of listeners' registration. A listener will register to the bus on particular events. So can happen that many listeners register to the bus for the same event. Therefore, when an event is posted to the bus a registration list is created and sent to the workers. A worker 
-take the list and iterate over registrations to execute them all. Order of registration is guaranteed. So if a listener registers before another events will be delivered accordingly. 
-Bus permits the programmer using registration/de-registration of listeners during post execution. But you should then be aware of the fact that internal status can be screwed up.
-If you want to keep internal status safe and continue to guarantee events' order then you must use the correct configuration in the bus builder (**safeRegistrationsListNeeded**); this will use copies of the registrations' list instead of the shared reference state but would be a bit slower.
-If your configuration for registered/unregistered listeners does not change at runtime then use the default parameters.
+The bus keeps inside the memory state the current status of listeners' registration. A listener will register to the bus on particular events. So can happen that many listeners register to the bus for the same event. Therefore, when an event is posted to the bus a registrations snapshot array is sent to the workers. A worker 
+iterates over the snapshot array to execute all registrations. Order of registration is guaranteed. So if a listener registers before another events will be delivered accordingly. 
+Bus permits the programmer using registration/de-registration of listeners during post execution. The current architecture is formally safe for this concurrency scenario because registrations are managed with copy-on-write arrays: writes happen in the state manager thread, while workers consume immutable snapshots.
 
 Another important feature of the bus is that it uses reflection to execute listeners' registered methods. Hence, an annotation is used to register a listener's method and, by default, reflection's ```method.invoke()``` is used. Is also provided a faster way to execute events by setting the correct parameter (**useLambdaFactoryInsteadOfStandardReflection**). This will use a LambdaFactory to create methods handlers (a lot faster than standard reflection). This method can be used always but in combination with modules as explained [here](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/invoke/MethodHandles.Lookup.html), so this is not the default behaviour of the bus. 
 
@@ -115,7 +113,7 @@ Usually what you want is to look for classes in your project's package. So we re
 ```
 #### Safeness parameters:
 
-* **safeRegistrationsListNeeded** this forces the bus to make a copy of registrations' lists instead of passing to the workers the references. Useful when you want to play with registration/de-registration of listeners at runtime.
+No dedicated safeness builder parameter is required. Runtime register/de-register with concurrent delivery is handled by immutable copy-on-write registrations snapshots.
 
 #### Logging, debugging and Exceptions' parameters
 
