@@ -65,3 +65,7 @@ tmp/
 
 # Android
 local.properties
+
+#Opencode
+AGENTS.md
+opencode.json
