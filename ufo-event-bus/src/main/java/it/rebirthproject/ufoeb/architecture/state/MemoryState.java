@@ -153,26 +153,13 @@ public class MemoryState {
     public void registerListener(final BusEventKey eventKey, final Registration registration) {
         Object listener = registration.getListener();
 
-        if (isNewListener(listener)) {
-            foundListenerStickyEventsRegistrations.clear();
-        }
-
         Set<EventMethodKey> eventKeys = listenerToEventsMap.getOrDefault(listener, new HashSet<>());
         EventMethodKey eventMethodKey = new EventMethodKey(eventKey.getEventClass(),registration.getMethod());        
         if (!eventKeys.contains(eventMethodKey)) {                        
             eventKeys.add(eventMethodKey);
             listenerToEventsMap.put(listener, eventKeys);
             eventsRegistrations.addRegistration(eventKey, registration);
-
-            if (!stickyEventsMap.isEmpty()) {
-                for (Map.Entry<BusEventKey, Object> stickyEntry : stickyEventsMap.entrySet()) {
-                    Object stickyEvent = stickyEntry.getValue();
-                    Set<Class<?>> stickyEventInheritanceObjects = getEventSuperClassesAndInterfaces(stickyEvent);
-                    if (stickyEventInheritanceObjects != null && stickyEventInheritanceObjects.contains(eventKey.getEventClass())) {
-                        foundListenerStickyEventsRegistrations.addRegistration(stickyEntry.getKey(), registration);
-                    }
-                }
-            }
+            foundListenerStickyEventsRegistrations.addRegistration(eventKey, registration);
             logger.debug("Registered new event {}", eventKey.getEventClass());
             logger.debug("Registrations sticky size: {}", foundListenerStickyEventsRegistrations.containsKey(eventKey) ? foundListenerStickyEventsRegistrations.get(eventKey).size() : 0);
             if (verboseLogging) {
@@ -188,6 +175,22 @@ public class MemoryState {
      */
     public EventsRegistrationsMap getFoundListenerStickyEventsRegistrations() {
         return foundListenerStickyEventsRegistrations;
+    }
+
+    /**
+     * Clears listener registrations collected during the current register flow.
+     */
+    public void clearFoundListenerStickyEventsRegistrations() {
+        foundListenerStickyEventsRegistrations.clear();
+    }
+
+    /**
+     * Gets sticky events keys currently present in memory state.
+     *
+     * @return A copy of sticky event keys
+     */
+    public Set<BusEventKey> getStickyEventsKeys() {
+        return new HashSet<>(stickyEventsMap.keySet());
     }
 
     /**
@@ -301,17 +304,6 @@ public class MemoryState {
     public void printState() {
         printEventsRegistrations();
         printListenerToEventsMap();
-    }
-
-    /**
-     * Checks if the specified listener is already registered in the
-     * {@link #listenerToEventsMap}
-     *
-     * @param listener The listener to check
-     * @return True if the specified listener is not present and false otherwise
-     */
-    private boolean isNewListener(Object listener) {
-        return !listenerToEventsMap.containsKey(listener);
     }
 
     /**

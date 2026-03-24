@@ -121,12 +121,22 @@ public class BusMemoryStateManager implements Runnable {
                     case REGISTER_LISTENER_MESSAGE: {
                         logger.debug("A new Registration arrived!!");
                         RegisterMessage registerMessage = (RegisterMessage) message;
+                        memoryState.clearFoundListenerStickyEventsRegistrations();
                         listenerMethodFinder.findListenerMethods(registerMessage.getListenerToRegister(), memoryState);
-                        
-                        EventsRegistrationsMap foundStickyEventsRegistrations = memoryState.getFoundListenerStickyEventsRegistrations();
-                        for (BusEventKey busEventKey : foundStickyEventsRegistrations.keySet()) {                            
-                            workersPoolExecutor.execute(new EventExecutor(foundStickyEventsRegistrations.get(busEventKey),memoryState.getStickyEvent(busEventKey)));
-                        }                        
+
+                        EventsRegistrationsMap listenerRegistrations = memoryState.getFoundListenerStickyEventsRegistrations();
+                        for (BusEventKey stickyEventKey : memoryState.getStickyEventsKeys()) {
+                            Object stickyEvent = memoryState.getStickyEvent(stickyEventKey);
+                            Set<Class<?>> stickyInheritanceObjects = memoryState.getEventSuperClassesAndInterfaces(stickyEvent);
+                            if (stickyInheritanceObjects != null) {
+                                for (BusEventKey listenerEventKey : listenerRegistrations.keySet()) {
+                                    if (stickyInheritanceObjects.contains(listenerEventKey.getEventClass())) {
+                                        workersPoolExecutor.execute(new EventExecutor(listenerRegistrations.get(listenerEventKey), stickyEvent));
+                                    }
+                                }
+                            }
+                        }
+                        memoryState.clearFoundListenerStickyEventsRegistrations();
                         break;
                     }
                     case UNREGISTER_LISTENER_MESSAGE: {
