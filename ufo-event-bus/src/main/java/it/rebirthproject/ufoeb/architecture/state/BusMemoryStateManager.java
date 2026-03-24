@@ -26,11 +26,14 @@ import it.rebirthproject.ufoeb.architecture.executor.EventExecutor;
 import it.rebirthproject.ufoeb.architecture.messages.interfaces.Message;
 import it.rebirthproject.ufoeb.architecture.messages.query.IsListenerRegisteredMessage;
 import it.rebirthproject.ufoeb.dto.BusEventKey;
-import it.rebirthproject.ufoeb.dto.registrations.maps.interfaces.EventsRegistrationsMap;
+import it.rebirthproject.ufoeb.dto.EventMethodKey;
+import it.rebirthproject.ufoeb.dto.registrations.Registration;
 import it.rebirthproject.ufoeb.eventannotation.Listen;
 import it.rebirthproject.ufoeb.services.ListenerMethodFinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -121,22 +124,30 @@ public class BusMemoryStateManager implements Runnable {
                     case REGISTER_LISTENER_MESSAGE: {
                         logger.debug("A new Registration arrived!!");
                         RegisterMessage registerMessage = (RegisterMessage) message;
-                        memoryState.clearFoundListenerStickyEventsRegistrations();
-                        listenerMethodFinder.findListenerMethods(registerMessage.getListenerToRegister(), memoryState);
+                        try {
+                            listenerMethodFinder.findListenerMethods(registerMessage.getListenerToRegister(), memoryState);
 
-                        EventsRegistrationsMap listenerRegistrations = memoryState.getFoundListenerStickyEventsRegistrations();
-                        for (BusEventKey stickyEventKey : memoryState.getStickyEventsKeys()) {
-                            Object stickyEvent = memoryState.getStickyEvent(stickyEventKey);
-                            Set<Class<?>> stickyInheritanceObjects = memoryState.getEventSuperClassesAndInterfaces(stickyEvent);
-                            if (stickyInheritanceObjects != null) {
-                                for (BusEventKey listenerEventKey : listenerRegistrations.keySet()) {
-                                    if (stickyInheritanceObjects.contains(listenerEventKey.getEventClass())) {
-                                        workersPoolExecutor.execute(new EventExecutor(listenerRegistrations.get(listenerEventKey), stickyEvent));
+                            Set<EventMethodKey> lastRegisteredEventMethodKeys = memoryState.getLastRegisteredEventMethodKeys();
+                            for (BusEventKey stickyEventKey : memoryState.getStickyEventsKeys()) {
+                                Object stickyEvent = memoryState.getStickyEvent(stickyEventKey);
+                                Set<Class<?>> stickyInheritanceObjects = memoryState.getEventSuperClassesAndInterfaces(stickyEvent);
+                                if (stickyInheritanceObjects != null) {
+                                    for (EventMethodKey eventMethodKey : lastRegisteredEventMethodKeys) {
+                                        if (stickyInheritanceObjects.contains(eventMethodKey.getEventClass())) {
+                                            BusEventKey listenerEventKey = new BusEventKey(eventMethodKey.getEventClass());
+                                            List<Registration> registrations = memoryState.getRegistrations(listenerEventKey);
+                                            for (Registration registration : registrations) {
+                                                if (registerMessage.getListenerToRegister().equals(registration.getListener()) && eventMethodKey.getMethod().equals(registration.getMethod())) {
+                                                    workersPoolExecutor.execute(new EventExecutor(Collections.singletonList(registration), stickyEvent));
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
+                        } finally {
+                            memoryState.clearLastRegisteredEventMethodKeys();
                         }
-                        memoryState.clearFoundListenerStickyEventsRegistrations();
                         break;
                     }
                     case UNREGISTER_LISTENER_MESSAGE: {

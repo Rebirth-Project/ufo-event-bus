@@ -21,7 +21,6 @@ import it.rebirthproject.ufoeb.dto.BusEventKey;
 import it.rebirthproject.ufoeb.dto.EventMethodKey;
 import it.rebirthproject.ufoeb.dto.registrations.Registration;
 import it.rebirthproject.ufoeb.dto.registrations.maps.PriorityEventsRegistrationsMap;
-import it.rebirthproject.ufoeb.dto.registrations.maps.UnorderedEventsRegistrationsMap;
 import it.rebirthproject.ufoeb.dto.registrations.maps.interfaces.EventsRegistrationsMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,10 +66,9 @@ public class MemoryState {
      */
     private final boolean safeRegistrationsListNeeded;
     /**
-     * Partial registrations on sticky events for each Listener (used only in
-     * listener registration)
+     * Event method keys added during the current listener registration flow.
      */
-    private final EventsRegistrationsMap foundListenerStickyEventsRegistrations = new UnorderedEventsRegistrationsMap();
+    private final Set<EventMethodKey> lastRegisteredEventMethodKeys = new HashSet<>();
     /**
      * The chosen system inheritancePolicy is stored here.
      *
@@ -159,9 +157,8 @@ public class MemoryState {
             eventKeys.add(eventMethodKey);
             listenerToEventsMap.put(listener, eventKeys);
             eventsRegistrations.addRegistration(eventKey, registration);
-            foundListenerStickyEventsRegistrations.addRegistration(eventKey, registration);
+            lastRegisteredEventMethodKeys.add(eventMethodKey);
             logger.debug("Registered new event {}", eventKey.getEventClass());
-            logger.debug("Registrations sticky size: {}", foundListenerStickyEventsRegistrations.containsKey(eventKey) ? foundListenerStickyEventsRegistrations.get(eventKey).size() : 0);
             if (verboseLogging) {
                 printState();
             }
@@ -169,19 +166,19 @@ public class MemoryState {
     }
 
     /**
-     * Gets the found lister sticky events registrations
+     * Gets event method keys added during the current register flow.
      *
-     * @return The found listener sticky events registrations
+     * @return Event method keys added during the current register flow
      */
-    public EventsRegistrationsMap getFoundListenerStickyEventsRegistrations() {
-        return foundListenerStickyEventsRegistrations;
+    public Set<EventMethodKey> getLastRegisteredEventMethodKeys() {
+        return lastRegisteredEventMethodKeys;
     }
 
     /**
-     * Clears listener registrations collected during the current register flow.
+     * Clears event method keys collected during the current register flow.
      */
-    public void clearFoundListenerStickyEventsRegistrations() {
-        foundListenerStickyEventsRegistrations.clear();
+    public void clearLastRegisteredEventMethodKeys() {
+        lastRegisteredEventMethodKeys.clear();
     }
 
     /**
