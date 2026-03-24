@@ -21,10 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UnorderedListVerifier<E, V extends Validator<E>> {
 
-    public final void assertAsExpected(List<E> list, List<V> elementValidators) throws Exception {
-        assertEquals(elementValidators.size(), list.size(), "The number of elements was different from expectations.");
+    public final void assertAsExpected(E[] elements, List<V> elementValidators) throws Exception {
+        assertEquals(elementValidators.size(), elements.length, "The number of elements was different from expectations.");
 
-        for (E element : list) {
+        for (E element : elements) {
             int numberOfEceptionsSearchingElement = 0;
             for (V elementValidator : elementValidators) {
                 try {

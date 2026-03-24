@@ -17,6 +17,8 @@ package it.rebirthproject.ufoeb.architecture.executor;
 
 import it.rebirthproject.ufoeb.architecture.eventbus.EventBusBuilder;
 import it.rebirthproject.ufoeb.dto.registrations.Registration;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +37,7 @@ public class EventExecutor implements Runnable {
      * The logger used by this class
      */
     private static final Logger logger = LoggerFactory.getLogger(EventExecutor.class);
-    private final List<Registration> registrationList;
+    private final Registration[] registrationList;
     private final Object eventToPost;
 
     /**
@@ -44,7 +46,7 @@ public class EventExecutor implements Runnable {
      * @param registrationList List of registrations that get the event
      * @param eventToPost The posted event to send to the registrations
      */
-    public EventExecutor(List<Registration> registrationList, Object eventToPost) {
+    public EventExecutor(Registration[] registrationList, Object eventToPost) {
         this.registrationList = registrationList;
         this.eventToPost = eventToPost;
     }
@@ -81,6 +83,6 @@ public class EventExecutor implements Runnable {
      * @return The registrations list
      */
     public List<Registration> getRegistrationList() {
-        return registrationList;
+        return Collections.unmodifiableList(Arrays.asList(registrationList));
     }
 }

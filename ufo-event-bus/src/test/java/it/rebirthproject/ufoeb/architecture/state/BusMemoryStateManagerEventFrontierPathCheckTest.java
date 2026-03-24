@@ -45,7 +45,7 @@ public class BusMemoryStateManagerEventFrontierPathCheckTest extends BaseTest {
         fakeMessageEmitter = new FakeMessageEmitter(messageQueue);
         fakePoolExecutor = new FakePoolExecutor();
 
-        memoryState = new MemoryState(!SAFE_REGISTRATIONS_NEEDED, FactoryInheritancePolicy.createInheritancePolicy(InheritancePolicyType.COMPLETE_EVENT_INHERITANCE, classProcessableService), VERBOSE_LOGGING);
+        memoryState = new MemoryState(FactoryInheritancePolicy.createInheritancePolicy(InheritancePolicyType.COMPLETE_EVENT_INHERITANCE, classProcessableService), VERBOSE_LOGGING);
         busMemoryStateManager = new BusMemoryStateManager(messageQueue, fakePoolExecutor, memoryState, listenerMethodFinder, THROW_NO_REGISTRATIONS_WARNING);
     }
 
@@ -82,7 +82,7 @@ public class BusMemoryStateManagerEventFrontierPathCheckTest extends BaseTest {
     @Test
     public void finder_stop_reflection_if_event_listened_class_hierachy_does_not_belong_to_the_correct_frontier_path() throws Exception {
         ClassProcessableService customClassProcessableService = new ClassProcessableService("it.rebirthproject.ufoeb.architecture.state.dto.inheritancetest.objectstoregister");
-        memoryState = new MemoryState(!SAFE_REGISTRATIONS_NEEDED, FactoryInheritancePolicy.createInheritancePolicy(InheritancePolicyType.COMPLETE_EVENT_INHERITANCE, customClassProcessableService), VERBOSE_LOGGING);
+        memoryState = new MemoryState(FactoryInheritancePolicy.createInheritancePolicy(InheritancePolicyType.COMPLETE_EVENT_INHERITANCE, customClassProcessableService), VERBOSE_LOGGING);
         busMemoryStateManager = new BusMemoryStateManager(messageQueue, fakePoolExecutor, memoryState, listenerMethodFinder, THROW_NO_REGISTRATIONS_WARNING);
        
         EventExtendingJavaLibClass eventExtendingJavaLibClass = new EventExtendingJavaLibClass();

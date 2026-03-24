@@ -32,8 +32,6 @@ import it.rebirthproject.ufoeb.eventannotation.Listen;
 import it.rebirthproject.ufoeb.services.ListenerMethodFinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -135,10 +133,10 @@ public class BusMemoryStateManager implements Runnable {
                                     for (EventMethodKey eventMethodKey : lastRegisteredEventMethodKeys) {
                                         if (stickyInheritanceObjects.contains(eventMethodKey.getEventClass())) {
                                             BusEventKey listenerEventKey = new BusEventKey(eventMethodKey.getEventClass());
-                                            List<Registration> registrations = memoryState.getRegistrations(listenerEventKey);
+                                            Registration[] registrations = memoryState.getRegistrationsSnapshot(listenerEventKey);
                                             for (Registration registration : registrations) {
                                                 if (registerMessage.getListenerToRegister().equals(registration.getListener()) && eventMethodKey.getMethod().equals(registration.getMethod())) {
-                                                    workersPoolExecutor.execute(new EventExecutor(Collections.singletonList(registration), stickyEvent));
+                                                    workersPoolExecutor.execute(new EventExecutor(new Registration[]{registration}, stickyEvent));
                                                 }
                                             }
                                         }
@@ -226,7 +224,7 @@ public class BusMemoryStateManager implements Runnable {
     private void postEvent(Object eventObjectToPost, Class<?> eventClass) {
         BusEventKey busEventKey = new BusEventKey(eventClass);
         if (memoryState.registrationMapContainsKey(busEventKey)) {
-            workersPoolExecutor.execute(new EventExecutor(memoryState.getRegistrations(busEventKey),eventObjectToPost));
+            workersPoolExecutor.execute(new EventExecutor(memoryState.getRegistrationsSnapshot(busEventKey), eventObjectToPost));
         } else {
             //we are in the case of a sticky event so if a sticky event is posted before any registrations we do nothing.
             //We can also be in the case of inheritance where superclasses or interfaces are not listened by anyone

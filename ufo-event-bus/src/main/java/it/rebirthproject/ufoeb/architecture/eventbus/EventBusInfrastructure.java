@@ -73,10 +73,6 @@ final class EventBusInfrastructure {
      * bus
      * @param numberOfWorkers The number of workers ({@link EventExecutor}s)
      * used by the bus behind the scenes to deliver events.
-     * @param safeRegistrationsListNeeded is used when you want to use
-     * inheritance over a listener and all its superclasses. Enabling it will
-     * let the bus look for all listeners' methods considering also all their
-     * superclasses methods.
      * @param throwNoRegistrationsWarning A boolean which defines if it's needed
      * to throw warnings when no registrations are found for a specific event
      * @param verboseLogging Boolean parameter set to true if a more verbose
@@ -85,11 +81,11 @@ final class EventBusInfrastructure {
      * @see ListenerMethodFinder
      * @see EventInheritancePolicy
      */
-    EventBusInfrastructure(ListenerMethodFinder listenerMethodFinder, EventInheritancePolicy inheritancePolicy, int queueLength, int numberOfWorkers, boolean safeRegistrationsListNeeded, boolean throwNoRegistrationsWarning, boolean verboseLogging) {
+    EventBusInfrastructure(ListenerMethodFinder listenerMethodFinder, EventInheritancePolicy inheritancePolicy, int queueLength, int numberOfWorkers, boolean throwNoRegistrationsWarning, boolean verboseLogging) {
         this.messageQueue = new LinkedBlockingQueue<>(queueLength);
         this.numberOfWorkers = numberOfWorkers;
         this.workersPoolExecutor = Executors.newFixedThreadPool(numberOfWorkers);
-        MemoryState memoryState = new MemoryState(safeRegistrationsListNeeded, inheritancePolicy, verboseLogging);
+        MemoryState memoryState = new MemoryState(inheritancePolicy, verboseLogging);
         BusMemoryStateManager busMemoryStateManager = new BusMemoryStateManager(messageQueue, workersPoolExecutor, memoryState, listenerMethodFinder, throwNoRegistrationsWarning);
         this.busMemoryStateManagerThread = new Thread(busMemoryStateManager);
     }

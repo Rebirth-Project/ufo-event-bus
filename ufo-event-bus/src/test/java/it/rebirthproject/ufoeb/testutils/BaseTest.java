@@ -45,7 +45,6 @@ public abstract class BaseTest {
     public static final boolean LISTENER_SUPERCLASS_INHERITANCE = true;
     public static final boolean THROW_NOT_VALID_METHOD_EXCEPTION = true;
     public static final boolean THROW_NO_LISTENERS_EXCEPTION = true;
-    public static final boolean SAFE_REGISTRATIONS_NEEDED = true;
     public static final boolean THROW_NO_REGISTRATIONS_WARNING = true;
     public static final boolean EVENT_SUPERCLASS_INHERITANCE = true;
     public static final boolean VERBOSE_LOGGING = true;

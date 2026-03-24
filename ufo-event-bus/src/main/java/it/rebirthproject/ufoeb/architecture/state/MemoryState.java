@@ -21,7 +21,6 @@ import it.rebirthproject.ufoeb.dto.BusEventKey;
 import it.rebirthproject.ufoeb.dto.EventMethodKey;
 import it.rebirthproject.ufoeb.dto.registrations.Registration;
 import it.rebirthproject.ufoeb.dto.registrations.maps.PriorityEventsRegistrationsMap;
-import it.rebirthproject.ufoeb.dto.registrations.maps.interfaces.EventsRegistrationsMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.*;
@@ -43,7 +42,7 @@ public class MemoryState {
      * Data structure used to map each listener's registration metadata stored
      * into the memory state
      */
-    private final EventsRegistrationsMap eventsRegistrations = new PriorityEventsRegistrationsMap();
+    private final PriorityEventsRegistrationsMap eventsRegistrations = new PriorityEventsRegistrationsMap();
     /**
      * This map data structure contains all the registered listeners and their
      * corresponding listened events keys A listener can listen to different
@@ -58,13 +57,6 @@ public class MemoryState {
      * A map used to cache superclasses and interfaces related to an event class
      */
     private final Map<Class<?>, Set<Class<?>>> eventSuperClassesAndInterfacesCache = new HashMap<>();
-    /**
-     * This attribute ensures that workers gets an unmodifiable
-     * {@link Registration}'s list. For best performance this attribute should
-     * be set to false (default) and avoid to register/unregister listeners at
-     * runtime time. Otherwise, set it to true.
-     */
-    private final boolean safeRegistrationsListNeeded;
     /**
      * Event method keys added during the current listener registration flow.
      */
@@ -83,27 +75,22 @@ public class MemoryState {
     /**
      * The constructor used to build the memory state
      *
-     * @param safeRegistrationsListNeeded The parameter to select whether the
-     * safeRegistrationsListNeeded
      * @param inheritancePolicy The chosen system inheritancePolicy to use
      * @param verboseLogging If set to true verbose logging will be enabled
      */
-    public MemoryState(boolean safeRegistrationsListNeeded, EventInheritancePolicy inheritancePolicy, boolean verboseLogging) {
-        this.safeRegistrationsListNeeded = safeRegistrationsListNeeded;
+    public MemoryState(EventInheritancePolicy inheritancePolicy, boolean verboseLogging) {
         this.inheritancePolicy = inheritancePolicy;
         this.verboseLogging = verboseLogging;
     }
 
     /**
-     * Get the list of listeners registrations for a particular event
+     * Gets registrations immutable snapshot for a particular event.
      *
-     * @param busEventKey The {@link BusEventKey} is used to retrieve all
-     * related listeners registrations
-     * @return The list of listeners registrations for the specified event
+     * @param busEventKey The event key used to retrieve registrations
+     * @return registrations immutable snapshot
      */
-    public List<Registration> getRegistrations(BusEventKey busEventKey) {
-        List<Registration> registrationsList = eventsRegistrations.get(busEventKey);
-        return safeRegistrationsListNeeded ? Collections.unmodifiableList(registrationsList) : registrationsList;
+    public Registration[] getRegistrationsSnapshot(BusEventKey busEventKey) {
+        return eventsRegistrations.get(busEventKey);
     }
 
     /**
@@ -115,11 +102,7 @@ public class MemoryState {
      * specified {@link BusEventKey} or false otherwise
      */
     public boolean registrationMapContainsKey(BusEventKey busEventKey) {
-        if (!eventsRegistrations.containsKey(busEventKey)) {
-            return false;
-        }
-        List<Registration> registrationsList = eventsRegistrations.get(busEventKey);
-        return registrationsList != null && !registrationsList.isEmpty();
+        return eventsRegistrations.get(busEventKey).length > 0;
     }
 
     /**
@@ -189,19 +172,7 @@ public class MemoryState {
     public Set<BusEventKey> getStickyEventsKeys() {
         return new HashSet<>(stickyEventsMap.keySet());
     }
-
-    /**
-     * Check if a sticky event with a specified {@link BusEventKey} is
-     * registered in the {@link #stickyEventsMap}
-     *
-     * @param eventKey The {@link BusEventKey} to check
-     * @return True if the sticky event with the specified {@link BusEventKey}
-     * is already registered in the {@link #stickyEventsMap} or false otherwise
-     */
-    public boolean isStickyEventRegistered(BusEventKey eventKey) {
-        return stickyEventsMap.containsKey(eventKey);
-    }
-
+   
     /**
      * Get a saved sticky event into the {@link #stickyEventsMap} if present
      * specifying its {@link BusEventKey}
@@ -261,18 +232,7 @@ public class MemoryState {
         if (eventsListenedByListener != null) {
             for (EventMethodKey eventMethodKey : eventsListenedByListener) {
                 BusEventKey eventKey = new BusEventKey(eventMethodKey.getEventClass());
-                List<Registration> registrationsList = eventsRegistrations.get(eventKey);
-                if (registrationsList != null) {
-                    registrationsList.removeIf(registration -> {
-                        Object listener = registration.getListener();
-                        logger.debug("Priority={} registeredObject={}", registration.getPriority(), listener.getClass().getName());
-                        return listenerToUnregister.equals(listener);
-                    });
-
-                    if (registrationsList.isEmpty()) {
-                        eventsRegistrations.remove(eventKey);
-                    }
-                }
+                eventsRegistrations.removeRegistrationsForListener(eventKey, listenerToUnregister);
             }
 
             listenerToEventsMap.remove(listenerToUnregister);
@@ -311,9 +271,9 @@ public class MemoryState {
         logger.info("Number of registered events: " + eventsRegistrations.size());
         for (BusEventKey eventKey : eventsRegistrations.keySet()) {
             logger.info("Event:" + eventKey.getEventClass().getName());
-            List<Registration> registrationsList = getRegistrations(eventKey);
-            logger.info("Number of registrations per event: " + registrationsList.size());
-            for (Registration registration : registrationsList) {
+            Registration[] registrations = getRegistrationsSnapshot(eventKey);
+            logger.info("Number of registrations per event: " + registrations.length);
+            for (Registration registration : registrations) {
                 logger.info("Class:" + registration.getListener().getClass().getName());               
                 logger.info("Registered Method:" + registration.getMethod().getName());
                 logger.info("Priority:" + registration.getPriority());

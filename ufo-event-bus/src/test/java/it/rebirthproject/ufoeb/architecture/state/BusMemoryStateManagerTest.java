@@ -61,7 +61,7 @@ public class BusMemoryStateManagerTest extends BaseTest {
         fakeMessageEmitter = new FakeMessageEmitter(messageQueue);
         fakePoolExecutor = new FakePoolExecutor();
 
-        memoryState = new MemoryState(!SAFE_REGISTRATIONS_NEEDED, FactoryInheritancePolicy.createInheritancePolicy(InheritancePolicyType.COMPLETE_EVENT_INHERITANCE, classProcessableService), VERBOSE_LOGGING);
+        memoryState = new MemoryState(FactoryInheritancePolicy.createInheritancePolicy(InheritancePolicyType.COMPLETE_EVENT_INHERITANCE, classProcessableService), VERBOSE_LOGGING);
         busMemoryStateManager = new BusMemoryStateManager(messageQueue, fakePoolExecutor, memoryState, listenerMethodFinder, THROW_NO_REGISTRATIONS_WARNING);
         executorService.submit(busMemoryStateManager);
     }
@@ -75,8 +75,8 @@ public class BusMemoryStateManagerTest extends BaseTest {
 
         awaitUntilExecutorFinishToWorkAndDie();
 
-        List<Registration> registrations = memoryState.getRegistrations(new BusEventKey(TestEvent1.class));
-        assertEquals(1, registrations.size(), "The number of registrations was different from expectations.");
+        Registration[] registrations = memoryState.getRegistrationsSnapshot(new BusEventKey(TestEvent1.class));
+        assertEquals(1, registrations.length, "The number of registrations was different from expectations.");
     }
 
     @Test

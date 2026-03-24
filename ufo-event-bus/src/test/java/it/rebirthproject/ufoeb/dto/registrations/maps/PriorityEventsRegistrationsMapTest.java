@@ -18,7 +18,6 @@ package it.rebirthproject.ufoeb.dto.registrations.maps;
 
 import it.rebirthproject.ufoeb.dto.BusEventKey;
 import it.rebirthproject.ufoeb.dto.registrations.Registration;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -33,9 +32,9 @@ public class PriorityEventsRegistrationsMapTest {
 
         map.addRegistration(EVENT_KEY, new TestRegistration("B", 10));
 
-        List<Registration> registrations = map.get(EVENT_KEY);
-        assertEquals("B", ((TestRegistration) registrations.get(0)).getId());
-        assertEquals("A", ((TestRegistration) registrations.get(1)).getId());
+        Registration[] registrations = map.get(EVENT_KEY);
+        assertEquals("B", ((TestRegistration) registrations[0]).getId());
+        assertEquals("A", ((TestRegistration) registrations[1]).getId());
     }
 
     @Test
@@ -45,9 +44,9 @@ public class PriorityEventsRegistrationsMapTest {
 
         map.addRegistration(EVENT_KEY, new TestRegistration("B", 1));
 
-        List<Registration> registrations = map.get(EVENT_KEY);
-        assertEquals("A", ((TestRegistration) registrations.get(0)).getId());
-        assertEquals("B", ((TestRegistration) registrations.get(1)).getId());
+        Registration[] registrations = map.get(EVENT_KEY);
+        assertEquals("A", ((TestRegistration) registrations[0]).getId());
+        assertEquals("B", ((TestRegistration) registrations[1]).getId());
     }
 
     @Test
@@ -57,9 +56,9 @@ public class PriorityEventsRegistrationsMapTest {
 
         map.addRegistration(EVENT_KEY, new TestRegistration("B", 5));
 
-        List<Registration> registrations = map.get(EVENT_KEY);
-        assertEquals("A", ((TestRegistration) registrations.get(0)).getId());
-        assertEquals("B", ((TestRegistration) registrations.get(1)).getId());
+        Registration[] registrations = map.get(EVENT_KEY);
+        assertEquals("A", ((TestRegistration) registrations[0]).getId());
+        assertEquals("B", ((TestRegistration) registrations[1]).getId());
     }
 
     @Test
@@ -73,12 +72,12 @@ public class PriorityEventsRegistrationsMapTest {
         map.addRegistration(EVENT_KEY, new TestRegistration("E", 10));
         map.addRegistration(EVENT_KEY, new TestRegistration("F", 1));
 
-        List<Registration> registrations = map.get(EVENT_KEY);
-        assertEquals("C", ((TestRegistration) registrations.get(0)).getId());
-        assertEquals("E", ((TestRegistration) registrations.get(1)).getId());
-        assertEquals("A", ((TestRegistration) registrations.get(2)).getId());
-        assertEquals("D", ((TestRegistration) registrations.get(3)).getId());
-        assertEquals("B", ((TestRegistration) registrations.get(4)).getId());
-        assertEquals("F", ((TestRegistration) registrations.get(5)).getId());
+        Registration[] registrations = map.get(EVENT_KEY);
+        assertEquals("C", ((TestRegistration) registrations[0]).getId());
+        assertEquals("E", ((TestRegistration) registrations[1]).getId());
+        assertEquals("A", ((TestRegistration) registrations[2]).getId());
+        assertEquals("D", ((TestRegistration) registrations[3]).getId());
+        assertEquals("B", ((TestRegistration) registrations[4]).getId());
+        assertEquals("F", ((TestRegistration) registrations[5]).getId());
     }
 }

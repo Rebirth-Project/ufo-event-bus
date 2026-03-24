@@ -21,6 +21,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ListVerifier<E, V extends Validator<E>> {
 
+    public final void assertAsExpected(E[] elements, List<V> elementValidators) throws Exception {
+        assertEquals(elementValidators.size(), elements.length, "The number of elements was different from expectations.");
+
+        for (int i = 0; i < elements.length; i++) {
+            E element = elements[i];
+            V elementValidator = elementValidators.get(i);
+            elementValidator.assertValid(element);
+        }
+    }
+
     public final void assertAsExpected(List<E> list, List<V> elementValidators) throws Exception {       
         assertEquals(elementValidators.size(), list.size(), "The number of elements was different from expectations.");
 

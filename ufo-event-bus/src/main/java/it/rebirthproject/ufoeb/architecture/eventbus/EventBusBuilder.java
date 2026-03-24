@@ -54,13 +54,6 @@ public final class EventBusBuilder {
      */
     private Integer numberOfWorkers = 1;
     /**
-     * This parameter ensures that workers gets an unmodifiable
-     * {@link Registration}'s list. For best performance leave this parameter to
-     * false (default) and avoid to register/unregister listeners at runtime
-     * time. Otherwise, set it to true.
-     */
-    private boolean safeRegistrationsListNeeded = false;
-    /**
      * This parameter should be used when you want to use inheritance over a
      * listener and all its superclasses. Enabling it will let the bus look for
      * all listeners' methods considering also all their superclasses methods.
@@ -164,18 +157,6 @@ public final class EventBusBuilder {
      * Boolean attribute used to enable or disable verbose logging
      */
     private boolean verboseLogging = false;
-
-    /**
-     * Sets the {@link #safeRegistrationsListNeeded} attribute to true
-     *
-     * @return The {@link EventBusBuilder} instance configured with the
-     * {@link #safeRegistrationsListNeeded} set to true
-     * @see #safeRegistrationsListNeeded
-     */
-    public EventBusBuilder setSafeRegistrationsListNeeded() {
-        this.safeRegistrationsListNeeded = true;
-        return this;
-    }
 
     /**
      * If a registering listener does not have any {@link Listen} annotated
@@ -422,7 +403,6 @@ public final class EventBusBuilder {
                     eventInheritancePolicy,
                     queueLength,
                     numberOfWorkers,
-                    safeRegistrationsListNeeded,
                     throwNoRegistrationsWarning,
                     verboseLogging
             );
